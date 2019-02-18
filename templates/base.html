@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+    <title>Bee DB</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="/static/project.css" rel="stylesheet">
+</head>
+<body>
+
+<h3><a href="/">HOME</a></h3>
+
+{% if "user_id" in session %}
+    <h5><a href="/logout"> You are logged in. Want to log out? </a></h5>
+
+
+{% else %}
+    <a href="/login"><h5>You are not logged in. Want to? </h5></a>
+
+{% endif %}
+
+
+{% block content %}
+  Put your body here.
+{% endblock %}
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script> <<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</body>
+</html>

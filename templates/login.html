@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+    <title>DB</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link href="/static/project.css" rel="stylesheet">
+</head>
+<body>
+
+<h3><a href="/">HOME</a></h3>
+  <br><br>
+  <h5>Login</h5>
+ 
+    <form action="/login" method="POST"> 
+
+    <div>
+      <label>Email:
+        <input type="email" name="email" id="name-input" required>
+      </label>
+    </div>
+
+    <div>
+      <label>Password:
+        <input type="password" name="password" id="password-input" required>
+      </label>
+    </div>
+
+    <div>
+      <input type="submit" value="Log In">
+    </div>
+
+  </form>
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</body>
+</html>

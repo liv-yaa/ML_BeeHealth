@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<br><br>
+
+{% if "user_id" in session %}
+    <h3>You are logged in. Submit a Photo? </h3>
+
+    <!-- I want it to go to the homepage once we have submitted. But refresh database. --> 
+    <form action="/upload-success" method="POST"> 
+
+        <label for="user_file"> Photo Uploader will go here: </label>
+        <br>
+        <input type="file" name="user_file">
+        
+        <button type="submit" value="Submit Photo"> Submit Photo </button>
+    </form>
+
+
+{% endif %}
+<br><br>
+
+<h3> View Our Bee Photo Database </h3>
+
+    <ul>
+        {% for bee in bees %}
+            <li>
+                {{ bee }} 
+                <img src="https://storage.cloud.google.com/beees/bee_imgs/038_438.png?_ga=2.105848003.-1912604629.1547183681&_gac=1.182683476.1547183691.CjwKCAiA99vhBRBnEiwAwpk-uLxHdBlFU6pw9_sKFaZrkuB_Ob190WTVy9IxuTRXSxbdLkum-tQA3hoC1uAQAvD_BwE">
+                <br><br>
+                
+            </li>
+        {% endfor %}
+    </ul>
+
+
+{% endblock %}

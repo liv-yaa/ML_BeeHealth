@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% if "user_id" in session %}
+    
+
+    <h3>{{ user.email }} is the user at this URL. ID#{{ user.user_id }}</h3>
+    <br><br>
+
+    <a href="/"><h2>Upload a photo! </h2></a>
+    <br><br>
+    {% if user.photos %}
+
+      <h2>All of the User's Photos </h2>
+
+      <ul>
+      {% for photo in user.photos %}
+        <li>
+          {{ photo }} goes here...need a tag and href=, see example!
+          <a href="/photos/{{ photo.url }}"> {{ photo.url }} was uploaded on {{ photo.date }}
+        </li>
+      {% endfor %}
+      </ul>
+
+    {% else %}
+
+      Users photos would have been here. None yet tho
+
+    {% endif %}
+
+
+{% endif %}
+
+  
+
+
+
+
+
+{% endblock %}

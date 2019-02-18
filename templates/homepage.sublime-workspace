@@ -1,0 +1,537 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"register",
+				"register_form"
+			],
+			[
+				"user",
+				"user_id"
+			],
+			[
+				"render",
+				"render_template"
+			],
+			[
+				"demo",
+				"demo_class"
+			],
+			[
+				"dem",
+				"demo_class"
+			],
+			[
+				"con",
+				"continue"
+			],
+			[
+				"n_",
+				"n_value_list"
+			],
+			[
+				"to",
+				"to_string"
+			],
+			[
+				"au",
+				"author"
+			],
+			[
+				"book",
+				"book_new"
+			],
+			[
+				"add",
+				"add_book"
+			],
+			[
+				"update",
+				"update_password"
+			],
+			[
+				"sp",
+				"speed_limit"
+			],
+			[
+				"ro",
+				"road_1"
+			],
+			[
+				"v",
+				"values_list"
+			],
+			[
+				"va",
+				"values"
+			],
+			[
+				"di",
+				"dictionary"
+			],
+			[
+				"na",
+				"names_values"
+			],
+			[
+				"names",
+				"names_values"
+			],
+			[
+				"nam",
+				"name0"
+			],
+			[
+				"value",
+				"value_list"
+			],
+			[
+				"out",
+				"out_list"
+			],
+			[
+				"las",
+				"last_letter_of_name"
+			],
+			[
+				"fi",
+				"first_letter_of_name"
+			],
+			[
+				"d",
+				"dictionary"
+			],
+			[
+				"pira",
+				"pirate_dict"
+			],
+			[
+				"pi",
+				"pirate_dict"
+			],
+			[
+				"mel",
+				"mel_dict"
+			],
+			[
+				"count",
+				"count_dict"
+			],
+			[
+				"coun",
+				"count_dict"
+			],
+			[
+				"li",
+				"list_of_words"
+			],
+			[
+				"f",
+				"fibonacci"
+			],
+			[
+				"b",
+				"bunny_ears"
+			],
+			[
+				"s",
+				"string"
+			],
+			[
+				"tu",
+				"tuple_list"
+			],
+			[
+				"p",
+				"percentage"
+			],
+			[
+				"bas",
+				"base_price"
+			],
+			[
+				"tot",
+				"total_cost"
+			],
+			[
+				"state",
+				"state_abbrev"
+			],
+			[
+				"fr",
+				"fruit_name"
+			],
+			[
+				"is",
+				"is_berry"
+			],
+			[
+				"home",
+				"hometown_matches"
+			],
+			[
+				"town",
+				"town_name"
+			],
+			[
+				"la",
+				"lastname"
+			],
+			[
+				"l",
+				"lastname"
+			],
+			[
+				"let",
+				"letter_list"
+			],
+			[
+				"get",
+				"get_unique_characters"
+			],
+			[
+				"des",
+				"descending_items"
+			],
+			[
+				"sm",
+				"smallest_n_items"
+			],
+			[
+				"ev",
+				"every_other_item"
+			],
+			[
+				"common",
+				"common_words"
+			],
+			[
+				"words",
+				"words1"
+			],
+			[
+				"wo",
+				"words_in_common"
+			],
+			[
+				"word",
+				"words_in_common"
+			],
+			[
+				"wor",
+				"words1"
+			],
+			[
+				"i",
+				"item_tuple"
+			],
+			[
+				"inde",
+				"indexed_list"
+			],
+			[
+				"tw",
+				"twoInnaRow"
+			],
+			[
+				"an",
+				"anArray"
+			],
+			[
+				"sum",
+				"sum67"
+			],
+			[
+				"st",
+				"string_times"
+			],
+			[
+				"DN",
+				"DNA_d"
+			],
+			[
+				"m",
+				"monoisotopic_t"
+			],
+			[
+				"arr",
+				"arrayA"
+			],
+			[
+				"perm",
+				"permutations"
+			],
+			[
+				"pro",
+				"producter"
+			]
+		]
+	},
+	"build_system": "",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/Python/Python.sublime-build",
+					""
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					"Syntax Check"
+				]
+			],
+			[
+				"Packages/Python/Python.sublime-build",
+				""
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"Bookmarks: Select All"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 136.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/liv/src/BeeMachine/seed.py",
+		"/Users/liv/src/BeeMachine/model.py",
+		"/Users/liv/src/BeeMachine/templates/upload.html",
+		"/Users/liv/src/BeeMachine/templates/all_users.html",
+		"/Users/liv/src/BeeMachine/templates/user.html",
+		"/Users/liv/src/BeeMachine/templates/login.html",
+		"/Users/liv/src/BeeMachine/templates/registration_form.html",
+		"/Users/liv/src/BeeMachine/templates/homepage.html",
+		"/Users/liv/src/BeeMachine/templates/base.html",
+		"/Users/liv/src/BeeMachine/templates/upload-page.html",
+		"/Users/liv/src/BeeMachine/requirements.txt",
+		"/Users/liv/src/LabsSolutions/ratings/solution/step-1/server.py",
+		"/Users/liv/src/LabsSolutions/ratings/solution/step-1/seed.py",
+		"/Users/liv/src/LabsSolutions/ratings/solution/step-4/model.py",
+		"/Users/liv/src/LabsSolutions/ratings/solution/step-1/model.py",
+		"/Users/liv/Desktop/thread_demo.py",
+		"/Users/liv/src/LabsSolutions/Week4_Lab_Solns/ajax/solution/templates/index.html",
+		"/Users/liv/src/LabsSolutions/Week4_Lab_Solns/js-word-scramble/solution/scramble-helper.js",
+		"/Users/liv/src/LabsSolutions/Week4_Lab_Solns/js-coffee-shop/solution/further-study.html",
+		"/Users/liv/src/LabsSolutions/Week4_Lab_Solns/js-coffee-shop/solution/coffee.html",
+		"/Users/liv/src/LabsSolutions/Week4_Lab_Solns/js-word-scramble/solution/scramble.html",
+		"/Users/liv/src/LecturePDF&Demos/Week4_LecturePDFs/JavaScript/js-dom-demo/demo.html",
+		"/Users/liv/src/LabsSolutions/Week4_Lab_Solns/js-word-scramble/solution/scramble-further-study_2.html",
+		"/Users/liv/src/LabsSolutions/Week4_Lab_Solns/js-word-scramble/solution/scramble-further-study_1.html",
+		"/Users/liv/src/Skills_Assessments/Skills-4/SQL-Liv/sql/requirements.txt",
+		"/Users/liv/src/lectureDemos/flask-demo/_test.txt",
+		"/Users/liv/src/lectureDemos/flask-demo/requirements.txt",
+		"/Users/liv/src/Homework/melon-production/shipping_procedure.py",
+		"/Users/liv/src/Homework/melon-production/melons.py",
+		"/Users/liv/src/Homework/melon-production/robots.py",
+		"/Users/liv/src/LightingTalk/demo2_multithreading.py",
+		"/Users/liv/src/LightingTalk/demo_multithreading.py",
+		"/Users/liv/src/100Days/Day_1.py",
+		"/Users/liv/src/Homework/salesperson-report/sales_report.py",
+		"/Users/liv/src/Homework/salesperson-report/sales-report.txt",
+		"/Users/liv/src/100Days/Day_2.py",
+		"/Users/liv/src/Skills_Assessments/skills-1/functions.py",
+		"/Users/liv/src/Skills_Assessments/Skills_assessments-Solutions/fina_solution/fina_skills1/hackbright__week1_skills/test_lists.py",
+		"/Users/liv/src/Skills_Assessments/Skills_assessments-Solutions/fina_solution/fina_skills1/hackbright__week1_skills/lists.py",
+		"/Users/liv/src/Skills_Assessments/Skills_assessments-Solutions/fina_solution/fina_skills1/hackbright__week1_skills/test_functions.py",
+		"/Users/liv/src/Skills_Assessments/Skills_assessments-Solutions/fina_solution/fina_skills1/hackbright__week1_skills/functions.py",
+		"/Users/liv/src/underpaid-customers/accounting.py",
+		"/Users/liv/src/list-slicing/further_study.py",
+		"/Users/liv/vagrant/src/intro-to-ubermelon/process.py",
+		"/Users/liv/Desktop/Hackbright/Tech PreWork/what.html",
+		"/Users/liv/vagrant/homework/code.py",
+		"/Users/liv/vagrant/homework/smith_hello.py",
+		"/Volumes/Vagrant/code.py",
+		"/Users/liv/Desktop/12-16-18 PyPractice.py",
+		"/Users/liv/Desktop/MorePyPractice.py",
+		"/Users/liv/Desktop/PythonCodingBat.py",
+		"/Users/liv/Desktop/Udemy /Sort-Algorithms-Insertion-Sort-(Implementation)-Source-Code/src/academy/learnprogramming/insertionsort/Main.java",
+		"/Users/liv/Desktop/Picture.java",
+		"/Users/liv/Desktop/Pixel.java",
+		"/Users/liv/Desktop/StringProcTestEx.java",
+		"/Users/liv/Desktop/ArrayMethodsPrac.java",
+		"/Users/liv/Desktop/BasicArray.java",
+		"/Users/liv/Desktop/HealthProfileEx.Java",
+		"/Users/liv/Desktop/LibraryCatalogEx.java",
+		"/Users/liv/Desktop/HealthProfileDriverEx.java",
+		"/Users/liv/Desktop/CrapsEx.java",
+		"/Users/liv/Desktop/DiceEx.java",
+		"/Users/liv/Desktop/BookTesterEx.java",
+		"/Users/liv/Desktop/CS514/MathUtil_test.java",
+		"/Users/liv/Desktop/CS514/GuessingGame.java",
+		"/Users/liv/Desktop/CS514/hmk1-liv-yaa-master/src/main/UsernameHelper.java",
+		"/Users/liv/Desktop/CS514/Hello.java",
+		"/Users/liv/Desktop/CS514/GasMileage.java",
+		"/Users/liv/Desktop/CS514 Lec 1.java",
+		"/Users/liv/Documents/Rosalind/rosalind_tran_samp.txt",
+		"/Users/liv/Documents/Rosalind/SplicedMotif.py",
+		"/Users/liv/Documents/Rosalind/rosalind_lexf_samp.txt",
+		"/Users/liv/Documents/Rosalind/TransitionsTransversions.py",
+		"/Users/liv/Documents/Rosalind/EnumeratingKMers.py",
+		"/Users/liv/Documents/Rosalind/rosalind_revp_samp.txt",
+		"/Users/liv/Documents/Rosalind/RestrictionSites.py",
+		"/Users/liv/Documents/Rosalind/rosalind_pper_samp.txt",
+		"/Users/liv/Documents/Rosalind/PartPermutations.py",
+		"/Users/liv/Documents/Rosalind/rosalind_sseq_samp.txt",
+		"/Users/liv/Documents/Rosalind/RNASplicing.py",
+		"/Users/liv/Documents/Rosalind/RNA_codon_table_2.txt",
+		"/Users/liv/Documents/Rosalind/proteinMass.py",
+		"/Users/liv/Documents/Rosalind/IntroRandomStrings.py",
+		"/Users/liv/Documents/Rosalind/protMassTable.txt",
+		"/Users/liv/Documents/Rosalind/rosalind_prtm_samp.txt",
+		"/Users/liv/Documents/Rosalind/mrna.txt",
+		"/Users/liv/Documents/Rosalind/InferringmRNA.py",
+		"/Users/liv/Documents/Rosalind/rosalind_prob_samp.txt",
+		"/Users/liv/Documents/Rosalind/EnumeratingGeneOrders.py",
+		"/Users/liv/Documents/Rosalind/rosalind_perm_samp.txt",
+		"/Users/liv/Desktop/consensus_rosalind.py",
+		"/Start_Program.py",
+		"/Users/liv/Desktop/UCSC Algo/Experiment.py",
+		"/Users/liv/Desktop/UCSC Algo/find_max.py",
+		"/Users/liv/Desktop/UCSC Algo/recursive_runtime.py",
+		"/Users/liv/Desktop/UCSC Algo/arith_geo_series.py",
+		"/Users/liv/Desktop/UCSC Algo/timing.py",
+		"/Users/liv/Desktop/UCSC Algo/binary_search.py"
+	],
+	"find":
+	{
+		"height": 39.0
+	},
+	"find_in_files":
+	{
+		"height": 101.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"incremental_find":
+	{
+		"height": 31.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 30.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "Packages/Python/Python.sublime-build",
+	"replace":
+	{
+		"height": 58.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 59.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
