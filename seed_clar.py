@@ -24,11 +24,11 @@ def load_bees_from_clarifai():
 
     all_bees = list(clarifai_app.inputs.get_all())
 
-    print(len(all_bees))
+
 
     # Iterate and create Bee objects
-    # for i in range(len(all_bees)):
-    for i in range(30): # FOR NOW
+    for i in range(len(all_bees)):
+    # for i in range(30): # FOR NOW
 
         bee_id = i 
         bee = all_bees[i] # Gets object from list
@@ -40,7 +40,14 @@ def load_bees_from_clarifai():
                         health=health,
                         )
 
-        print(new_bee)
+        # What is the dir of bee object?
+        # 'allow_dup_url', 'base64', 'concepts', 'crop', 'dict', 
+        #'feedback_info', 'file_obj', 'filename', 'geo', 'input_id', 
+        #'metadata', 'not_concepts', 'regions', 'score', 
+        #'status', 'url'
+
+        # print("Dict: ", dict(bee))
+        print("Concepts: ", bee.concepts)
 
         db.session.add(new_bee)
 

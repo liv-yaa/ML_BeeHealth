@@ -25,10 +25,10 @@
     <ul>
         {% for bee in bees %}
             <li>
-                {{ bee }} 
-                <img src="https://storage.cloud.google.com/beees/bee_imgs/038_438.png?_ga=2.105848003.-1912604629.1547183681&_gac=1.182683476.1547183691.CjwKCAiA99vhBRBnEiwAwpk-uLxHdBlFU6pw9_sKFaZrkuB_Ob190WTVy9IxuTRXSxbdLkum-tQA3hoC1uAQAvD_BwE">
-                <br><br>
-                
+                {{ bee.bee_id }} 
+                <img src={{ bee.url }}>
+                {{ bee.health }}
+
             </li>
         {% endfor %}
     </ul>
