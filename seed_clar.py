@@ -12,19 +12,20 @@ What is the dir of bee object?
 
 # API Requests / Get
 from clarifai.rest import ClarifaiApp
-# from clarifai.rest.client import create_image_from_filename # https://media.readthedocs.org/pdf/clarifai-python/latest/clarifai-python.pdf (pg11)
+clarifai_app = ClarifaiApp(api_key="58dc8755e39d4043a98554b44bbcaf56")
+# model = app.public_models.general_model
+# response = model.predict_by_url('url!!')
 
-from gcloud import storage
 
 import pandas as pd
 
 from model import User, Photo, Bee, connect_to_db, db
 from server import app
 
-clarifai_app = ClarifaiApp(api_key="58dc8755e39d4043a98554b44bbcaf56")
-# model = app.public_models.general_model
-# response = model.predict_by_url('url!!')
 
+
+# Google cloud storage stuff?
+# from gcloud import storage
 # https://github.com/googleapis/google-cloud-python/issues/1295
 # client = storage.Client() # Environ set up
 # bucket = client.bucket('mlbees')
@@ -38,23 +39,22 @@ def add_images_concepts(csv_filename):
     """
     Load images to Clarifai model, using custom tags from the csv file.
     """
-    print("csv file ", csv_filename)
 
     # df is a pandas DataFrame
     df = pd.read_csv(csv_filename, # https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html
-                    index_col=False, # from docs: tells reader to ignore headers
-                    parse_dates={'datetime':[1, 2]}, # from docs: This will parse columns 1, 2 as date and call result 'datetime'
+                    index_col=False, 
+                    parse_dates={'datetime':[1, 2]}, # This will parse columns 1, 2 as date and call result 'datetime'
                     dtype={'health':'category', 
                             'datetime':'datetime64[ns]',
                             'csv_filename':'str',
                             'zip_code':'str',
-                            } # Data type for data, column respectively.
+                            } 
     )
 
     image_list = []
 
-    # for i in range(len(df)):
-    for i in range(100): # FOR NOW
+    for i in range(len(df)):
+    # for i in range(120): # FOR NOW
 
         bee_id = i # Integer assigned to each new Bee
         health_ = str(df.loc[i][5])
@@ -67,21 +67,6 @@ def add_images_concepts(csv_filename):
 
         # Edit fileanme to have the local path:
         local_filename = 'bee_imgs/' + csv_filename
-        
-        # print(bee_id,
-        #     health,
-        #     datetime,
-        #     csv_filename,
-        #     zip_code,
-        #     local_filename)
-
-        # Constructor of ClImage: ClImage(url='', 
-                    # filename='/tmp/user/dog.jpg', 
-                    # concepts=[''], 
-                    # not-concepts=[''],
-                    # metadata={'id':123, '': ...})
-
-        # local_filename = "temp"
 
         if (health == 'y'):
             img = clarifai_app.inputs.create_image_from_filename(filename=local_filename, 
@@ -90,6 +75,7 @@ def add_images_concepts(csv_filename):
                             not_concepts=None,
                             # metadata={'datetime': datetime, 'zip_code': zip_code},
                             # geo=None # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
+                            allow_duplicate_url=True,
                             )
         else:
             img = clarifai_app.inputs.create_image_from_filename(filename=local_filename, 
@@ -98,29 +84,29 @@ def add_images_concepts(csv_filename):
                             not_concepts=['health'],
                             # metadata={'datetime': datetime, 'zip_code': zip_code},
                             # geo=None # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
+                            allow_duplicate_url=True,
                             )
 
 
 
-        print("URL: ", img.url)
-        # print("Filename: ", img.filename)
-        print("img concepts: ", img.concepts)
-        # print("img not concepts: ", img.not_concepts)
-        # print("metadata: ", img.metadata)
-        # print(img)
-        print()
+        # print("URL: ", img.url)
+        # # print("Filename: ", img.filename)
+        # print("img concepts: ", img.concepts)
+        # # print("img not concepts: ", img.not_concepts)
+        # # print("metadata: ", img.metadata)
+        # # print(img)
+        # print()
         
         image_list.append(img)
 
     clarifai_app.inputs.bulk_create_images(image_list)
 
-    # We are trying to get images by url and upload them to our file!
-    # Let's grab them from Google:
-    # https://cloud.google.com/appengine/docs/standard/python/refdocs/google.appengine.api.images#Image_get_serving_url
 
-
-
-
+def clear_all():
+    """
+    Clear all images to Clarifai model, including concepts.
+    """
+    clarifai_app.inputs.delete_all()
 
 
 def load_bees_from_clarifai():
@@ -155,9 +141,14 @@ if __name__ == '__main__':
     connect_to_db(app)
     db.create_all()
 
+    # Clear it
+    clear_all()
+    print('Successfully deleted all.')
+
     # Get Bees from file
     seed_filename = "bee_data.csv" 
     add_images_concepts(seed_filename)
+    print('Successfully added all.')
 
     # Add Bees to database
     # load_bees_from_clarifai()
