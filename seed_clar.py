@@ -5,7 +5,9 @@ FROM CLARIFAI API - gets images
 
 # API Requests / Get
 from clarifai.rest import ClarifaiApp
-from clarifai.rest import Image as ClImage
+from clarifai.rest import Image as ClImage # https://media.readthedocs.org/pdf/clarifai-python/latest/clarifai-python.pdf (pg11)
+
+from gcloud import storage
 
 import pandas as pd
 
@@ -37,10 +39,10 @@ def images_up_with_concepts(csv_filename):
         # bee_id = i # Integer
 
         health_ = str(df.loc[i][5])
-        # datetime = df.loc[i][0]
-        local_filename = str(df.loc[i][1])
+        datetime = df.loc[i][0]
+        csv_filename = str(df.loc[i][1])
         # location = str(df.loc[i][2])
-        # zip_code = str(df.loc[i][3])
+        zip_code = str(df.loc[i][3])
         # subspecies = str(df.loc[i][4])
         # pollen_carrying = str(df.loc[i][6])
         # caste = str(df.loc[i][7])
@@ -48,16 +50,44 @@ def images_up_with_concepts(csv_filename):
 
         # Edit health (a string) to make it better for queries (a binary value)
         health = 'y' if health_ == 'healthy' else 'n'
+
+        # Edit fileanme to have the local path:
+        local_filename = '/bee_imgs/' + csv_filename
+        print(local_filename)
         
+        # # Constructor of ClImage: ClImage(url='', 
+        #             # filename='/tmp/user/dog.jpg', 
+        #             # concepts=[''], 
+        #             # not-concepts=[''],
+        #             # metadata={'id':123, '': ...})
 
-        if (health == 'y'):
-            img = ClImage(local_filename,  concepts=['health'])
-        else:
-            img = ClImage(local_filename, not_concepts=['health'])
+        # if (health == 'y'):
+        #     img = ClImage(filename=local_filename, 
+        #                     concepts=['health'],
+        #                     metadata={'datetime': datetime, 'zip_code': zip_code},
+        #                     )
+        # else:
+        #     img = ClImage(filename=local_filename, 
+        #                     not_concepts=['health'],
+        #                     metadata={'datetime': datetime, 'zip_code': zip_code},
+        #                     )
 
-        image_list.append(img)
+        # print("URL: ", img.url)
+        # print("Filename: ", img.filename)
+        # print("img concepts: ", img.concepts)
+        # print("img not concepts: ", img.not_concepts)
+        # print("metadata: ", img.metadata)
+        # print(img)
+        # print()
+        
+    #     image_list.append(img)
 
-    clarifai_app.inputs.bulk_create_images(image_list)
+    # clarifai_app.inputs.bulk_create_images(image_list)
+
+    # We are trying to get images by url and upload them to our file!
+    # Let's grab them from Google:
+    # https://cloud.google.com/appengine/docs/standard/python/refdocs/google.appengine.api.images#Image_get_serving_url
+
 
 
 
