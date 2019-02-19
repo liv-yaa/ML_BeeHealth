@@ -66,7 +66,7 @@ def add_images_concepts(csv_filename):
         health = 'y' if health_ == 'healthy' else 'n'
 
         # Edit fileanme to have the local path:
-        local_filename = '/bee_imgs/' + csv_filename
+        local_filename = 'bee_imgs/' + csv_filename
         
         # print(bee_id,
         #     health,
@@ -85,34 +85,34 @@ def add_images_concepts(csv_filename):
 
         if (health == 'y'):
             img = clarifai_app.inputs.create_image_from_filename(filename=local_filename, 
-                            image_id=bee_id,
+                            # image_id=bee_id,
                             concepts=['health'],
                             not_concepts=None,
-                            metadata={'datetime': datetime, 'zip_code': zip_code},
-                            geo=None # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
+                            # metadata={'datetime': datetime, 'zip_code': zip_code},
+                            # geo=None # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
                             )
         else:
             img = clarifai_app.inputs.create_image_from_filename(filename=local_filename, 
-                            image_id=bee_id,
+                            # image_id=bee_id,
                             concepts=None,
                             not_concepts=['health'],
-                            metadata={'datetime': datetime, 'zip_code': zip_code},
-                            geo=None # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
+                            # metadata={'datetime': datetime, 'zip_code': zip_code},
+                            # geo=None # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
                             )
 
 
 
         print("URL: ", img.url)
-        print("Filename: ", img.filename)
+        # print("Filename: ", img.filename)
         print("img concepts: ", img.concepts)
-        print("img not concepts: ", img.not_concepts)
-        print("metadata: ", img.metadata)
-        print(img)
+        # print("img not concepts: ", img.not_concepts)
+        # print("metadata: ", img.metadata)
+        # print(img)
         print()
         
-    #     image_list.append(img)
+        image_list.append(img)
 
-    # clarifai_app.inputs.bulk_create_images(image_list)
+    clarifai_app.inputs.bulk_create_images(image_list)
 
     # We are trying to get images by url and upload them to our file!
     # Let's grab them from Google:
