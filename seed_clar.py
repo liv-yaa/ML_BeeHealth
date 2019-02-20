@@ -19,7 +19,7 @@ clarifai_app = ClarifaiApp(api_key="58dc8755e39d4043a98554b44bbcaf56")
 
 import pandas as pd
 
-from model import User, Photo, Bee, connect_to_db, db
+from model import User, Bee, connect_to_db, db
 from server import app
 
 
@@ -142,8 +142,8 @@ if __name__ == '__main__':
     db.create_all()
 
     # Clear it
-    clear_all()
-    print('Successfully deleted all.')
+    # clear_all()
+    # print('Successfully deleted all.')
 
     # Get Bees from file
     seed_filename = "bee_data.csv" 
@@ -151,4 +151,4 @@ if __name__ == '__main__':
     print('Successfully added all.')
 
     # Add Bees to database
-    # load_bees_from_clarifai()
+    load_bees_from_clarifai()

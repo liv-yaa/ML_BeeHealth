@@ -23,47 +23,19 @@ class User(db.Model):
     user_id = db.Column(db.Integer,
                         autoincrement=True,
                         primary_key=True)
-    email = db.Column(db.String(100), nullable=True)
-    password = db.Column(db.String(20), nullable=True)
+    email = db.Column(db.String(100))
+    password = db.Column(db.String(20))
 
     def __repr__(self):
         """ Print format for User object """
         return f'<User id: {self.user_id}; email: {self.email}>'
 
 
-class Photo(db.Model):
-    """ A photo of a bee, Uploaded by a user.
-
-    """
-
-    __tablename__= 'photos'
-
-    photo_id = db.Column(db.Integer,
-                        autoincrement=True,
-                        primary_key=True,
-                        )
-
-
-    user_id = db.Column(db.Integer,
-                        db.ForeignKey('users.user_id'))
-    bee_id = db.Column(db.Integer,
-                        db.ForeignKey('bees.bee_id'))
-
-
-    user = db.relationship("User", backref=db.backref("photos", order_by=photo_id))
-    bee = db.relationship("Bee", backref=db.backref("photos", order_by=photo_id))
-
-
-    def __repr__(self):
-        """ Print format for Photo object """
-        return f'<Photo id: {self.photo_id}; {self.url}>'
-
-
 class Bee(db.Model):
     """ All Bee objects, both from Kaggle Dataset and from
         user generated bee Photos
 
-        Every Bee does not have a user, but does it have a Photo?
+        Every Bee does not have a user.
     """
 
     __tablename__= 'bees'
@@ -73,10 +45,16 @@ class Bee(db.Model):
                         primary_key=True,
                         )
 
-    url = db.Column(db.String(150)) # Keep
-    health = db.Column(db.String(1)) # 'y' if healthy, or 'n' if not.
+    user_id = db.Column(db.Integer, 
+                        db.ForeignKey('users.user_id'),
+                        nullable=True,
+                        )
 
-   
+    url = db.Column(db.String(150), nullable=True) # Keep
+    health = db.Column(db.String(1), nullable=True) # 'y' if healthy, or 'n' if not.
+
+    user = db.relationship("User",
+                           backref=db.backref("bees"))
 
     def __repr__(self):
         """ Print format for Bee object """
@@ -84,6 +62,7 @@ class Bee(db.Model):
                     Bee id: {self.bee_id}
                     url: {self.url}
                     health: {self.health}
+                    Uploaded by: {self.users.user_id}
                     >'''
 
 
