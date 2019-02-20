@@ -5,14 +5,13 @@
 # Connect to the PostgreSQL database through the Flask-SQLAlchemy library
 # Includes the 'session' object
 from flask_sqlalchemy import SQLAlchemy
+
 # Create a database object
 db = SQLAlchemy()
 
 
-
-
-# Model Class Definitions
-
+##############################################################################
+# Model definitions
 class User(db.Model):
     """ A user of the app.
     Contains login information for the session (email, password).
@@ -26,9 +25,19 @@ class User(db.Model):
     email = db.Column(db.String(100))
     password = db.Column(db.String(20))
 
+
     def __repr__(self):
         """ Print format for User object """
         return f'<User id: {self.user_id}; email: {self.email}>'
+
+
+    def get_users_bees(self):
+        """ Retrieve all Bees that are tagged with this User's user_id 
+        """
+        
+        # Return a list - need to test!!! 
+        query = db.session.query(Bee.user_id)
+        return query
 
 
 class Bee(db.Model):
@@ -50,7 +59,7 @@ class Bee(db.Model):
                         nullable=True,
                         )
 
-    url = db.Column(db.String(150), nullable=True) # Keep
+    url = db.Column(db.String(150), nullable=True) 
     health = db.Column(db.String(1), nullable=True) # 'y' if healthy, or 'n' if not.
 
     user = db.relationship("User",
@@ -62,7 +71,7 @@ class Bee(db.Model):
                     Bee id: {self.bee_id}
                     url: {self.url}
                     health: {self.health}
-                    Uploaded by: {self.users.user_id}
+                    Uploaded by: {self.user_id}
                     >'''
 
 

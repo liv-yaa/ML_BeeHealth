@@ -1,4 +1,5 @@
-""" File that seeds health_db database from Kaggle data in kaggle_data/ """
+""" DEPRECIATED
+File that seeds health_db database from Kaggle data in kaggle_data/ """
 # Outside tools
 import pandas as pd
 
