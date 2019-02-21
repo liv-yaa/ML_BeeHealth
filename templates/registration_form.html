@@ -1,28 +1,29 @@
 {% extends 'base.html' %}
 {% block content %}
-
-<h1> Welcome! Please Register to Upload a Photo: </h1>
+<div class="well spaced" style="width:40%;">
+<h3> Welcome! Please Register</h3>
 
 <form action="register" method="POST">
 
-  <div>
+  <div class="form-group">
     <label>
       Email
-      <input type="email" name="email">
+      <input type="email" name="email" class="form-control">
     </label>
   </div>
 
   <div>
     <label>
       Password
-      <input type="password" name="password">
+      <input type="password" name="password" class="form-control">
     </label>
   </div>
 
   <div>
-    <input type="submit" value="Register">
+    <input type="submit" value="Register" class="btn btn-danger">
   </div>
 
 </form>
+</div>
 
 {% endblock %}

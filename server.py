@@ -76,8 +76,12 @@ def register_process():
     db.session.commit()
     flash(f"User {email} added.")
 
-    # Redirect to the index page.
-    return redirect('/users')
+    # Log the user in automatically:
+    session["user_id"] = a_user.user_id
+    flash("Logged in")
+
+    # Redirect to the users page
+    return redirect(f'/users/{a_user.user_id}')
 
 
 @app.route('/login', methods=['GET'])
@@ -89,8 +93,8 @@ def login_form():
 
 @app.route('/login', methods=['POST'])
 def login_process():
-    """ Process the login (previous route ^). Works upon submission of the Submit button.
-    This is not working though ?
+    """ Process the login (previous route ^). 
+    Works upon submission of the Submit button.
     """
 
     # Get variables from the form (login.html):
@@ -112,7 +116,7 @@ def login_process():
     session["user_id"] = user.user_id
 
     flash("Logged in")
-    return redirect(f"/users/{user.user_id}") # See the route with similar name below!
+    return redirect(f"/users/{user.user_id}") 
 
 
 @app.route('/logout')
@@ -135,6 +139,10 @@ def get_users():
 @app.route("/users/<int:user_id>")
 def user_detail(user_id):
     """Show info about user.
+        Show all Bees created by that user, if they exist.
+        
+
+        NOT DONE YET: Show a form for uploading a photo.
     """
 
     user = User.query.get(user_id)
@@ -148,28 +156,49 @@ def user_detail(user_id):
 
 
 
-@app.route('/upload-success', methods=['GET'])
-def upload():
-    """ I want to make this AJAX! In place. For now, this will be a form.
-    """
+# @app.route('/upload-success', methods=['GET'])
+# def upload():
+#     """ I want to make this AJAX! In place. For now, this will be a form.
+#     """
 
-    return render_template("upload_success.html")
-
-@app.route('/upload-success', methods=['POST'])
-def upload():
-    """ I want to make this AJAX! In place. For now, this will be a form.
-    """
-
-    return redirect("/bee-add-success")
+#     return render_template("upload_success.html")
 
 
+# @app.route('/upload-success', methods=['POST'])
+# def upload():
+#     """ I want to make this AJAX! In place. For now, this will be a form.
+#     """
 
-@app.route('/bee-add-success')
-def upload():
-    """ I want to make this AJAX! In place. For now, this will be a form.
-    """
+#     # Get image and health from the form upload_success.html
+#     image = request.form["image"]
+#     health = request.form["health"]
 
-    return render_template("bee_add_success.html")
+#     # # See if there are any users yet in our db
+#     # user = User.query.filter_by(email=email).first()
+
+#     # if not user:
+#     #     flash("That user information does not exist.")
+#     #     return redirect("/login")
+
+#     # if user.password != password:
+#     #     flash("Incorrect password")
+#     #     return redirect("/login")
+
+#     # # If we succesfully find a match, add the user_id to the session
+#     # session["user_id"] = user.user_id
+
+#     # flash("Logged in")
+
+#     return redirect("/bee-add-success")
+
+
+
+# @app.route('/bee-add-success')
+# def upload():
+#     """ I want to make this AJAX! In place. For now, this will be a form.
+#     """
+
+#     return render_template("bee_add_success.html")
 
 
 
