@@ -130,19 +130,17 @@ def logout():
 
 @app.route('/users')
 def get_users():
-    """ Get all users - temporary for now """
+    """ Get all users - temporary for now - should be viewable by Admin only. """
 
     users = User.query.all()
     return render_template("all_users.html", users=users)
 
 
-@app.route("/users/<int:user_id>")
+@app.route("/users/<int:user_id>", methods=['GET'])
 def user_detail(user_id):
     """Show info about user.
         Show all Bees created by that user, if they exist.
-        
 
-        NOT DONE YET: Show a form for uploading a photo.
     """
 
     user = User.query.get(user_id)
@@ -153,6 +151,61 @@ def user_detail(user_id):
                             user=user,
                             user_bees=user_bees,
                             )
+
+
+@app.route("/users/<int:user_id>", methods=['POST'])
+def add_bee(user_id):
+    """       
+
+        Show a form for uploading a photo.
+        Createa Bee from the data submitted by that user.
+
+        NOT DONE YET: We need to host the image on Clarafai.
+
+    """
+    result = db.session.query(func.max(Bee.bee_id)).one()
+    bee_id = int(result[0]) + 1
+
+    flash("Bee id", bee_id)
+
+    zipcode = None # Nullable
+
+    # image = request.form["user-file"]
+    image = "https://www.istockphoto.com/no/photos/honey-bee?sort=mostpopular&mediatype=photography&phrase=honey%20bee"
+    health = request.form["health"]
+
+    user_id = session.get("user_id")
+    if not user_id:
+        raise Exception("No user logged in.")
+
+    # Check for an existing Bee? not really possible tho.
+
+    # bee = Bee(bee_id=bee_id,
+    #             user_id=user_id,
+    #             url=image, # From user_file
+    #             health=health,
+    #             zip_code=zipcode,
+
+    #             )
+
+    # flash("Bee created successfully.")
+
+    # db.session.add(bee)
+    # db.session.commit()
+    # flash("Bee added to database. Thank you!")
+
+    return redirect(f"/bee-add-success")
+
+
+
+
+@app.route('/bee-add-success')
+def upload():
+    """ I want to make this AJAX! In place. For now, this will be a form.
+    """
+
+    return render_template("bee_add_success.html")
+
 
 
 
@@ -193,12 +246,6 @@ def user_detail(user_id):
 
 
 
-# @app.route('/bee-add-success')
-# def upload():
-#     """ I want to make this AJAX! In place. For now, this will be a form.
-#     """
-
-#     return render_template("bee_add_success.html")
 
 
 

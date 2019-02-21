@@ -7,11 +7,29 @@
     <h3>{{ user.email }} is the user at this URL. ID#{{ user.user_id }}</h3>
     <br><br>
 
-    <a href="/"><h2>Upload a photo! </h2></a>
+    <h2>Upload a photo! </h2>
+    <form action="/bee-add-success" method="POST"> 
+
+        <br>
+        <input type="file" name="user-file">
+
+        <div>
+          <label> How is the health of this bee?
+            <input type="value" name="health" id="health" required>
+          </label>
+            <label> What is your zipcode?
+              <input type="value" name="zipcode" id="zipcode">
+          </label>
+        </div>
+        
+        <button type="submit" value="Submit Photo"> Submit Photo </button>
+    </form>
+
+
     <br><br>
     {% if user_bees %}
 
-      <h2>All of the User's Photos </h2>
+      <h2>All of Your Photos </h2>
 
       <ul>
       {% for photo in user_bees %}

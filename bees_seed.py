@@ -15,17 +15,7 @@ import pandas as pd
 from model import Bee, connect_to_db, db
 # from server import app
 
-def set_val_bee_id():
-    """ WHAT IS THIS FUNCTION FOR??? """
 
-    # Get the maximum user_id in the database:
-    result = db.session.query(func.max(Bee.bee_id)).one()
-    max_id = int(result[0])
-
-    # Set the value for the next user_id to be max_id + 1
-    query = "SELECT setval('bees_bee_id_seq', :new_id)"
-    db.session.execute(query, {'new_id': max_id + 1})
-    db.session.commit()
 
 
 def add_images_concepts(csv_filename):

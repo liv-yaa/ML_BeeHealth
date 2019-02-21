@@ -59,7 +59,7 @@ class Bee(db.Model):
                         nullable=True,
                         )
 
-    url = db.Column(db.String(150), nullable=True) 
+    url = db.Column(db.String(250), nullable=True) 
     health = db.Column(db.String(1), nullable=True) # 'y' if healthy, or 'n' if not.
     zip_code = db.Column(db.String(10), nullable=True)
 
