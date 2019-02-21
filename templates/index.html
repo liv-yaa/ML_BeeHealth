@@ -18,20 +18,36 @@
 
 
 {% endif %}
-<br><br>
+
 
 <h3> View Our Bee Photo Database </h3>
-
-    <ul>
-        {% for bee in bees %}
-            <li>
-                {{ bee.bee_id }} 
-                <img src={{ bee.url }}>
-                {{ bee.health }}
-
-            </li>
+    <br>
+    <h5> healthy bees: </h5>
+    
+        {% for bee in healthy_bees %}
+            
+            {{ bee.bee_id, bee.health }} 
+            <img src={{ bee.url }} 
+                alt="healthy bee {{ bee.bee_id}}" 
+                height="100" 
+                width="100">
+            
         {% endfor %}
-    </ul>
+    
+    <br><br><br>
+    <h5> unhealthy bees: </h5>
+
+        {% for bee in unhealthy_bees %}
+
+            {{ bee.bee_id, bee.health }} 
+            <img src={{ bee.url }} 
+                alt="healthy bee {{ bee.bee_id}}" 
+                height="100" 
+                width="100">
+
+
+        {% endfor %}
+
 
 
 {% endblock %}

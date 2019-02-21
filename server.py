@@ -1,7 +1,7 @@
 """ server.py
     Flask routes for BeeMachine project.
 """
-
+import random
 from jinja2 import StrictUndefined
 
 from flask import Flask, render_template, request, flash, redirect, session
@@ -38,8 +38,18 @@ def index():
     """
 
     # Get list of bees
-    bees = Bee.query.all()
-    return render_template("index.html", bees=bees)
+    # bees = Bee.query.all()
+
+    healthy = Bee.query.filter_by(health='y').all()
+    unhealthy = Bee.query.filter_by(health='n').all()
+
+    healthy_bees = random.sample(healthy, 10)
+    unhealthy_bees = random.sample(unhealthy, 10)
+
+
+    return render_template("index.html", 
+                            healthy_bees=healthy_bees,
+                            unhealthy_bees=unhealthy_bees)
 
 # There are two '/register' routes: One will render template and get info from 
 # login form, the other processes the information and adds it to the session.

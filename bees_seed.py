@@ -99,8 +99,7 @@ def load_bees_from_clarifai():
     """ Load Image objects by using GET request from Clarifai API
     https://clarifai.com/developer/guide/inputs#get-inputs 
 
-    Convert Image objects to Bee objects, 
-    & add to our database.
+    Convert Image objects to Bee objects, & add to our database.
     """
 
     all_images = list(clarifai_app.inputs.get_all())
@@ -131,6 +130,14 @@ def load_bees_from_clarifai():
 
     # Commit all Bee objects to the database
     db.session.commit()
+
+
+def add_photo_to_db():
+    """ Get a users photo and add it to the database. """
+
+    # Get the maximum user_id in the database??? set_val_bee_id??? do i need to?
+    pass
+
 
 def set_val_bee_id():
     """ WHAT IS THIS FUNCTION FOR??? """
