@@ -37,7 +37,6 @@ def index():
     """
 
     # Get list of bees
-    # bees = Bee.query.all()
 
     healthy = Bee.query.filter_by(health='y').all()
     unhealthy = Bee.query.filter_by(health='n').all()
@@ -149,16 +148,28 @@ def user_detail(user_id):
 
 
 
-
-@app.route('/upload-success')
+@app.route('/upload-success', methods=['GET'])
 def upload():
     """ I want to make this AJAX! In place. For now, this will be a form.
     """
 
     return render_template("upload_success.html")
 
+@app.route('/upload-success', methods=['POST'])
+def upload():
+    """ I want to make this AJAX! In place. For now, this will be a form.
+    """
+
+    return redirect("/bee-add-success")
 
 
+
+@app.route('/bee-add-success')
+def upload():
+    """ I want to make this AJAX! In place. For now, this will be a form.
+    """
+
+    return render_template("bee_add_success.html")
 
 
 

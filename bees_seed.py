@@ -1,27 +1,31 @@
 """ File that seeds health_db database from Kaggle data in kaggle_data/ 
 FROM CLARIFAI API - gets images
 
-
-What is the dir of bee object?
-'allow_dup_url', 'base64', 'concepts', 'crop', 'dict', 
-'feedback_info', 'file_obj', 'filename', 'geo', 'input_id', 
-'metadata', 'not_concepts', 'regions', 'score', 
-'status', 'url'
-
 """
 
 # API Requests / Get
 from clarifai.rest import ClarifaiApp
 clarifai_app = ClarifaiApp(api_key="58dc8755e39d4043a98554b44bbcaf56")
-# model = app.public_models.general_model
-# response = model.predict_by_url('url!!')
+MODEL_ID = 'test'
+
 
 from sqlalchemy import func
 import pandas as pd
 
 from model import Bee, connect_to_db, db
-from server import app
+# from server import app
 
+def set_val_bee_id():
+    """ WHAT IS THIS FUNCTION FOR??? """
+
+    # Get the maximum user_id in the database:
+    result = db.session.query(func.max(Bee.bee_id)).one()
+    max_id = int(result[0])
+
+    # Set the value for the next user_id to be max_id + 1
+    query = "SELECT setval('bees_bee_id_seq', :new_id)"
+    db.session.execute(query, {'new_id': max_id + 1})
+    db.session.commit()
 
 
 def add_images_concepts(csv_filename):
@@ -132,31 +136,62 @@ def load_bees_from_clarifai():
     db.session.commit()
 
 
-def add_photo_to_db():
+def add_photo_to_clarifai():
     """ Get a users photo and add it to the database. """
 
     # Get the maximum user_id in the database??? set_val_bee_id??? do i need to?
     pass
 
 
-def set_val_bee_id():
-    """ WHAT IS THIS FUNCTION FOR??? """
+def create_model(model_id):
+    """ https://clarifai.com/developer/guide/train#train 
+    Creates a model with a given model_name
+    """
+    model = clarifai_app.models.create(model_id, concepts=['health'])
 
-    # Get the maximum user_id in the database:
-    result = db.session.query(func.max(Bee.bee_id)).one()
-    max_id = int(result[0])
+    return model
 
-    # Set the value for the next user_id to be max_id + 1
-    query = "SELECT setval('bees_bee_id_seq', :new_id)"
-    db.session.execute(query, {'new_id': max_id + 1})
-    db.session.commit()
+
+def train_model(model_id):
+    """ Trains a model with a given model_id (name) """
+
+    model = clarifai_app.models.get(model_id)
+
+    model.train()
+
+    model_name = model.model_name
+
+    print(f"Model {model_name} trained.")
+    
+
+def predict_with_model(model_id, model_version_id, url):
+    """ https://clarifai.com/developer/guide/train#predict-with-the-model
+    Makes a prediction with the model.
+    @model_id = name of the model
+    @model_version_id = integer, version this time around
+    @url = a string, the URL of the photo we are analyzing!
+
+    """
+
+    model = clarifai_app.models.get(model_id)
+
+    # Set a model version id because I want to keep track of progress
+    model.model_version = model_version_id
+
+    print(model.model_version)
+
+    response = model.predict_by_url(url)
+
+    print( response.created_at)
+
+
 
 
 if __name__ == '__main__':
 
     # Flask database initialization
-    connect_to_db(app)
-    db.create_all()
+    # connect_to_db(app)
+    # db.create_all()
 
     # Clear it from Clarifai. Be careful!!!!!!!!!
     # clear_all()
@@ -168,4 +203,10 @@ if __name__ == '__main__':
     # print('Successfully added all.')
 
     # Add Bees to our database from Clarifai
-    load_bees_from_clarifai()
+    # load_bees_from_clarifai()
+
+    train_model(MODEL_ID)
+
+    print(predict_with_model(model_id=MODEL_ID, 
+        model_version_id='2', 
+        url='https://www.ahs.com/static-srvm/trmx/blog-images/How-To-Tell-If-Youre-Allergic-To-A-Bee-Sting-Main.jpg'))

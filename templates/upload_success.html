@@ -2,12 +2,25 @@
 {% block content %}
 
 <br><br>
+{% if "user_id" in session %}
+    <h3>Please upload your bee image: </h3>
 
-<h1>Upload was successful! Thanks for adding your bee image. </h1>
+    <form action="/bee-add-success" method="POST"> 
 
-<h2>How is the health of this bee? </h2>
+        <br>
+        <input type="file" name="user_file">
 
-(form goes here)
+        <div>
+          <label> How is the health of this bee?
+            <input type="value" name="health" id="health" required>
+          </label>
+        </div>
+        
+        <button type="submit" value="Submit Photo"> Submit Photo </button>
+    </form>
+    <br><br>
 
+
+{% endif %}
 
 {% endblock %}

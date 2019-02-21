@@ -99,19 +99,3 @@ if __name__ == '__main__':
     from server import app
     connect_to_db(app)
     print("Connected to Database.")
-
-
-    # a_bee = Bee(bee_id=555,
-    #                 user_id=None, # All database bees will have no user_id
-    #                 url='url',
-    #                 health='health',
-    #                 zip_code='zip_code',
-    #                 )
-
-    a_user = User(
-                    user_id=99, # All database bees will have no user_id
-                    email='email',
-                    password='password',
-                    )
-
-    print("User bees", a_user.get_user_bees())
