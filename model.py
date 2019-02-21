@@ -61,6 +61,8 @@ class Bee(db.Model):
 
     url = db.Column(db.String(150), nullable=True) 
     health = db.Column(db.String(1), nullable=True) # 'y' if healthy, or 'n' if not.
+    zip_code = db.Column(db.String(10), nullable=True)
+
 
     user = db.relationship("User",
                            backref=db.backref("bees"))
@@ -69,9 +71,11 @@ class Bee(db.Model):
         """ Print format for Bee object """
         return f'''<BEE OBJECT
                     Bee id: {self.bee_id}
+                    Uploaded by: {self.user_id}
                     url: {self.url}
                     health: {self.health}
-                    Uploaded by: {self.user_id}
+                    zipcode: {self.zipcode}
+                    
                     >'''
 
 
@@ -95,3 +99,11 @@ if __name__ == '__main__':
     from server import app
     connect_to_db(app)
     print("Connected to Database.")
+
+
+    a_bee = Bee(bee_id=555,
+                    user_id=None, # All database bees will have no user_id
+                    url='url',
+                    health='health',
+                    zip_code='zip_code',
+                    )

@@ -45,7 +45,7 @@ def add_images_concepts(csv_filename):
     # for i in range(len(df)):
     for i in range(120): # FOR NOW
 
-        bee_id = i # Integer assigned to each new Bee
+        image_id = i # Integer assigned to each new Bee
         health_ = str(df.loc[i][5])
         datetime = df.loc[i][0]
         csv_filename = str(df.loc[i][1])
@@ -62,8 +62,11 @@ def add_images_concepts(csv_filename):
                             # image_id=bee_id,
                             concepts=['health'],
                             not_concepts=None,
-                            # metadata={'datetime': datetime, 'zip_code': zip_code},
-                            # geo=None # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
+                            metadata={ 'image_id': image_id,
+                                        # 'datetime': datetime, 
+                                        'zip_code': zip_code,
+                                        },
+                            geo=None, # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
                             allow_duplicate_url=True,
                             )
         else:
@@ -71,8 +74,11 @@ def add_images_concepts(csv_filename):
                             # image_id=bee_id,
                             concepts=None,
                             not_concepts=['health'],
-                            # metadata={'datetime': datetime, 'zip_code': zip_code},
-                            # geo=None # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
+                            metadata={ 'image_id': image_id,
+                                        # 'datetime': datetime, 
+                                        'zip_code': zip_code,
+                                        },
+                            geo=None, # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
                             allow_duplicate_url=True,
                             )
 
@@ -83,32 +89,43 @@ def add_images_concepts(csv_filename):
 
 def clear_all():
     """
+    BE CAREFUL!
     Clear all images to Clarifai model, including concepts.
     """
     clarifai_app.inputs.delete_all()
 
 
 def load_bees_from_clarifai():
-    """ Load bee objects by using GET request from Clarifai API
+    """ Load Image objects by using GET request from Clarifai API
     https://clarifai.com/developer/guide/inputs#get-inputs 
 
-    Add them as Bee objects to our database.
+    Convert Image objects to Bee objects, 
+    & add to our database.
     """
 
-    all_bees = list(clarifai_app.inputs.get_all())
+    all_images = list(clarifai_app.inputs.get_all())
 
-    for i in range(len(all_bees)):
+    for i in range(len(all_images)):
 
-         
-        bee = all_bees[i] 
-        bee_id = bee.bee_id
-        health = bee.health
-        url = bee.url 
+        image = all_images[i] 
+        
+        url = image.url
+        image_id = int(image.metadata['image_id'])
+        zip_code = str(image.metadata['zip_code']) 
+        health = None
 
-        a_bee = Bee(bee_id=bee_id,
-                        url=url,
-                        health=health,
-                        )
+        if (image.concepts): 
+            health = 'y' 
+        elif (image.not_concepts):
+            health = 'n'
+
+        # Create a bee
+        a_bee = Bee(bee_id=image_id,
+                    user_id=None, # All database bees will have no user_id
+                    url=url,
+                    health=health,
+                    zip_code=zip_code,
+                    )
 
         db.session.add(a_bee)
 
@@ -138,10 +155,10 @@ if __name__ == '__main__':
     # clear_all()
     # print('Successfully deleted all.')
 
-    # Give images and concepts from file to Clarifai
-    seed_filename = "bee_data.csv" 
-    add_images_concepts(seed_filename)
-    print('Successfully added all.')
+    # # Give images and concepts from file to Clarifai
+    # seed_filename = "bee_data.csv" 
+    # add_images_concepts(seed_filename)
+    # print('Successfully added all.')
 
     # Add Bees to our database from Clarifai
-    # load_bees_from_clarifai()
+    load_bees_from_clarifai()
