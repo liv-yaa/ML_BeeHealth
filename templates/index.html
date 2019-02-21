@@ -26,11 +26,12 @@
     
         {% for bee in healthy_bees %}
             
-            {{ bee.bee_id, bee.health }} 
+<!--             {{ bee.bee_id, bee.health }};
+            zip: {{ bee.zip_code }} -->
             <img src={{ bee.url }} 
                 alt="healthy bee {{ bee.bee_id}}" 
                 height="100" 
-                width="100">
+                width="100"> 
             
         {% endfor %}
     
@@ -39,9 +40,10 @@
 
         {% for bee in unhealthy_bees %}
 
-            {{ bee.bee_id, bee.health }} 
+<!--             {{ bee.bee_id, bee.health }};
+            zip: {{ bee.zip_code }} -->
             <img src={{ bee.url }} 
-                alt="healthy bee {{ bee.bee_id}}" 
+                alt="unhealthy bee {{ bee.bee_id}}" 
                 height="100" 
                 width="100">
 

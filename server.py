@@ -7,7 +7,10 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, request, flash, redirect, session
 from flask_debugtoolbar import DebugToolbarExtension
 
+from sqlalchemy import func
+
 from model import Bee, User, connect_to_db, db
+
 
 # Create a Flask app
 app = Flask(__name__)
@@ -22,10 +25,6 @@ app.config.from_object("config")
 
 # Ask Jinja to give us an error if there is an undefined variable in scope
 app.jinja_env.undefined = StrictUndefined
-
-
-
-
 
 
 @app.route('/')
@@ -67,14 +66,19 @@ def register_process():
     email = request.form["email"]
     password = request.form["password"]
 
+    # Get most recent user_id:
+    result = db.session.query(func.max(User.user_id)).one()
+    max_id = int(result[0]) + 1
+
+
     # Create a new user and add them to the session.
-    a_user = User(email=email, password=password)
+    a_user = User(user_id=max_id, email=email, password=password)
     db.session.add(a_user)
     db.session.commit()
     flash(f"User {email} added.")
 
     # Redirect to the index page.
-    return redirect('/')
+    return redirect('/users')
 
 
 # There are two '/login' routes: One will render template and get info from 
