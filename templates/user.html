@@ -9,15 +9,15 @@
 
     <a href="/"><h2>Upload a photo! </h2></a>
     <br><br>
-    {% if user.photos %}
+    {% if user_bees %}
 
       <h2>All of the User's Photos </h2>
 
       <ul>
-      {% for photo in user.photos %}
+      {% for photo in user_bees %}
         <li>
-          {{ photo }} goes here...need a tag and href=, see example!
-          <a href="/photos/{{ photo.url }}"> {{ photo.url }} was uploaded on {{ photo.date }}
+          <img src="photo.url">
+
         </li>
       {% endfor %}
       </ul>
@@ -32,8 +32,6 @@
 {% endif %}
 
   
-
-
 
 
 

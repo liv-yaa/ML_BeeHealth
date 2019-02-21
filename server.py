@@ -81,9 +81,6 @@ def register_process():
     return redirect('/users')
 
 
-# There are two '/login' routes: One will render template and get info from 
-# login form, the other processes the information and adds it to the session.
-
 @app.route('/login', methods=['GET'])
 def login_form():
     """ Show the login form, where we will get input values email & password """
@@ -142,7 +139,13 @@ def user_detail(user_id):
     """
 
     user = User.query.get(user_id)
-    return render_template("user.html", user=user)
+
+    user_bees = user.get_user_bees()
+
+    return render_template("user.html", 
+                            user=user,
+                            user_bees=user_bees,
+                            )
 
 
 

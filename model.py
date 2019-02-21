@@ -31,13 +31,13 @@ class User(db.Model):
         return f'<User id: {self.user_id}; email: {self.email}>'
 
 
-    def get_users_bees(self):
+    def get_user_bees(self):
         """ Retrieve all Bees that are tagged with this User's user_id 
         """
         
         # Return a list - need to test!!! 
-        query = db.session.query(Bee.user_id)
-        return query
+        query_list = db.session.query(Bee).filter_by(user_id=self.user_id).all()
+        return query_list
 
 
 class Bee(db.Model):
@@ -101,9 +101,17 @@ if __name__ == '__main__':
     print("Connected to Database.")
 
 
-    a_bee = Bee(bee_id=555,
-                    user_id=None, # All database bees will have no user_id
-                    url='url',
-                    health='health',
-                    zip_code='zip_code',
+    # a_bee = Bee(bee_id=555,
+    #                 user_id=None, # All database bees will have no user_id
+    #                 url='url',
+    #                 health='health',
+    #                 zip_code='zip_code',
+    #                 )
+
+    a_user = User(
+                    user_id=99, # All database bees will have no user_id
+                    email='email',
+                    password='password',
                     )
+
+    print("User bees", a_user.get_user_bees())
