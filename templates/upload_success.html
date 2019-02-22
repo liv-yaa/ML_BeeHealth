@@ -3,22 +3,11 @@
 
 <br><br>
 {% if "user_id" in session %}
-    <h3>Please upload your bee image: </h3>
+    <h3>Upload Successful </h3>
 
-    <form action="/bee-add-success" method="POST"> 
 
-        <br>
-        <input type="file" name="user_file">
+    <a href="/"> Go Back to Home </a>
 
-        <div>
-          <label> How is the health of this bee?
-            <input type="value" name="health" id="health" required>
-          </label>
-        </div>
-        
-        <button type="submit" value="Submit Photo"> Submit Photo </button>
-    </form>
-    <br><br>
 
 
 {% endif %}

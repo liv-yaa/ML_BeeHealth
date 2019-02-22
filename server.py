@@ -1,7 +1,7 @@
 """ server.py
     Flask routes for BeeMachine project.
 """
-import random
+import random, os
 from jinja2 import StrictUndefined
 
 from flask import Flask, render_template, request, flash, redirect, session
@@ -17,6 +17,10 @@ app = Flask(__name__)
 
 # Added this config statement based on this demo for Amazon S3 integration: http://zabana.me/notes/upload-files-amazon-s3-flask.html
 app.config.from_object("config")
+
+# An upload folder for temporarily storing user uploads
+UPLOAD_FOLDER = os.path.basename('uploads')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Moved to config:
 # A secret key is required for Flask sessions and debug toolbar
@@ -49,8 +53,7 @@ def index():
                             healthy_bees=healthy_bees,
                             unhealthy_bees=unhealthy_bees)
 
-# There are two '/register' routes: One will render template and get info from 
-# login form, the other processes the information and adds it to the session.
+
 
 @app.route('/register', methods=['GET'])
 def register_form():
@@ -163,58 +166,39 @@ def add_bee(user_id):
         NOT DONE YET: We need to host the image on Clarafai.
 
     """
-    result = db.session.query(func.max(Bee.bee_id)).one()
-    bee_id = int(result[0]) + 1
+
 
     flash("Bee id", bee_id)
 
     zipcode = None # Nullable
 
-    # image = request.form["user-file"]
-    image = "https://www.istockphoto.com/no/photos/honey-bee?sort=mostpopular&mediatype=photography&phrase=honey%20bee"
+    # https://medium.com/@sightengine_/image-upload-and-moderation-with-python-and-flask-e7585f43828a
+    image_path = request.form["user-file"] 
+    f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+    image_path.save(f)
+
+
+
+    # image = "https://www.istockphoto.com/no/photos/honey-bee?sort=mostpopular&mediatype=photography&phrase=honey%20bee"
     health = request.form["health"]
 
     user_id = session.get("user_id")
     if not user_id:
         raise Exception("No user logged in.")
 
-    # Check for an existing Bee? not really possible tho.
+    # add_photo_to_clarifai(user_id, image_path, health)
 
-    # bee = Bee(bee_id=bee_id,
-    #             user_id=user_id,
-    #             url=image, # From user_file
-    #             health=health,
-    #             zip_code=zipcode,
-
-    #             )
-
-    # flash("Bee created successfully.")
-
-    # db.session.add(bee)
-    # db.session.commit()
-    # flash("Bee added to database. Thank you!")
-
-    return redirect(f"/bee-add-success")
+    return redirect(f"/upload-success")
 
 
 
 
-@app.route('/bee-add-success')
-def upload():
+@app.route('/upload-success', methods=['POST'])
+def upload_success():
     """ I want to make this AJAX! In place. For now, this will be a form.
     """
 
-    return render_template("bee_add_success.html")
-
-
-
-
-# @app.route('/upload-success', methods=['GET'])
-# def upload():
-#     """ I want to make this AJAX! In place. For now, this will be a form.
-#     """
-
-#     return render_template("upload_success.html")
+    return render_template("upload_success.html")
 
 
 # @app.route('/upload-success', methods=['POST'])

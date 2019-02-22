@@ -2,22 +2,16 @@
 {% block content %}
 
 <br><br>
-
 {% if "user_id" in session %}
-    <h3>You are logged in. Submit a Photo? </h3>
+    
 
-    <!-- I want it to go to the homepage once we have submitted. But refresh database. --> 
-    <form action="/upload-success" method="POST"> 
 
-        <label for="user_file"> Photo Uploader will go here: </label>
-        <br>
-        <input type="file" name="user_file">
-        
-        <button type="submit" value="Submit Photo"> Submit Photo </button>
-    </form>
+
+    <h5><a href="/"> Want to submit a photo? doesnt work </a></h5>
 
 
 {% endif %}
+
 
 
 <h3> View Our Bee Photo Database </h3>

@@ -3,12 +3,18 @@ FROM CLARIFAI API - gets images
     train the model in synchronous or asynchronous mode. Synchronous will block until the
     model is trained, async will not.
     >> Set to asynchronous
+
+    Methods are:
+    - add_images_concepts (our bulk initial setup of local files to Clar)
+    - load_bees_from_clar (getting images from Clar to our Postgres (?) database)
+    - add_one_image (single image upload of user's local file, stored temp, to Clar)
+    - load_one_image (add a single image to Postgres database)
+    - more methods...
 """
 
 # API Requests / Get
 from clarifai.rest import ClarifaiApp
-clarifai_app = ClarifaiApp(api_key="58dc8755e39d4043a98554b44bbcaf56")
-MODEL_ID = 'test'
+
 
 import json
 import requests
@@ -20,9 +26,11 @@ import pandas as pd
 from model import Bee, connect_to_db, db
 from server import app
 
+clarifai_app = ClarifaiApp(api_key="58dc8755e39d4043a98554b44bbcaf56")
+MODEL_ID = 'test'
 model = clarifai_app.models.get(MODEL_ID)
 
-def add_images_concepts(csv_filename):
+def add_images_concepts_to_clar(csv_filename):
     """
     Load images to Clarifai model, using custom tags from the csv file.
     """
@@ -85,15 +93,7 @@ def add_images_concepts(csv_filename):
     clarifai_app.inputs.bulk_create_images(image_list)
 
 
-def clear_all():
-    """
-    BE CAREFUL!
-    Clear all images to Clarifai model, including concepts.
-    """
-    clarifai_app.inputs.delete_all()
-
-
-def load_bees_from_clarifai():
+def load_bees_from_clarifai_to_db():
     """ Load Image objects by using GET request from Clarifai API
     https://clarifai.com/developer/guide/inputs#get-inputs 
     Convert Image objects to Bee objects, & add to our database.
@@ -130,40 +130,110 @@ def load_bees_from_clarifai():
 
 
 
-def add_photo_to_clarifai():
-    """ Get a users photo and add it to the database. """
+def add_one_image_concepts_to_clar(user_id, photo_url, photo_health):
+    """ Get a users input:
+    @url, a string
+    @concepts - either 'y' for health or 'n' for not
 
-    # Get the maximum user_id in the database??? set_val_bee_id??? do i need to?
-    pass
+    and add it to Clarifai """
 
+    image_id = i # Integer assigned to each new Bee
+    health_ = str(df.loc[i][5])
+    datetime = df.loc[i][0]
+    csv_filename = str(df.loc[i][1])
+    zip_code = str(df.loc[i][3])
+
+    # Edit health (a string) to make it better for queries (a binary value)
+    health = 'y' if health_ == 'healthy' else 'n'
+
+    # Edit fileanme to have the local path:
+    local_filename = 'bee_imgs/' + csv_filename
+
+    if (health == 'y'):
+        img = clarifai_app.inputs.create_image_from_filename(filename=local_filename, 
+                        # image_id=bee_id,
+                        concepts=['health'],
+                        not_concepts=None,
+                        metadata={ 'image_id': image_id,
+                                    # 'datetime': datetime, 
+                                    'zip_code': zip_code,
+                                    },
+                        geo=None, # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
+                        allow_duplicate_url=True,
+                        )
+    else:
+        img = clarifai_app.inputs.create_image_from_filename(filename=local_filename, 
+                        # image_id=bee_id,
+                        concepts=None,
+                        not_concepts=['health'],
+                        metadata={ 'image_id': image_id,
+                                    # 'datetime': datetime, 
+                                    'zip_code': zip_code,
+                                    },
+                        geo=None, # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
+                        allow_duplicate_url=True,
+                        )
+
+
+    # clarifai_app.inputs.bulk_create_images(image_list)
 
     
 
-def predict_with_model(url):
-    """ https://clarifai.com/developer/guide/train#predict-with-the-model
-    Makes a prediction with the model.
-    @model_version_id = integer, version this time around
-    @url = a string, the URL of the photo we are analyzing!
+
+def load_one_image_to_db():
+    """ Get one image (hosted by clarafai) - which has a url (on Clar)
+    Create a Bee object and add it to the database 
     """
 
+    # Get the maximum bee_id in the database
+    result = db.session.query(func.max(Bee.bee_id)).one()
+    bee_id = int(result[0]) + 1
+
+
+    # Create a new bee:
+    # bee = Bee(bee_id=bee_id,
+    #             user_id=user_id,
+    #             url=image, # From user_file
+    #             health=health,
+    #             zip_code=zipcode,
+
+    #             )
+
+    # flash("Bee created successfully.")
+
+    # db.session.add(bee)
+    # db.session.commit()
+    # flash("Bee added to database. Thank you!")
+
+
     
 
-    # # Set a model version id because I want to keep track of progress
-    # # model.model_version = model_version_id
+# def predict_with_model(url):
+#     """ https://clarifai.com/developer/guide/train#predict-with-the-model
+#     Makes a prediction with the model.
+#     @model_version_id = integer, version this time around
+#     @url = a string, the URL of the photo we are analyzing!
+#     """
 
-    # print(model.model_version)
+    
 
-    response = model.predict_by_url(url)
+#     # # Set a model version id because I want to keep track of progress
+#     # # model.model_version = model_version_id
 
-    pprint (response['outputs'][0]['model']['output_info'])
-    # pprint (response['outputs'])
+#     # print(model.model_version)
 
-    # print(response.json())
+#     response = model.predict_by_url(url)
+
+#     pprint (response['outputs'][0]['model']['output_info'])
+#     # pprint (response['outputs'])
+
+#     # print(response.json())
 
 
-    # response_jfd = json.loads(response)
+#     # response_jfd = json.loads(response)
 
-    # pprint (response_jfd)
+#     # pprint (response_jfd)
+
 
 
 if __name__ == '__main__':
@@ -173,7 +243,7 @@ if __name__ == '__main__':
     db.create_all()
 
     # Clear it from Clarifai. Be careful!!!!!!!!!
-    # clear_all()
+    # clarifai_app.inputs.delete_all()
     # print('Successfully deleted all.')
 
     # # Give images and concepts from file to Clarifai
@@ -184,7 +254,7 @@ if __name__ == '__main__':
     # Add Bees to our database from Clarifai
     # load_bees_from_clarifai()
 
-    model.train(sync=False)
+    model.train(sync=False) # False goes faster
 
     # predict_with_model( 
     #     url='https://www.ahs.com/static-srvm/trmx/blog-images/How-To-Tell-If-Youre-Allergic-To-A-Bee-Sting-Main.jpg')
