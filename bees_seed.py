@@ -1,6 +1,8 @@
 """ File that seeds health_db database from Kaggle data in kaggle_data/ 
 FROM CLARIFAI API - gets images
-
+    train the model in synchronous or asynchronous mode. Synchronous will block until the
+    model is trained, async will not.
+    >> Set to asynchronous
 """
 
 # API Requests / Get
@@ -8,15 +10,17 @@ from clarifai.rest import ClarifaiApp
 clarifai_app = ClarifaiApp(api_key="58dc8755e39d4043a98554b44bbcaf56")
 MODEL_ID = 'test'
 
+import json
+import requests
+from pprint import pprint
 
 from sqlalchemy import func
 import pandas as pd
 
 from model import Bee, connect_to_db, db
-# from server import app
+from server import app
 
-
-
+model = clarifai_app.models.get(MODEL_ID)
 
 def add_images_concepts(csv_filename):
     """
@@ -92,7 +96,6 @@ def clear_all():
 def load_bees_from_clarifai():
     """ Load Image objects by using GET request from Clarifai API
     https://clarifai.com/developer/guide/inputs#get-inputs 
-
     Convert Image objects to Bee objects, & add to our database.
     """
 
@@ -126,6 +129,7 @@ def load_bees_from_clarifai():
     db.session.commit()
 
 
+
 def add_photo_to_clarifai():
     """ Get a users photo and add it to the database. """
 
@@ -133,55 +137,40 @@ def add_photo_to_clarifai():
     pass
 
 
-def create_model(model_id):
-    """ https://clarifai.com/developer/guide/train#train 
-    Creates a model with a given model_name
-    """
-    model = clarifai_app.models.create(model_id, concepts=['health'])
-
-    return model
-
-
-def train_model(model_id):
-    """ Trains a model with a given model_id (name) """
-
-    model = clarifai_app.models.get(model_id)
-
-    model.train()
-
-    model_name = model.model_name
-
-    print(f"Model {model_name} trained.")
     
 
-def predict_with_model(model_id, model_version_id, url):
+def predict_with_model(url):
     """ https://clarifai.com/developer/guide/train#predict-with-the-model
     Makes a prediction with the model.
-    @model_id = name of the model
     @model_version_id = integer, version this time around
     @url = a string, the URL of the photo we are analyzing!
-
     """
 
-    model = clarifai_app.models.get(model_id)
+    
 
-    # Set a model version id because I want to keep track of progress
-    model.model_version = model_version_id
+    # # Set a model version id because I want to keep track of progress
+    # # model.model_version = model_version_id
 
-    print(model.model_version)
+    # print(model.model_version)
 
     response = model.predict_by_url(url)
 
-    print( response.created_at)
+    pprint (response['outputs'][0]['model']['output_info'])
+    # pprint (response['outputs'])
+
+    # print(response.json())
 
 
+    # response_jfd = json.loads(response)
+
+    # pprint (response_jfd)
 
 
 if __name__ == '__main__':
 
     # Flask database initialization
-    # connect_to_db(app)
-    # db.create_all()
+    connect_to_db(app)
+    db.create_all()
 
     # Clear it from Clarifai. Be careful!!!!!!!!!
     # clear_all()
@@ -195,8 +184,7 @@ if __name__ == '__main__':
     # Add Bees to our database from Clarifai
     # load_bees_from_clarifai()
 
-    train_model(MODEL_ID)
+    model.train(sync=False)
 
-    print(predict_with_model(model_id=MODEL_ID, 
-        model_version_id='2', 
-        url='https://www.ahs.com/static-srvm/trmx/blog-images/How-To-Tell-If-Youre-Allergic-To-A-Bee-Sting-Main.jpg'))
+    # predict_with_model( 
+    #     url='https://www.ahs.com/static-srvm/trmx/blog-images/How-To-Tell-If-Youre-Allergic-To-A-Bee-Sting-Main.jpg')
