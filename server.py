@@ -167,20 +167,20 @@ def add_bee(user_id):
 
     """
 
-
-    flash("Bee id", bee_id)
-
-    zipcode = None # Nullable
+    
 
     # https://medium.com/@sightengine_/image-upload-and-moderation-with-python-and-flask-e7585f43828a
-    image_path = request.form["user-file"] 
-    f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-    image_path.save(f)
+    image_path = request.files["user-file"] 
+    filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+    image_path.save(filename)
+
+    print()
 
 
 
     # image = "https://www.istockphoto.com/no/photos/honey-bee?sort=mostpopular&mediatype=photography&phrase=honey%20bee"
     health = request.form["health"]
+    zipcode = request.form["zipcode"]
 
     user_id = session.get("user_id")
     if not user_id:

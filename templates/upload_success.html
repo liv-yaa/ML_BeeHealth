@@ -5,9 +5,11 @@
 {% if "user_id" in session %}
     <h3>Upload Successful </h3>
 
+    {{ filename }}
+
 
     <a href="/"> Go Back to Home </a>
-
+<!--     <h5><a href="/users/<int:user_id>"> Want to submit a photo? </a></h5> -->
 
 
 {% endif %}

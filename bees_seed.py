@@ -175,6 +175,7 @@ def add_one_image_concepts_to_clar(user_id, photo_url, photo_health):
                         )
 
 
+
     # clarifai_app.inputs.bulk_create_images(image_list)
 
     
