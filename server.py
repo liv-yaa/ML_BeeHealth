@@ -4,7 +4,7 @@
 import random, os
 from jinja2 import StrictUndefined
 
-from flask import Flask, render_template, request, flash, redirect, session
+from flask import Flask, render_template, request, flash, redirect, session, send_from_directory
 from flask_debugtoolbar import DebugToolbarExtension
 
 from werkzeug.utils import secure_filename
@@ -24,6 +24,7 @@ app.config.from_object("config")
 UPLOAD_FOLDER = os.path.basename('uploads')
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 # Moved to config:
 # A secret key is required for Flask sessions and debug toolbar
@@ -196,7 +197,9 @@ def upload_file(user_id):
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
+            # return redirect(url_for('uploaded_file',
+            #                         filename=filename))
+            import pdb; pdb.set_trace()
 
 
             return redirect(redirect("/upload-success", 
@@ -216,7 +219,6 @@ def upload_file(user_id):
 
 
     # image = "https://www.istockphoto.com/no/photos/honey-bee?sort=mostpopular&mediatype=photography&phrase=honey%20bee"
-
 
 
 
