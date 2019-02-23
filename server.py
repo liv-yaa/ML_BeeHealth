@@ -7,6 +7,8 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, request, flash, redirect, session
 from flask_debugtoolbar import DebugToolbarExtension
 
+from werkzeug.utils import secure_filename
+
 from sqlalchemy import func
 
 from model import Bee, User, connect_to_db, db
@@ -20,6 +22,7 @@ app.config.from_object("config")
 
 # An upload folder for temporarily storing user uploads
 UPLOAD_FOLDER = os.path.basename('uploads')
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Moved to config:
@@ -156,8 +159,8 @@ def user_detail(user_id):
                             )
 
 
-@app.route("/users/<int:user_id>", methods=['POST'])
-def add_bee(user_id):
+@app.route("/users/<int:user_id>", methods=['GET', 'POST'])
+def upload_file(user_id):
     """       
 
         Show a form for uploading a photo.
@@ -167,28 +170,54 @@ def add_bee(user_id):
 
     """
 
+    if request.method == 'POST':
+
+        # Get other data
+        health = request.form["health"]
+        zipcode = request.form["zipcode"]
+
+        user_id = session.get("user_id")
+        if not user_id:
+            raise Exception("No user logged in.")
+
+        # Handle file specified by user (on their local machine)
+        # Check if the post request has the file part:
+        if 'file' not in request.files:
+            flash('no file part')
+            return redirect(request.url)
+
+        file = request.files["user-file"]
+
+        # Handle if user does not select file:
+        if file.filename == '':
+            flash ('No selected file')
+            return redirect(request.url) 
+
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+
+
+            return redirect(redirect("/upload-success", 
+                                        
+                                        health=health,
+                                        zipcode=zipcode,
+                                        user_id=user_id,
+                                        filename=filename,
+                                        ))
     
 
-    # https://medium.com/@sightengine_/image-upload-and-moderation-with-python-and-flask-e7585f43828a
-    image_path = request.files["user-file"] 
-    filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-    image_path.save(filename)
+    # filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+    # image_path.save(filename)
 
     print()
 
 
 
     # image = "https://www.istockphoto.com/no/photos/honey-bee?sort=mostpopular&mediatype=photography&phrase=honey%20bee"
-    health = request.form["health"]
-    zipcode = request.form["zipcode"]
 
-    user_id = session.get("user_id")
-    if not user_id:
-        raise Exception("No user logged in.")
 
-    # add_photo_to_clarifai(user_id, image_path, health)
-
-    return redirect(f"/upload-success")
 
 
 
@@ -229,8 +258,10 @@ def upload_success():
 #     return redirect("/bee-add-success")
 
 
-
-
+## Helper functions ##
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 
