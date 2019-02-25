@@ -2,20 +2,21 @@
 <html>
 <head>
     <title>Bee DB</title>
-<!--     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link href="/static/project.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="/static/project.css" rel="stylesheet">
 </head>
 <body>
 
-<h3><a href="/">HOME</a></h3>
+<h3><a href="/">The Bee Machine</a></h3>
 
 {% if "user_id" in session %}
     <h5><a href="/logout"> You are logged in. Want to log out? </a></h5>
 
 
 {% else %}
-    <a href="/login"><h5>You are not logged in. Want to? </h5></a>
-    <a href="/register"><h5>Or Register</h5></a>
+    <a href="/login">You are not logged in. Want to?</a>
+    <br>
+    <a href="/register">Or, Register</a>
 
 {% endif %}
 

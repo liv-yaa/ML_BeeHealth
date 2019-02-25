@@ -3,14 +3,14 @@
 
 <br><br>
 {% if "user_id" in session %}
-    <h3>Upload Successful </h3>
+    Upload Successful
+    <br>
+    {{ health }} {{ zipcode }} {{ user_id }} {{ filename }}
 
-    {{ health, zipcode, user_id, filename }}
-
-
+    <br>
     <a href="/"> Go Back to Home </a>
-<!--     <h5><a href="/users/<int:user_id>"> Want to submit a photo? </a></h5> -->
-
+    <br>
+    <a href="/users/<int:user_id>"> Want to submit a photo? </a>
 
 {% endif %}
 

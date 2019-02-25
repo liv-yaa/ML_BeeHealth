@@ -153,7 +153,7 @@ def add_one_image_concepts_to_clar(user_id, photo_url, photo_health):
         img = clarifai_app.inputs.create_image_from_filename(filename=local_filename, 
                         # image_id=bee_id,
                         concepts=['health'],
-                        not_concepts=None,
+                        not_concepts=['sick'],
                         metadata={ 'image_id': image_id,
                                     # 'datetime': datetime, 
                                     'zip_code': zip_code,
@@ -164,7 +164,7 @@ def add_one_image_concepts_to_clar(user_id, photo_url, photo_health):
     else:
         img = clarifai_app.inputs.create_image_from_filename(filename=local_filename, 
                         # image_id=bee_id,
-                        concepts=None,
+                        concepts=['sick'],
                         not_concepts=['health'],
                         metadata={ 'image_id': image_id,
                                     # 'datetime': datetime, 

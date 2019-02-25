@@ -1,7 +1,7 @@
 """ server.py
     Flask routes for BeeMachine project.
 """
-import random, os
+import random, os, pdb
 from jinja2 import StrictUndefined
 
 from flask import Flask, render_template, request, flash, redirect, session, send_from_directory
@@ -160,55 +160,85 @@ def user_detail(user_id):
                             )
 
 
-@app.route("/users/<int:user_id>", methods=['GET', 'POST'])
+@app.route("/users/<int:user_id>", methods=['POST'])
 def upload_file(user_id):
     """       
 
         Show a form for uploading a photo.
         Createa Bee from the data submitted by that user.
 
-        NOT DONE YET: We need to host the image on Clarafai.
+        In this method, we store the image in a temporary location (Flask)
+
+        After this method,
+        - Image needs to be evaluated
+        - We need to host the image on Clarafai.
+
 
     """
 
-    if request.method == 'POST':
+    
+
+    try:
 
         # Get other data
         health = request.form["health"]
         zipcode = request.form["zipcode"]
 
+        # if not health:
+        #     flash ('No health given')
+        #     return redirect(request.url) 
+
+        # if not zipcode:
+        #     flash ('No zipcode given')
+        #     return redirect(request.url)
+
+
+
         user_id = session.get("user_id")
         if not user_id:
             raise Exception("No user logged in.")
 
+        
         # Handle file specified by user (on their local machine)
         # Check if the post request has the file part:
-        if 'file' not in request.files:
-            flash('no file part')
-            return redirect(request.url)
+        # if 'file' not in request.files:
+        #     flash('no file part')
+        #     return redirect(request.url)
 
         file = request.files["user-file"]
+
+        # pdb.set_trace()
 
         # Handle if user does not select file:
         if file.filename == '':
             flash ('No selected file')
             return redirect(request.url) 
+ 
 
-        if file and allowed_file(file.filename):
+        if file and health and zipcode and allowed_file(file.filename):
+
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             # return redirect(url_for('uploaded_file',
             #                         filename=filename))
-            import pdb; pdb.set_trace()
+            
+            pdb.set_trace()
 
-
-            return redirect(redirect("/upload-success", 
+            return redirect("/upload-success", 
                                         
                                         health=health,
                                         zipcode=zipcode,
                                         user_id=user_id,
                                         filename=filename,
-                                        ))
+                                        )
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+
+
+
+
+
+        
     
 
     # filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
@@ -230,6 +260,9 @@ def upload_success():
     """
 
     return render_template("upload_success.html")
+
+
+
 
 
 # @app.route('/upload-success', methods=['POST'])
@@ -260,6 +293,25 @@ def upload_success():
 #     return redirect("/bee-add-success")
 
 
+    
+    
+@app.route('/charts')
+def ml_charts():
+    """ Exciting page for demo of the machine learning model
+    """
+
+
+    return render_template("charts.html")
+
+
+@app.route('/links')
+def links():
+    """ Exciting page for links and resources about honeybees
+    """
+
+    return render_template("links.html")
+
+
 ## Helper functions ##
 def allowed_file(filename):
     return '.' in filename and \
@@ -279,4 +331,4 @@ if __name__ == '__main__':
     # Use the flask DebugToolbar
     DebugToolbarExtension(app)
 
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", debug=True)
