@@ -8,10 +8,10 @@
     <br><br>
 
     <h2>Upload a photo! </h2>
-    <form action="/upload-success" method="POST"> 
+    <form action="/upload-success" enctype="multipart/form-data" method="POST" > 
 
         <br>
-        <input type="file" name="user-file">
+        <input type="file" name="file">
 
         <div>
           <label> How is the health of this bee?

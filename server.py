@@ -160,8 +160,8 @@ def user_detail(user_id):
                             )
 
 
-@app.route("/users/<int:user_id>", methods=['POST'])
-def upload_file(user_id):
+@app.route("/upload-success", methods=['POST'])
+def upload_file():
     """       
 
         Show a form for uploading a photo.
@@ -172,94 +172,62 @@ def upload_file(user_id):
         After this method,
         - Image needs to be evaluated
         - We need to host the image on Clarafai.
-
-
     """
 
     
+    # Get other data
+    user_id = session.get("user_id")
 
-    try:
+    health = request.form["health"]
 
-        # Get other data
-        health = request.form["health"]
-        zipcode = request.form["zipcode"]
-
-        # if not health:
-        #     flash ('No health given')
-        #     return redirect(request.url) 
-
-        # if not zipcode:
-        #     flash ('No zipcode given')
-        #     return redirect(request.url)
+    zipcode = request.form["zipcode"]
 
 
+    if 'file' not in request.files:
+        flash('No file part')
+        return redirect(request.url)
 
-        user_id = session.get("user_id")
-        if not user_id:
-            raise Exception("No user logged in.")
+    print(request.files)
+    file = request.files["file"]
 
-        
-        # Handle file specified by user (on their local machine)
-        # Check if the post request has the file part:
-        # if 'file' not in request.files:
-        #     flash('no file part')
-        #     return redirect(request.url)
+    # Handle if user does not select file:
+    if file.filename == '':
+        flash ('No selected file')
+        return redirect(request.url)
 
-        file = request.files["user-file"]
+    if file and health and zipcode and allowed_file(file.filename):
 
-        # pdb.set_trace()
+        print(file.filename)
+        filename = secure_filename(file.filename)
 
-        # Handle if user does not select file:
-        if file.filename == '':
-            flash ('No selected file')
-            return redirect(request.url) 
- 
+        print(filename)
 
-        if file and health and zipcode and allowed_file(file.filename):
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        return redirect(url_for('uploaded_file',
+                                filename=filename))
+        print(file.path)
 
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            # return redirect(url_for('uploaded_file',
-            #                         filename=filename))
-            
-            pdb.set_trace()
-
-            return redirect("/upload-success", 
+        return render_template("upload_success.html", 
                                         
                                         health=health,
                                         zipcode=zipcode,
                                         user_id=user_id,
                                         filename=filename,
+                                        folder=app.config['UPLOAD_FOLDER'],
+                                       
                                         )
-    except:
-        print("Unexpected error:", sys.exc_info()[0])
-
-
-
-
-
         
     
 
-    # filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-    # image_path.save(filename)
+    
 
     print()
 
 
-
-    # image = "https://www.istockphoto.com/no/photos/honey-bee?sort=mostpopular&mediatype=photography&phrase=honey%20bee"
-
-
-
-
-
-@app.route('/upload-success', methods=['POST'])
-def upload_success():
-    """ I want to make this AJAX! In place. For now, this will be a form.
-    """
-
-    return render_template("upload_success.html")
+# @app.route('/user/<filename>')
+# def uploaded_file(filename):
+#     return send_from_directory(app.config['UPLOAD_FOLDER'],
+#                                filename)
 
 
 
