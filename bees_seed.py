@@ -24,7 +24,7 @@ from sqlalchemy import func
 import pandas as pd
 
 from model import Bee, connect_to_db, db
-from server import app
+
 
 clarifai_app = ClarifaiApp(api_key="58dc8755e39d4043a98554b44bbcaf56")
 MODEL_ID = 'test'
@@ -222,7 +222,7 @@ def predict_with_model(path):
 
     # print(model.model_version)
 
-    response = model.predict_by_filename(path)
+    response = cl_model.predict_by_filename(path)
 
 
     print("data")
@@ -242,6 +242,7 @@ def predict_with_model(path):
 if __name__ == '__main__':
 
     # Flask database initialization
+    from server import app
     connect_to_db(app)
     db.create_all()
 

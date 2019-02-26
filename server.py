@@ -199,7 +199,7 @@ def upload_file():
 
         # Build the relative path:
         folder = app.config['UPLOAD_FOLDER']
-        relative_path = folder + filename
+        relative_path = folder + "/" + filename
 
         print(relative_path)
 
@@ -253,8 +253,35 @@ def links():
 
 ## Helper functions ##
 def allowed_file(filename):
+    """ Determines whether filename is legal """
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+# def predict_with_model(model_name, path):
+#     """ https://clarifai.com/developer/guide/train#predict-with-the-model
+#     Makes a prediction with the model.
+#     @model_version_id = integer, version this time around
+   
+#     @path = local filename
+#     """
+
+#     # Set a model version id because I want to keep track of progress
+#     # model.model_version = model_version_id
+
+#     # print(model.model_version)
+
+#     response = model_name.predict_by_filename(path)
+
+
+#     print("data")
+#     response_id = response['outputs'][0]['data']['concepts'][0]['id']
+    
+#     response_confidence = response['outputs'][0]['data']['concepts'][0]['value']
+#     print(response_confidence)
+
+#     response_tuple = (response_id, response_confidence)
+#     return response_tuple
 
 
 
@@ -270,4 +297,9 @@ if __name__ == '__main__':
     # Use the flask DebugToolbar
     DebugToolbarExtension(app)
 
+    print(predict_with_model( 
+        path='uploads/download.jpeg'))
+
     app.run(host="0.0.0.0", debug=True)
+
+
