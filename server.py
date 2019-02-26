@@ -13,6 +13,8 @@ from sqlalchemy import func
 
 from model import Bee, User, connect_to_db, db
 
+from os.path import join, dirname, realpath
+
 
 # Create a Flask app
 app = Flask(__name__)
@@ -21,7 +23,7 @@ app = Flask(__name__)
 app.config.from_object("config")
 
 # An upload folder for temporarily storing user uploads
-UPLOAD_FOLDER = os.path.basename('uploads')
+UPLOAD_FOLDER = join(dirname(realpath(__file__)), 'uploads')
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
@@ -165,7 +167,7 @@ def upload_file():
     """       
 
         Show a form for uploading a photo.
-        Createa Bee from the data submitted by that user.
+        Createa Bee from the data submitted by that user? Or other method will do that?
 
         In this method, we store the image in a temporary location (Flask)
 
@@ -200,12 +202,12 @@ def upload_file():
         print(file.filename)
         filename = secure_filename(file.filename)
 
-        print(filename)
+        # print(filename)
 
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        return redirect(url_for('uploaded_file',
-                                filename=filename))
-        print(file.path)
+        # return redirect(url_for('uploaded_file',
+        #                         filename=filename))
+        # print(file.path)
 
         return render_template("upload_success.html", 
                                         
