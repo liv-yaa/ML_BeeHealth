@@ -28,7 +28,7 @@ from server import app
 
 clarifai_app = ClarifaiApp(api_key="58dc8755e39d4043a98554b44bbcaf56")
 MODEL_ID = 'test'
-model = clarifai_app.models.get(MODEL_ID)
+cl_model = clarifai_app.models.get(MODEL_ID)
 
 def add_images_concepts_to_clar(csv_filename):
     """
@@ -209,31 +209,33 @@ def load_one_image_to_db():
 
     
 
-# def predict_with_model(url):
-#     """ https://clarifai.com/developer/guide/train#predict-with-the-model
-#     Makes a prediction with the model.
-#     @model_version_id = integer, version this time around
-#     @url = a string, the URL of the photo we are analyzing!
-#     """
+def predict_with_model(path):
+    """ https://clarifai.com/developer/guide/train#predict-with-the-model
+    Makes a prediction with the model.
+    @model_version_id = integer, version this time around
+   
+    @path = local filename
+    """
 
+    # Set a model version id because I want to keep track of progress
+    # model.model_version = model_version_id
+
+    # print(model.model_version)
+
+    response = model.predict_by_filename(path)
+
+
+    print("data")
+    response_id = response['outputs'][0]['data']['concepts'][0]['id']
     
+    response_confidence = response['outputs'][0]['data']['concepts'][0]['value']
+    print(response_confidence)
 
-#     # # Set a model version id because I want to keep track of progress
-#     # # model.model_version = model_version_id
-
-#     # print(model.model_version)
-
-#     response = model.predict_by_url(url)
-
-#     pprint (response['outputs'][0]['model']['output_info'])
-#     # pprint (response['outputs'])
-
-#     # print(response.json())
+    response_tuple = (response_id, response_confidence)
+    return response_tuple
 
 
-#     # response_jfd = json.loads(response)
 
-#     # pprint (response_jfd)
 
 
 
@@ -255,7 +257,7 @@ if __name__ == '__main__':
     # Add Bees to our database from Clarifai
     # load_bees_from_clarifai()
 
-    model.train(sync=False) # False goes faster
+    # model.train(sync=False) # False goes faster
 
-    # predict_with_model( 
-    #     url='https://www.ahs.com/static-srvm/trmx/blog-images/How-To-Tell-If-Youre-Allergic-To-A-Bee-Sting-Main.jpg')
+    predict_with_model( 
+        path='uploads/download.jpeg')

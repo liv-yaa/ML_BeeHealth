@@ -12,6 +12,7 @@ from werkzeug.utils import secure_filename
 from sqlalchemy import func
 
 from model import Bee, User, connect_to_db, db
+from bees_seed import predict_with_model, cl_model
 
 from os.path import join, dirname, realpath
 
@@ -165,7 +166,6 @@ def user_detail(user_id):
 @app.route("/upload-success", methods=['POST'])
 def upload_file():
     """       
-
         Show a form for uploading a photo.
         Createa Bee from the data submitted by that user? Or other method will do that?
 
@@ -176,38 +176,35 @@ def upload_file():
         - We need to host the image on Clarafai.
     """
 
-    
     # Get other data
     user_id = session.get("user_id")
-
     health = request.form["health"]
-
     zipcode = request.form["zipcode"]
-
 
     if 'file' not in request.files:
         flash('No file part')
         return redirect(request.url)
 
-    print(request.files)
     file = request.files["file"]
 
-    # Handle if user does not select file:
+    # Handle if user did not select file:
     if file.filename == '':
         flash ('No selected file')
         return redirect(request.url)
 
-    if file and health and zipcode and allowed_file(file.filename):
+    if file and allowed_file(file.filename):
 
-        print(file.filename)
         filename = secure_filename(file.filename)
-
-        # print(filename)
-
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        # return redirect(url_for('uploaded_file',
-        #                         filename=filename))
-        # print(file.path)
+
+        # Build the relative path:
+        folder = app.config['UPLOAD_FOLDER']
+        relative_path = folder + filename
+
+        print(relative_path)
+
+        # Use method to predict
+        prediction = predict_with_model(relative_path)
 
         return render_template("upload_success.html", 
                                         
@@ -215,15 +212,15 @@ def upload_file():
                                         zipcode=zipcode,
                                         user_id=user_id,
                                         filename=filename,
+                                        prediction=prediction,
+                                        relative_path=relative_path,
                                         folder=app.config['UPLOAD_FOLDER'],
                                        
                                         )
-        
-    
 
-    
-
-    print()
+    else:
+        flash('Error')
+        return redirect(request.url)
 
 
 # @app.route('/user/<filename>')
@@ -233,34 +230,6 @@ def upload_file():
 
 
 
-
-
-# @app.route('/upload-success', methods=['POST'])
-# def upload():
-#     """ I want to make this AJAX! In place. For now, this will be a form.
-#     """
-
-#     # Get image and health from the form upload_success.html
-#     image = request.form["image"]
-#     health = request.form["health"]
-
-#     # # See if there are any users yet in our db
-#     # user = User.query.filter_by(email=email).first()
-
-#     # if not user:
-#     #     flash("That user information does not exist.")
-#     #     return redirect("/login")
-
-#     # if user.password != password:
-#     #     flash("Incorrect password")
-#     #     return redirect("/login")
-
-#     # # If we succesfully find a match, add the user_id to the session
-#     # session["user_id"] = user.user_id
-
-#     # flash("Logged in")
-
-#     return redirect("/bee-add-success")
 
 
     
