@@ -13,7 +13,14 @@ FROM CLARIFAI API - gets images
 """
 
 # API Requests / Get
-from clarifai.rest import ClarifaiApp
+from clarifai.rest import ClarifaiApp #  Clarifai Application Object
+                                        #   This is the entry point of the Clarifai Client API.
+                                        #   With authentication to an application, you can access
+                                        #   all the models, concepts, and inputs in this application through
+                                        #   the attributes of this class.
+                                        # |  To access the models: use ``app.models``
+                                        # |  To access the inputs: use ``app.inputs``
+                                        # |  To access the concepts: use ``app.concepts``
 
 
 import json
@@ -30,7 +37,6 @@ clarifai_app = ClarifaiApp(api_key="58dc8755e39d4043a98554b44bbcaf56") # move th
 MODEL_ID = 'test'
 cl_model = clarifai_app.models.get(MODEL_ID)
 
-# Class MyModel(Model)
 
 
 def add_images_concepts_to_clar(csv_filename):
@@ -257,14 +263,17 @@ if __name__ == '__main__':
     connect_to_db(app)
     db.create_all()
 
+    # Get model versions:
+    pprint(cl_model.list_versions())
+
     # Clear it from Clarifai. Be careful!!!!!!!!!
-    clarifai_app.inputs.delete_all()
-    print('Successfully deleted all.')
+    # clarifai_app.inputs.delete_all()
+    # print('Successfully deleted all.')
 
     # Give images and concepts from file to Clarifai
-    seed_filename = "bee_data.csv" 
-    add_images_concepts_to_clar(seed_filename)
-    print('Successfully added all.')
+    # seed_filename = "bee_data.csv" 
+    # add_images_concepts_to_clar(seed_filename)
+    # print('Successfully added all.')
 
     # Add Bees to our database from Clarifai
     # load_bees_from_clarifai()
