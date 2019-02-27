@@ -4,21 +4,18 @@
 <br><br>
 {% if "user_id" in session %}
     Upload Successful
-    <br>
-    {% if health %} {{ health }} {% endif %}
-    <br>
-    {% if zipcode %} {{ zipcode }} {% endif %}
-    <br>
-    {% if user_id %} {{ user_id }} {% endif %}
+
     
-    <br>
-    {% if filename %} {{ filename }} {% endif %}
     <br>
     {% if prediction %} {{ prediction }} {% endif %}
     <br>
-    {% if relative_path %} {{ relative_path }} {% endif %}
+    {% if performance %} {{ performance }} {% endif %}
 
-    <br>
+
+ 
+    <br><br><br>
+
+    <br><br>
     <a href="/"> Go Back to Home </a>
     <br>
     <a href="/users/<int:user_id>"> Want to submit a photo? </a>

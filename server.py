@@ -167,9 +167,8 @@ def user_detail(user_id):
 def upload_file():
     """       
         Show a form for uploading a photo.
-        Createa Bee from the data submitted by that user? Or other method will do that?
 
-        In this method, we store the image in a temporary location (Flask)
+        In this method, we (temporarily?) store the image in a local folder named "uploads"
 
         After this method,
         - Image needs to be evaluated
@@ -201,20 +200,20 @@ def upload_file():
         folder = app.config['UPLOAD_FOLDER']
         relative_path = folder + "/" + filename
 
-        print(relative_path)
+        # Use method to our model's prediction
+        prediction = predict_with_model(relative_path) # returns a tuple (response_id, response_confidence)
 
-        # Use method to predict
-        prediction = predict_with_model(relative_path)
+        performance = str(check_prediction(health, prediction))
+        print(health)
+        print(performance)
+        print(performance)
 
         return render_template("upload_success.html", 
                                         
-                                        health=health,
-                                        zipcode=zipcode,
-                                        user_id=user_id,
-                                        filename=filename,
+
                                         prediction=prediction,
-                                        relative_path=relative_path,
-                                        folder=app.config['UPLOAD_FOLDER'],
+
+                                        performance=performance,
                                        
                                         )
 
@@ -222,23 +221,11 @@ def upload_file():
         flash('Error')
         return redirect(request.url)
 
-
-# @app.route('/user/<filename>')
-# def uploaded_file(filename):
-#     return send_from_directory(app.config['UPLOAD_FOLDER'],
-#                                filename)
-
-
-
-
-
-    
     
 @app.route('/charts')
 def ml_charts():
     """ Exciting page for demo of the machine learning model
     """
-
 
     return render_template("charts.html")
 
@@ -258,30 +245,13 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-# def predict_with_model(model_name, path):
-#     """ https://clarifai.com/developer/guide/train#predict-with-the-model
-#     Makes a prediction with the model.
-#     @model_version_id = integer, version this time around
-   
-#     @path = local filename
-#     """
+def check_prediction(health_string, prediction_tuple):
+    """ Checks whether prediction tuple matches input of health specified by user """
+    response_string = prediction_tuple[0]
+    response_confidence = prediction_tuple[1]
 
-#     # Set a model version id because I want to keep track of progress
-#     # model.model_version = model_version_id
+    return response_string == health_string
 
-#     # print(model.model_version)
-
-#     response = model_name.predict_by_filename(path)
-
-
-#     print("data")
-#     response_id = response['outputs'][0]['data']['concepts'][0]['id']
-    
-#     response_confidence = response['outputs'][0]['data']['concepts'][0]['value']
-#     print(response_confidence)
-
-#     response_tuple = (response_id, response_confidence)
-#     return response_tuple
 
 
 
@@ -297,9 +267,17 @@ if __name__ == '__main__':
     # Use the flask DebugToolbar
     DebugToolbarExtension(app)
 
-    print(predict_with_model( 
-        path='uploads/download.jpeg'))
+    # print(check_prediction("unhealth", predict_with_model( 
+    #     path='uploads/download.jpeg')))
+    # print(check_prediction("health", predict_with_model( 
+    #     path='uploads/download.jpeg')))
+    # print(check_prediction("unhealth", predict_with_model( 
+    #     path='uploads/038_293.png')))
+    # print(check_prediction("health", predict_with_model( 
+    #     path='uploads/038_293.png')))
+
 
     app.run(host="0.0.0.0", debug=True)
+
 
 
