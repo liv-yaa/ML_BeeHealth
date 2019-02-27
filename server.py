@@ -211,16 +211,16 @@ def upload_file():
         # Attempt to add image to clarafai model
         # We need to do this first because the model.py database object has a URL.
         # So first thing we need to create is a URL.
-        add_image_clar = add_new_image_to_clar(,
+        # add_image_clar = add_new_image_to_clar(,
 
 
-                                                )
+        #                                         )
 
-        # Ceated is a URL ready to add to db.
-        add_image_db = add_new_image_to_db(user_id=user_id,
+        # # Ceated is a URL ready to add to db.
+        # add_image_db = add_new_image_to_db(user_id=user_id,
 
 
-                                        )
+        #                                 )
 
 
         # Teain model!

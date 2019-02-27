@@ -26,9 +26,12 @@ import pandas as pd
 from model import Bee, connect_to_db, db
 
 
-clarifai_app = ClarifaiApp(api_key="58dc8755e39d4043a98554b44bbcaf56")
+clarifai_app = ClarifaiApp(api_key="58dc8755e39d4043a98554b44bbcaf56") # move this
 MODEL_ID = 'test'
 cl_model = clarifai_app.models.get(MODEL_ID)
+
+# Class MyModel(Model)
+
 
 def add_images_concepts_to_clar(csv_filename):
     """
@@ -51,9 +54,9 @@ def add_images_concepts_to_clar(csv_filename):
     # for i in range(len(df)):
     for i in range(120): # FOR NOW
 
-        image_id = i # Integer assigned to each new Bee
+        image_id = str(i) # has to be a string to instantiate an Image
         health_ = str(df.loc[i][5])
-        datetime = df.loc[i][0]
+        datetime = str(df.loc[i][0])
         csv_filename = str(df.loc[i][1])
         zip_code = str(df.loc[i][3])
 
@@ -63,32 +66,43 @@ def add_images_concepts_to_clar(csv_filename):
         # Edit fileanme to have the local path:
         local_filename = 'bee_imgs/' + csv_filename
 
+
+        print(image_id, health, datetime, csv_filename, zip_code, local_filename)
+
         if (health == 'y'):
             img = clarifai_app.inputs.create_image_from_filename(filename=local_filename, 
-                            # image_id=bee_id,
-                            concepts=['health'],
-                            not_concepts=None,
+                            image_id=image_id,
+                            concepts=['health', 'is_bee'], # a list of concept names this image is associated with
+                            not_concepts=None,  #a list of concept names this image is not associated with
+                            crop=None, # crop information, with four corner coordinates
                             metadata={ 'image_id': image_id,
-                                        # 'datetime': datetime, 
+                                        'datetime': datetime, 
                                         'zip_code': zip_code,
                                         },
                             geo=None, # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
                             allow_duplicate_url=True,
                             )
+            
+
         else:
             img = clarifai_app.inputs.create_image_from_filename(filename=local_filename, 
-                            # image_id=bee_id,
-                            concepts=None,
+                            image_id=image_id,
+                            concepts=['is_bee'],
                             not_concepts=['health'],
+                            crop=None, # crop information, with four corner coordinates
                             metadata={ 'image_id': image_id,
-                                        # 'datetime': datetime, 
+                                        'datetime': datetime, 
                                         'zip_code': zip_code,
                                         },
                             geo=None, # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
                             allow_duplicate_url=True,
                             )
 
+        print(img.concepts, " lskjdfklsdjf '", img.not_concepts)
+
         image_list.append(img)
+
+        print(image_list)
 
     clarifai_app.inputs.bulk_create_images(image_list)
 
@@ -244,18 +258,18 @@ if __name__ == '__main__':
     db.create_all()
 
     # Clear it from Clarifai. Be careful!!!!!!!!!
-    # clarifai_app.inputs.delete_all()
-    # print('Successfully deleted all.')
+    clarifai_app.inputs.delete_all()
+    print('Successfully deleted all.')
 
-    # # Give images and concepts from file to Clarifai
-    # seed_filename = "bee_data.csv" 
-    # add_images_concepts(seed_filename)
-    # print('Successfully added all.')
+    # Give images and concepts from file to Clarifai
+    seed_filename = "bee_data.csv" 
+    add_images_concepts_to_clar(seed_filename)
+    print('Successfully added all.')
 
     # Add Bees to our database from Clarifai
     # load_bees_from_clarifai()
 
     # model.train(sync=False) # False goes faster
 
-    predict_with_model( 
-        path='uploads/download.jpeg')
+    # predict_with_model( 
+    #     path='uploads/download.jpeg')
