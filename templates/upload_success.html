@@ -7,13 +7,38 @@
 
     
     <br>
-    {% if prediction %} {{ prediction }} {% endif %}
     <br>
-    {% if performance %} {{ performance }} {% endif %}
+    {% if performance == 'True' %} 
+        Sweet! The machine learning model predicted correctly. {{ performance }} 
+        with a confidence score of {% if prediction %} {{ prediction[1] }} {% endif %}
+
+    {% else %}
+
+        Sigh...the machine learning model predicted incorrectly ( {{ performance }} )
+        with a confidence score of {% if prediction %} {{ prediction[1] }} {% endif %}
+
+    {% endif %}
+    <br><br>
 
 
- 
-    <br><br><br>
+
+    {% if image_added %}
+        
+        <br> Your image has been added! Thank you for improving our model.
+        {{ add_image_attempt }}
+
+    {% else %}
+
+        <br> Cannot add image to model {{ add_image_attempt }}
+
+    {% endif %}
+    
+    <br> 
+
+    
+
+
+    <br>
 
     <br><br>
     <a href="/"> Go Back to Home </a>

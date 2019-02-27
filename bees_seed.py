@@ -129,15 +129,43 @@ def load_bees_from_clarifai_to_db():
     db.session.commit()
 
 
+def predict_with_model(path):
+    """ https://clarifai.com/developer/guide/train#predict-with-the-model
+    Makes a prediction with the model.
+    @model_version_id = integer, version this time around
+   
+    @path = local filename
+    """
 
-def add_one_image_concepts_to_clar(user_id, photo_url, photo_health):
-    """ Get a users input:
-    @url, a string
-    @concepts - either 'y' for health or 'n' for not
+    # Set a model version id because I want to keep track of progress
+    # model.model_version = model_version_id
+
+    # print(model.model_version)
+
+    response = cl_model.predict_by_filename(path)
+    
+    response_id = response['outputs'][0]['data']['concepts'][0]['id']
+    
+    response_confidence = response['outputs'][0]['data']['concepts'][0]['value']
+    
+    response_datetime = response['outputs'][0]['created_at']
+
+
+    response_tuple = (response_id, response_confidence, response_datetime)
+    print("t", response_tuple)
+    return response_tuple
+
+
+
+def add_new_image_to_clar(user_id, photo_url, photo_health):
+    """ Get prediction tuple from a user's uploaded image (which has metadata)
+    Create a new Bee object
 
     and add it to Clarifai """
 
-    image_id = i # Integer assigned to each new Bee
+    image_id = i # Need to get nteger assigned to each new Bee
+
+
     health_ = str(df.loc[i][5])
     datetime = df.loc[i][0]
     csv_filename = str(df.loc[i][1])
@@ -176,12 +204,12 @@ def add_one_image_concepts_to_clar(user_id, photo_url, photo_health):
 
 
 
-    # clarifai_app.inputs.bulk_create_images(image_list)
+    clarifai_app.inputs.bulk_create_images(image_list)
 
     
 
 
-def load_one_image_to_db():
+def add_new_image_to_db():
     """ Get one image (hosted by clarafai) - which has a url (on Clar)
     Create a Bee object and add it to the database 
     """
@@ -205,37 +233,6 @@ def load_one_image_to_db():
     # db.session.add(bee)
     # db.session.commit()
     # flash("Bee added to database. Thank you!")
-
-
-    
-
-def predict_with_model(path):
-    """ https://clarifai.com/developer/guide/train#predict-with-the-model
-    Makes a prediction with the model.
-    @model_version_id = integer, version this time around
-   
-    @path = local filename
-    """
-
-    # Set a model version id because I want to keep track of progress
-    # model.model_version = model_version_id
-
-    # print(model.model_version)
-
-    response = cl_model.predict_by_filename(path)
-
-
-    print("data")
-    response_id = response['outputs'][0]['data']['concepts'][0]['id']
-    
-    response_confidence = response['outputs'][0]['data']['concepts'][0]['value']
-    print(response_confidence)
-
-    response_tuple = (response_id, response_confidence)
-    return response_tuple
-
-
-
 
 
 
