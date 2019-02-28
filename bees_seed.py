@@ -25,6 +25,7 @@ from clarifai.rest import ClarifaiApp #  Clarifai Application Object
 
 import json
 import requests
+import glob
 from pprint import pprint
 
 from sqlalchemy import func
@@ -34,9 +35,9 @@ from model import Bee, connect_to_db, db
 
 
 clarifai_app = ClarifaiApp(api_key="58dc8755e39d4043a98554b44bbcaf56") # move this
-MODEL_ID = 'test'
+MODEL_ID = 'Detection of Health in Bees with Images'
 cl_model = clarifai_app.models.get(MODEL_ID)
-
+seed_filename = "bee_data.csv" 
 
 
 def add_images_concepts_to_clar(csv_filename):
@@ -44,7 +45,7 @@ def add_images_concepts_to_clar(csv_filename):
     Load images to Clarifai model, using custom tags from the csv file.
     """
 
-    # df is a pandas DataFrame
+    # Read csv file, df is a pandas DataFrame
     df = pd.read_csv(csv_filename, 
                     index_col=False, 
                     parse_dates={'datetime':[1, 2]}, # This will parse columns 1, 2 as date and call result 'datetime'
@@ -55,23 +56,23 @@ def add_images_concepts_to_clar(csv_filename):
                             } 
     )
 
+    # Create a list to store all images we're passing to Clarafai app
     image_list = []
 
     # for i in range(len(df)):
     for i in range(120): # FOR NOW
 
-        image_id = str(i) # has to be a string to instantiate an Image
+        image_id = str(i)
         health_ = str(df.loc[i][5])
         datetime = str(df.loc[i][0])
         csv_filename = str(df.loc[i][1])
         zip_code = str(df.loc[i][3])
 
-        # Edit health (a string) to make it better for queries (a binary value)
+        # Edit health (a string) to make it a binary value (better for this purpose)
         health = 'y' if health_ == 'healthy' else 'n'
 
         # Edit fileanme to have the local path:
-        local_filename = 'bee_imgs/' + csv_filename
-
+        local_filename = 'images/bees/' + csv_filename
 
         print(image_id, health, datetime, csv_filename, zip_code, local_filename)
 
@@ -104,13 +105,41 @@ def add_images_concepts_to_clar(csv_filename):
                             allow_duplicate_url=True,
                             )
 
-        print(img.concepts, " lskjdfklsdjf '", img.not_concepts)
+        print(img.concepts, " are concepts and not concepts are ", img.not_concepts)
 
         image_list.append(img)
 
-        print(image_list)
+    print(image_list)
+
+    # Add nonbees:
+    
+    images = glob.glob('images/not_bees/*png')
+
+    for img_name in images:
+
+        # print(image_name)
+        # print(type(image_name)) # It's a string!
+
+        img = clarifai_app.inputs.create_image_from_filename(
+                            filename=img_name, 
+                            # image_id=None,
+                            # concepts=None,
+                            not_concepts=['is_bee'], 
+                            )
+
+        print(img.filename)
+
+        print(img.concepts, " are concepts and not concepts are ", img.not_concepts)
+
+        image_list.append(img)
+
+    print("Image list added", image_list)
+
+
+
 
     clarifai_app.inputs.bulk_create_images(image_list)
+
 
 
 def load_bees_from_clarifai_to_db():
@@ -162,22 +191,26 @@ def predict_with_model(path):
 
     # print(model.model_version)
 
+
     response = cl_model.predict_by_filename(path)
+    pprint(response)
     
-    response_id = response['outputs'][0]['data']['concepts'][0]['id']
+    # response_id = response['outputs'][0]['data']['concepts'][0]['id']
     
-    response_confidence = response['outputs'][0]['data']['concepts'][0]['value']
+    # response_confidence = response['outputs'][0]['data']['concepts'][0]['value']
     
-    response_datetime = response['outputs'][0]['created_at']
+    # response_datetime = response['outputs'][0]['created_at']
+
+    # print(response_datetime)
 
 
-    response_tuple = (response_id, response_confidence, response_datetime)
-    print("t", response_tuple)
-    return response_tuple
+    # response_tuple = (response_id, response_confidence, response_datetime)
+    # pprint("t", response_tuple)
+    # return response_tuple
 
 
 
-def add_new_image_to_clar(user_id, photo_url, photo_health):
+def process_img_upload(user_id, photo_url, photo_health):
     """ Get prediction tuple from a user's uploaded image (which has metadata)
     Create a new Bee object
 
@@ -228,7 +261,6 @@ def add_new_image_to_clar(user_id, photo_url, photo_health):
 
     
 
-
 def add_new_image_to_db():
     """ Get one image (hosted by clarafai) - which has a url (on Clar)
     Create a Bee object and add it to the database 
@@ -254,6 +286,40 @@ def add_new_image_to_db():
     # db.session.commit()
     # flash("Bee added to database. Thank you!")
 
+def process_upload(img_path):
+    """ method that gets called when a user uploads one photo 
+    - Gets prediction for user (using model version n)
+    - Adds new photo to model
+    - Adds new photo to bee_db
+    - Trains new model (version n+1)
+
+    @param img_path , the local path 'uploads/..'
+    @return prediction tuple (response_id, response_confidence)
+    """
+
+    prediction_tuple = predict_with_model(img_path)
+
+    # Attempt to add image to clarafai model
+    # We need to do this first because the model.py database object has a URL.
+    # So first thing we need to create is a URL.
+    # add_image_clar = add_new_image_to_clar(,
+
+
+    #                                         )
+
+    # # Created is a URL ready to add to db.
+    # add_image_db = add_new_image_to_db(user_id=user_id,
+
+
+    #                                 )
+
+
+    # Train model!
+
+
+
+    return prediction_tuple
+
 
 
 if __name__ == '__main__':
@@ -264,21 +330,21 @@ if __name__ == '__main__':
     db.create_all()
 
     # Get model versions:
-    pprint(cl_model.list_versions())
+    # pprint(cl_model.list_versions())
 
     # Clear it from Clarifai. Be careful!!!!!!!!!
     # clarifai_app.inputs.delete_all()
     # print('Successfully deleted all.')
 
     # Give images and concepts from file to Clarifai
-    # seed_filename = "bee_data.csv" 
-    # add_images_concepts_to_clar(seed_filename)
-    # print('Successfully added all.')
+    add_images_concepts_to_clar(seed_filename)
+    print('Successfully added all.')
 
     # Add Bees to our database from Clarifai
     # load_bees_from_clarifai()
 
     # model.train(sync=False) # False goes faster
 
-    # predict_with_model( 
-    #     path='uploads/download.jpeg')
+    # process_upload( 
+    #     img_path='uploads/download.jpeg')
+

@@ -12,7 +12,7 @@ from werkzeug.utils import secure_filename
 from sqlalchemy import func
 
 from model import Bee, User, connect_to_db, db
-from bees_seed import predict_with_model, add_new_image_to_clar, cl_model
+from bees_seed import process_upload, cl_model
 
 from os.path import join, dirname, realpath
 
@@ -201,43 +201,16 @@ def upload_file():
         relative_path = folder + "/" + filename
 
         # Use method to our model's prediction
-        prediction = predict_with_model(relative_path) # returns a tuple (response_id, response_confidence)
+        prediction = process_upload(relative_path) # returns a tuple (response_id, response_confidence)
 
         performance = str(check_prediction(health, prediction))
         print(health)
         print(performance)
-        print(performance)
-
-        # Attempt to add image to clarafai model
-        # We need to do this first because the model.py database object has a URL.
-        # So first thing we need to create is a URL.
-        # add_image_clar = add_new_image_to_clar(,
-
-
-        #                                         )
-
-        # # Ceated is a URL ready to add to db.
-        # add_image_db = add_new_image_to_db(user_id=user_id,
-
-
-        #                                 )
-
-
-        # Teain model!
-
-
-
-
-
-
-
 
 
         return render_template("upload_success.html", 
                                         prediction=prediction,
                                         performance=performance,
-                                        # add_image_clar=add_image_clar,
-                                        # add_image_db=add_image_db,
                                        
                                         )
 
