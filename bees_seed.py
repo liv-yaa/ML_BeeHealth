@@ -44,6 +44,8 @@ def add_images_concepts_to_clar(csv_filename):
     """
     Load images to Clarifai model, using custom tags from the csv file.
     """
+    # Create a list to store all images we're passing to Clarafai app
+    image_list = []
 
     # Read csv file, df is a pandas DataFrame
     df = pd.read_csv(csv_filename, 
@@ -55,9 +57,6 @@ def add_images_concepts_to_clar(csv_filename):
                             'zip_code':'str',
                             } 
     )
-
-    # Create a list to store all images we're passing to Clarafai app
-    image_list = []
 
     # for i in range(len(df)):
     for i in range(120): # FOR NOW
@@ -74,57 +73,50 @@ def add_images_concepts_to_clar(csv_filename):
         # Edit fileanme to have the local path:
         local_filename = 'images/bees/' + csv_filename
 
-        print(image_id, health, datetime, csv_filename, zip_code, local_filename)
+        # print(image_id, health, datetime, csv_filename, zip_code, local_filename)
 
         if (health == 'y'):
-            img = clarifai_app.inputs.create_image_from_filename(filename=local_filename, 
-                            image_id=image_id,
-                            concepts=['health', 'is_bee'], # a list of concept names this image is associated with
-                            not_concepts=None,  #a list of concept names this image is not associated with
-                            crop=None, # crop information, with four corner coordinates
-                            metadata={ 'image_id': image_id,
-                                        'datetime': datetime, 
-                                        'zip_code': zip_code,
-                                        },
-                            geo=None, # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
-                            allow_duplicate_url=True,
-                            )
             
+            concepts=['health', 'is_bee'], # a list of concept names this image is associated with
+            not_concepts=None,  # a list of concept names this image is not associated with
 
         else:
-            img = clarifai_app.inputs.create_image_from_filename(filename=local_filename, 
-                            image_id=image_id,
-                            concepts=['is_bee'],
-                            not_concepts=['health'],
-                            crop=None, # crop information, with four corner coordinates
-                            metadata={ 'image_id': image_id,
-                                        'datetime': datetime, 
-                                        'zip_code': zip_code,
-                                        },
-                            geo=None, # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
-                            allow_duplicate_url=True,
-                            )
+            concepts = ['is_bee']
+            not_concepts = ['health']
+           
 
-        print(img.concepts, " are concepts and not concepts are ", img.not_concepts)
+        img = clarifai_app.inputs.create_image_from_filename(filename=local_filename, 
+                        image_id=image_id,
+                        concepts=concepts,
+                        not_concepts=not_concepts,
+                        metadata={ 'image_id': image_id,
+                                    'datetime': datetime, 
+                                    'zip_code': zip_code,
+                                    },
+                        geo=None, # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
+                        allow_duplicate_url=False,
+                        )
+
+        # print(img.concepts, " are concepts and not concepts are ", img.not_concepts)
 
         image_list.append(img)
 
-    print(image_list)
+    print("Image list" , image_list)
 
     # Add nonbees:
     
-    images = glob.glob('images/not_bees/*png')
+    nonbees = glob.glob('images/not_bees/*png')
 
-    for img_name in images:
-
-        # print(image_name)
-        # print(type(image_name)) # It's a string!
+    for img_name in nonbees:
 
         img = clarifai_app.inputs.create_image_from_filename(
                             filename=img_name, 
-                            # image_id=None,
-                            # concepts=None,
+                            image_id=None,
+                            concepts=None,
                             not_concepts=['is_bee'], 
+                            metadata=None,
+                            geo=None,
+                            allow_duplicate_url=False,
                             )
 
         print(img.filename)
@@ -136,9 +128,7 @@ def add_images_concepts_to_clar(csv_filename):
     print("Image list added", image_list)
 
 
-
-
-    clarifai_app.inputs.bulk_create_images(image_list)
+    # clarifai_app.inputs.bulk_create_images(image_list)
 
 
 
@@ -148,31 +138,36 @@ def load_bees_from_clarifai_to_db():
     Convert Image objects to Bee objects, & add to our database.
     """
 
-    all_images = list(clarifai_app.inputs.get_all())
+    all_bees = clarifai_app.inputs.get_all()
 
-    for i in range(len(all_images)):
 
-        image = all_images[i] 
-        
+    print(all_bees)
+
+
+    for i in range(len(all_bees)):
+
+        image = all_bees[i] 
         url = image.url
         image_id = int(image.metadata['image_id'])
         zip_code = str(image.metadata['zip_code']) 
-        health = None
 
-        if (image.concepts): 
-            health = 'y' 
-        elif (image.not_concepts):
-            health = 'n'
+        if 'bee' in image.concepts:
 
-        # Create a bee
-        a_bee = Bee(bee_id=image_id,
-                    user_id=None, # All database bees will have no user_id
-                    url=url,
-                    health=health,
-                    zip_code=zip_code,
-                    )
+            if 'healthy' in image.concepts: 
+                health = 'y' 
 
-        db.session.add(a_bee)
+            else:
+                health = 'n'
+
+            # Create a bee
+            a_bee = Bee(bee_id=image_id,
+                        user_id=None, # All database bees will have no user_id
+                        url=url,
+                        health=health,
+                        zip_code=zip_code,
+                        )
+
+            db.session.add(a_bee)
 
     # Commit all Bee objects to the database
     db.session.commit()
@@ -333,15 +328,15 @@ if __name__ == '__main__':
     # pprint(cl_model.list_versions())
 
     # Clear it from Clarifai. Be careful!!!!!!!!!
-    # clarifai_app.inputs.delete_all()
-    # print('Successfully deleted all.')
+    clarifai_app.inputs.delete_all()
+    print('Successfully deleted all.')
 
     # Give images and concepts from file to Clarifai
     add_images_concepts_to_clar(seed_filename)
     print('Successfully added all.')
 
     # Add Bees to our database from Clarifai
-    # load_bees_from_clarifai()
+    # load_bees_from_clarifai_to_db()
 
     # model.train(sync=False) # False goes faster
 
