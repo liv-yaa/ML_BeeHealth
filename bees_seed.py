@@ -138,7 +138,7 @@ def load_bees_from_clarifai_to_db():
     Convert Image objects to Bee objects, & add to our database.
     """
 
-    all_bees = clarifai_app.inputs.get_all()
+    all_bees = list(clarifai_app.inputs.get_all())
 
 
     print(all_bees)
@@ -328,15 +328,15 @@ if __name__ == '__main__':
     # pprint(cl_model.list_versions())
 
     # Clear it from Clarifai. Be careful!!!!!!!!!
-    clarifai_app.inputs.delete_all()
-    print('Successfully deleted all.')
+    # clarifai_app.inputs.delete_all()
+    # print('Successfully deleted all.')
 
-    # Give images and concepts from file to Clarifai
-    add_images_concepts_to_clar(seed_filename)
-    print('Successfully added all.')
+    # # Give images and concepts from file to Clarifai
+    # add_images_concepts_to_clar(seed_filename)
+    # print('Successfully added all.')
 
     # Add Bees to our database from Clarifai
-    # load_bees_from_clarifai_to_db()
+    load_bees_from_clarifai_to_db()
 
     # model.train(sync=False) # False goes faster
 
