@@ -58,16 +58,15 @@ def add_images_concepts_to_clar(csv_filename):
                             } 
     )
 
-    # Get the maximum bee_id in the database
-    result = db.session.query(func.max(Bee.bee_id)).one()
-    nonbee_id = int(result[0]) + 1
+    # Get the maximum bee_id in the clarafai model and add 1
+    next_id = get_hi_input_id() + 1
 
-    print("nonbee_id", nonbee_id)
+    print("next_id", next_id)
 
     # for i in range(len(df)):
     for i in range(40): # FOR NOW
 
-        image_id = str(nonbee_id + i)
+        image_id = str(next_id + i)
         health_ = str(df.loc[i][5])
         datetime = str(df.loc[i][0])
         csv_filename = str(df.loc[i][1])
@@ -101,7 +100,7 @@ def add_images_concepts_to_clar(csv_filename):
                                     'zip_code': zip_code,
                                     },
                         # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
-                        allow_duplicate_url=True,
+                        # allow_duplicate_url=True,
                         )
 
         print("After", img.concepts, " are concepts and not concepts are ", img.not_concepts)
@@ -163,7 +162,6 @@ def load_bees_from_clarifai_to_db():
     """
 
     all_bees = list(clarifai_app.inputs.get_all())
-
 
     print(all_bees)
 
@@ -343,6 +341,17 @@ def process_upload(img_path):
     return prediction_tuple
 
 
+def get_hi_input_id():
+    # Get the highest input_id for all the bees in clar
+    all_ids = [bee.input_id for bee in clarifai_app.inputs.get_all()]
+
+    if all_ids == []:
+        return 0
+    else:
+        return max(all_ids)
+
+
+
 
 if __name__ == '__main__':
 
@@ -354,11 +363,13 @@ if __name__ == '__main__':
     # Get model versions:
     # pprint(cl_model.list_versions())
 
-    # Clear it from Clarifai. Be careful!!!!!!!!!
-    # clarifai_app.inputs.delete_all()
-    # print('Successfully deleted all.')
+    # print(get_hi_input_id())
 
-    # # Give images and concepts from file to Clarifai
+    # Clear it from Clarifai. Be careful!!!!!!!!!
+    clarifai_app.inputs.delete_all()
+    print('Successfully deleted all.')
+
+    # # # Give images and concepts from file to Clarifai
     add_images_concepts_to_clar(seed_filename)
     print('Successfully added all.')
 
