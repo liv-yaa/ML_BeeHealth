@@ -15,8 +15,11 @@
 <h3> View Our Bee Photo Database </h3>
     <br>
     <h5> healthy bees: </h5>
+
+    <ul id="grid" class="clear">
     
         {% for bee in healthy_bees %}
+            <li>
             
 <!--             {{ bee.bee_id, bee.health }};
             zip: {{ bee.zip_code }} -->
@@ -24,23 +27,28 @@
                 alt="healthy bee {{ bee.bee_id}}" 
                 height="100" 
                 width="100"> 
+            </li>
             
         {% endfor %}
+    </ul>
     
     <br><br><br>
     <h5> unhealthy bees: </h5>
 
+    <ul id="grid" class="clear">
         {% for bee in unhealthy_bees %}
 
+            <li>
 <!--             {{ bee.bee_id, bee.health }};
             zip: {{ bee.zip_code }} -->
             <img src={{ bee.url }} 
                 alt="unhealthy bee {{ bee.bee_id}}" 
                 height="100" 
                 width="100">
-
+            </li>
 
         {% endfor %}
+    </ul>
 
 <br><br>
 <a href="/charts">Learn about our machine learning model</a>

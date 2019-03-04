@@ -201,6 +201,7 @@ def upload_file():
         relative_path = folder + "/" + filename
 
         # Use method to our model's prediction
+        
         prediction = process_upload(relative_path) # returns a tuple (response_id, response_confidence)
 
         performance = str(check_prediction(health, prediction))
