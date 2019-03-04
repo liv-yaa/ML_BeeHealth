@@ -138,7 +138,7 @@ def add_images_concepts_to_clar(csv_filename):
     print("Image list added", image_list)
 
 
-    # clarifai_app.inputs.bulk_create_images(image_list)
+    clarifai_app.inputs.bulk_create_images(image_list)
 
 
 
