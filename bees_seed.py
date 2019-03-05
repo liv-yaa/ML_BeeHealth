@@ -82,8 +82,8 @@ def add_bees_to_clar(csv_filename):
 
         if (health == 'y'):
             
-            concepts=['health', 'is_bee'], # a list of concept names this image is associated with
-            not_concepts=None,  # a list of concept names this image is not associated with
+            concepts=['health', 'is_bee'] # a list of concept names this image is associated with
+            not_concepts=None  # a list of concept names this image is not associated with
 
         else:
             concepts = ['is_bee']
@@ -252,7 +252,7 @@ def process_upload(user_id, health, local_filename, zipcode):
     print("local_filename", local_filename)
     print("zipcode", zipcode)
 
-    image_id = get_hi_input_id() + 1
+    image_id = str(get_hi_input_id() + 1)
     print("image_id", image_id)
 
     # get prediction_tuple which is (response_id, response_confidence, response_datetime)
@@ -273,37 +273,71 @@ def process_upload(user_id, health, local_filename, zipcode):
     print("datetime", datetime)
 
 
-    # if (health == 'y'):
+    if (health == 'y'):
             
-    #     concepts=['health', 'is_bee'], # a list of concept names this image is associated with
-    #     not_concepts=None,  # a list of concept names this image is not associated with
+        concepts=['health', 'is_bee'] # a list of concept names this image is associated with
+        not_concepts=None  # a list of concept names this image is not associated with
 
-    # else:
-    #     concepts = ['is_bee']
-    #     not_concepts = ['health']
+    else:
+        concepts = ['is_bee']
+        not_concepts = ['health']
        
-    # print("Before", concepts, " are concepts and not concepts are ", not_concepts)
-    # print("image_id", image_id)
-    # img = clarifai_app.inputs.create_image_from_filename(filename=local_filename, 
-    #                 image_id=image_id,
-    #                 concepts=concepts,
-    #                 not_concepts=not_concepts,
-    #                 metadata={ 'image_id': image_id,
-    #                             'datetime': datetime, 
-    #                             'zip_code': zip_code,
-    #                             },
-    #                 # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
-    #                 # allow_duplicate_url=True,
-    #                 )
+    print("Before", concepts, " are concepts and not concepts are ", not_concepts)
+    print("")
 
-    # print("After", img.concepts, " are concepts and not concepts are ", img.not_concepts)
+    # Create image and add to Clar.
+    img = clarifai_app.inputs.create_image_from_filename(
+                    filename=local_filename, 
+                    image_id=image_id,
+                    concepts=concepts,
+                    not_concepts=not_concepts,
+                    metadata={ 'image_id': image_id,
+                                'datetime': datetime, 
+                                'zipcode': zipcode,
+                                'user_id': user_id,
+                                },
+                    # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
+                    allow_duplicate_url=True,
+                    )
 
+    print("After", img.concepts, " are concepts and not concepts are ", img.not_concepts)
+    # print("user_id", img.user_id)
+    # print("concepts", img.concepts)
+    # print("not_concepts", img.not_concepts)
+    # print("img.filename", img.filename)
+
+    # print("zipcode", img.ipcode)
+    # print("image_id", img.image_id)
+
+    # print("response_confidence", img.response_confidence)
+    # print("datetime", img.datetime)
+
+    print(dir(img))
+    print(img.dict)
+    print(img.url)
+    print("score", img.score)
+
+    print("")
+    print()
+
+
+    # Save our URL!
+    url = img.url
+
+    # Make a Bee.
+    print("url", url)
+
+    add_new_image_to_db(user_id=user_id,
+                        url=url,
+                        health=health,
+                        zipcode=zipcode,
+                        )
 
     return prediction_tuple
 
     
 
-def add_new_image_to_db():
+def add_new_image_to_db(user_id, url, health, zipcode):
     """ Get one image (hosted by clarafai) - which has a url (on Clar)
     Create a Bee object and add it to the database 
     """
@@ -312,21 +346,33 @@ def add_new_image_to_db():
     result = db.session.query(func.max(Bee.bee_id)).one()
     bee_id = int(result[0]) + 1
 
+    print(bee_id)
+
 
     # Create a new bee:
     # bee = Bee(bee_id=bee_id,
     #             user_id=user_id,
-    #             url=image, # From user_file
+    #             url=url, # From user_file
     #             health=health,
     #             zip_code=zipcode,
 
     #             )
 
+
+
     # flash("Bee created successfully.")
+
+    # print("Bee id", bee.bee_id)
+    # print("user_id", bee.user_id)
+    # print()
 
     # db.session.add(bee)
     # db.session.commit()
     # flash("Bee added to database. Thank you!")
+
+    # return boolean?!
+
+    return None
 
 
 
