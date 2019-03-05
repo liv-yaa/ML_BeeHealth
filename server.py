@@ -211,18 +211,24 @@ def upload_file():
         # Use method to our model's prediction
         
         # Also adds the new Bee to our database and to Clar app.
-        prediction = process_upload(user_id=user_id, 
+        # get prediction_tuple which is (response_id, response_confidence, response_datetime)
+
+        prediction_tuple = process_upload(user_id=user_id, 
                                     health=health, 
                                     local_filename=local_filename,
-                                    ) # returns prediction tuple
+                                    ) # returns prediction_tuple
 
-        performance = str(check_prediction(health, prediction))
+        performance = str(check_prediction(health, prediction_tuple))
         print(health)
-        print(performance)        
+        print(performance)   
+
+        # This is going to become true once image is added.
+        # needed for Jinja conditional...
+        image_added = None     
 
 
         return render_template("upload_success.html", 
-                                        prediction=prediction,
+                                        prediction_tuple=prediction_tuple,
                                         performance=performance,
                                        
                                         )

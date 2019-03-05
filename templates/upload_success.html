@@ -10,12 +10,12 @@
     <br>
     {% if performance == 'True' %} 
         Sweet! The machine learning model predicted correctly. {{ performance }} 
-        with a confidence score of {% if prediction %} {{ prediction[1] }} {% endif %}
+        with a confidence score of {% if prediction_tuple %} {{ prediction_tuple[1] }} {% endif %}
 
     {% else %}
 
         Sigh...the machine learning model predicted incorrectly ( {{ performance }} )
-        with a confidence score of {% if prediction %} {{ prediction[1] }} {% endif %}
+        with a confidence score of {% if prediction_tuple %} {{ prediction_tuple[1] }} {% endif %}
 
     {% endif %}
     <br><br>

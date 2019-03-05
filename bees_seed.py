@@ -255,7 +255,7 @@ def process_upload(user_id, health, local_filename):
     image_id = get_hi_input_id() + 1
     print("image_id", image_id)
 
-
+    # get prediction_tuple which is (response_id, response_confidence, response_datetime)
     prediction_tuple = predict_with_model(local_filename)
     print("prediction_tuple", prediction_tuple)
 
@@ -301,7 +301,7 @@ def process_upload(user_id, health, local_filename):
     # print("After", img.concepts, " are concepts and not concepts are ", img.not_concepts)
 
 
-    # return prediction_tuple
+    return prediction_tuple
 
     
 
@@ -383,14 +383,14 @@ if __name__ == '__main__':
     # load_bees_from_clarifai_to_db(all_bees=all_bees)
 
     # Test
-    # process_upload( 
+    process_upload( 
         
-    #     user_id=1, 
-    #     health='healthy',
-    #     local_filename='uploads/download.jpeg',
+        user_id=1, 
+        health='healthy',
+        local_filename='uploads/download.jpeg',
 
-    #     )
+        )
 
 
-    print(predict_with_model(path='uploads/download.jpeg'))
+    # print(predict_with_model(path='uploads/download.jpeg'))
 
