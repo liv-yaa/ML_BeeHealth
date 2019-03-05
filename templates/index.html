@@ -16,18 +16,37 @@
     <br>
     <h5> healthy bees: </h5>
 
-    <ul id="grid" class="clear">
+    <ul id="categories" class="clr">
     
-        {% for bee in healthy_bees %}
-            <li>
+        {% for bee in healthy_bees5 %}
+            <li class="pusher"></li>
+                <li>
+                    <div>
+                        <h1>{{ bee.bee_id, bee.health }}</h1>
+                        <p> zip: {{ bee.zip_code }} </p>
+                        <img src={{ bee.url }} 
+                            alt="healthy bee {{ bee.bee_id}}" 
+                            height="100" 
+                            width="100"> 
+                    </div>
+                </li>
+            <li class="pusher"></li>
+            <li class="pusher"></li>
             
-<!--             {{ bee.bee_id, bee.health }};
-            zip: {{ bee.zip_code }} -->
-            <img src={{ bee.url }} 
-                alt="healthy bee {{ bee.bee_id}}" 
-                height="100" 
-                width="100"> 
-            </li>
+        {% endfor %}
+        {% for bee in healthy_bees7 %}
+            <li class="pusher"></li>
+                <li>
+                    <div>
+                        <h1>{{ bee.bee_id, bee.health }}</h1>
+                        <p> zip: {{ bee.zip_code }} </p>
+                        <img src={{ bee.url }} 
+                            alt="healthy bee {{ bee.bee_id}}" 
+                            height="100" 
+                            width="100"> 
+                    </div>
+                </li>
+            <li class="pusher"></li>
             
         {% endfor %}
     </ul>
@@ -35,18 +54,39 @@
     <br><br><br>
     <h5> unhealthy bees: </h5>
 
-    <ul id="grid" class="clear">
-        {% for bee in unhealthy_bees %}
+    <ul id="categories" class="clr">
+        {% for bee in unhealthy_bees6 %}
 
-            <li>
-<!--             {{ bee.bee_id, bee.health }};
-            zip: {{ bee.zip_code }} -->
-            <img src={{ bee.url }} 
-                alt="unhealthy bee {{ bee.bee_id}}" 
-                height="100" 
-                width="100">
-            </li>
+            <li class="pusher"></li>
+                <li>
+                    <div>
+                        <h1>{{ bee.bee_id, bee.health }}</h1>
+                        <p> zip: {{ bee.zip_code }} </p>
+                        <img src={{ bee.url }} 
+                            alt="unhealthy bee {{ bee.bee_id}}" 
+                            height="100" 
+                            width="100">
+                    </div>
+                </li>
+            <li class="pusher"></li>
+            <li class="pusher"></li>   
+            
+        {% endfor %}
+        {% for bee in unhealthy_bees4 %}
 
+            <li class="pusher"></li>
+                <li>
+                    <div>
+                        <h1>{{ bee.bee_id, bee.health }}</h1>
+                        <p> zip: {{ bee.zip_code }} </p>
+                        <img src={{ bee.url }} 
+                            alt="unhealthy bee {{ bee.bee_id}}" 
+                            height="100" 
+                            width="100">
+                    </div>
+                </li>
+            <li class="pusher"></li>
+            
         {% endfor %}
     </ul>
 

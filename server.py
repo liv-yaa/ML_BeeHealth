@@ -52,13 +52,21 @@ def index():
     healthy = Bee.query.filter_by(health='y').all()
     unhealthy = Bee.query.filter_by(health='n').all()
 
-    healthy_bees = random.sample(healthy, 10)
-    unhealthy_bees = random.sample(unhealthy, 10)
+    # For loop? idk
+
+    healthy_bees5 = random.sample(healthy, 5)
+    healthy_bees7 = random.sample(healthy, 7)
+    unhealthy_bees6 = random.sample(unhealthy, 6)
+    unhealthy_bees4 = random.sample(unhealthy, 4)
 
 
     return render_template("index.html", 
-                            healthy_bees=healthy_bees,
-                            unhealthy_bees=unhealthy_bees)
+                            healthy_bees5=healthy_bees5,
+                            healthy_bees7=healthy_bees7,
+
+                            unhealthy_bees6=unhealthy_bees6,
+                            unhealthy_bees4=unhealthy_bees4,
+                            )
 
 
 
