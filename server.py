@@ -185,7 +185,7 @@ def upload_file():
 
     # Get other data
     user_id = session.get("user_id")
-    health = request.form["health"]
+    health = request.form["health"] # Change this to a button!!!! "healthy" else "n" gives us 'y' or 'n' in clarafai.
     zipcode = request.form["zipcode"]
 
     if 'file' not in request.files:

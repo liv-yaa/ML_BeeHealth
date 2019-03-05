@@ -240,7 +240,7 @@ def predict_with_model(path):
 
 
 
-def process_upload(user_id, health, local_filename):
+def process_upload(user_id, health, local_filename, zipcode):
     """ Get prediction tuple from a user's uploaded image (which has metadata)
     Create a new Image object and add it to Clarifai 
 
@@ -250,7 +250,7 @@ def process_upload(user_id, health, local_filename):
     print("user_id", user_id)
     print("health", health)
     print("local_filename", local_filename)
-
+    print("zipcode", zipcode)
 
     image_id = get_hi_input_id() + 1
     print("image_id", image_id)
@@ -259,21 +259,19 @@ def process_upload(user_id, health, local_filename):
     prediction_tuple = predict_with_model(local_filename)
     print("prediction_tuple", prediction_tuple)
 
-
-
-
-    # health = photo_health
-
     # # Edit health (a string) to make it a binary value (better for this purpose)
-    # health = 'y' if photo_health == 'healthy' else 'n'
+    health = 'y' if health == 'healthy' else 'n'
+    print(
+        "health now ", health)
 
-    # Edit fileanme to have the local path:
-    # local_filename = 'images/bees/' + 
+    response_id = prediction_tuple[0]
+    response_confidence = prediction_tuple[1]
+    datetime = prediction_tuple[2]
 
+    print("response_id", response_id)
+    print("response_confidence", response_confidence)
+    print("datetime", datetime)
 
-    # datetime = df.loc[i][0]
-    # csv_filename = str(df.loc[i][1])
-    # zip_code = str(df.loc[i][3])
 
     # if (health == 'y'):
             
@@ -384,11 +382,17 @@ if __name__ == '__main__':
 
     # Test
     process_upload( 
-        
         user_id=1, 
         health='healthy',
         local_filename='uploads/download.jpeg',
+        zipcode='12345'
+        )
 
+    process_upload( 
+        user_id=1, 
+        health='unhealthy',
+        local_filename='uploads/001_043.png',
+        zipcode='22111'
         )
 
 
