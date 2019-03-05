@@ -206,15 +206,19 @@ def upload_file():
 
         # Build the relative path:
         folder = app.config['UPLOAD_FOLDER']
-        relative_path = folder + "/" + filename
+        local_filename = folder + "/" + filename
 
         # Use method to our model's prediction
         
-        prediction = process_upload(relative_path) # returns a tuple (response_id, response_confidence)
+        # Also adds the new Bee to our database and to Clar app.
+        prediction = process_upload(user_id=user_id, 
+                                    health=health, 
+                                    local_filename=local_filename,
+                                    ) # returns prediction tuple
 
         performance = str(check_prediction(health, prediction))
         print(health)
-        print(performance)
+        print(performance)        
 
 
         return render_template("upload_success.html", 

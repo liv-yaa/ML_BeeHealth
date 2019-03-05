@@ -165,7 +165,6 @@ def add_nonbees_to_clar():
     
 
 
-
 def load_bees_from_clarifai_to_db():
     """ Load Image objects by using GET request from Clarifai API
     https://clarifai.com/developer/guide/inputs#get-inputs 
@@ -224,7 +223,7 @@ def predict_with_model(path):
 
 
     response = cl_model.predict_by_filename(path)
-    pprint(response)
+    # pprint(response)
     
     response_id = response['outputs'][0]['data']['concepts'][0]['id']
     
@@ -232,63 +231,77 @@ def predict_with_model(path):
     
     response_datetime = response['outputs'][0]['created_at']
 
-    print(response_datetime)
+    # print(response_datetime)
 
 
     response_tuple = (response_id, response_confidence, response_datetime)
-    pprint("t", response_tuple)
+    print("t", response_tuple)
     return response_tuple
 
 
 
-def process_img_upload(user_id, photo_url, photo_health):
+def process_upload(user_id, health, local_filename):
     """ Get prediction tuple from a user's uploaded image (which has metadata)
-    Create a new Bee object
+    Create a new Image object and add it to Clarifai 
 
-    and add it to Clarifai """
+    @ return the new Image object (Clar), which has a URL, and is ready to become our Bee object.
+    """
 
-    image_id = i # Need to get nteger assigned to each new Bee
+    print("user_id", user_id)
+    print("health", health)
+    print("local_filename", local_filename)
 
 
-    health_ = str(df.loc[i][5])
-    datetime = df.loc[i][0]
-    csv_filename = str(df.loc[i][1])
-    zip_code = str(df.loc[i][3])
+    image_id = get_hi_input_id() + 1
+    print("image_id", image_id)
 
-    # Edit health (a string) to make it better for queries (a binary value)
-    health = 'y' if health_ == 'healthy' else 'n'
+
+    prediction_tuple = predict_with_model(local_filename)
+    print("prediction_tuple", prediction_tuple)
+
+
+
+
+    # health = photo_health
+
+    # # Edit health (a string) to make it a binary value (better for this purpose)
+    # health = 'y' if photo_health == 'healthy' else 'n'
 
     # Edit fileanme to have the local path:
-    local_filename = 'bee_imgs/' + csv_filename
-
-    if (health == 'y'):
-        img = clarifai_app.inputs.create_image_from_filename(filename=local_filename, 
-                        # image_id=bee_id,
-                        concepts=['health'],
-                        not_concepts=['sick'],
-                        metadata={ 'image_id': image_id,
-                                    # 'datetime': datetime, 
-                                    'zip_code': zip_code,
-                                    },
-                        geo=None, # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
-                        allow_duplicate_url=True,
-                        )
-    else:
-        img = clarifai_app.inputs.create_image_from_filename(filename=local_filename, 
-                        # image_id=bee_id,
-                        concepts=['sick'],
-                        not_concepts=['health'],
-                        metadata={ 'image_id': image_id,
-                                    # 'datetime': datetime, 
-                                    'zip_code': zip_code,
-                                    },
-                        geo=None, # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
-                        allow_duplicate_url=True,
-                        )
+    # local_filename = 'images/bees/' + 
 
 
+    # datetime = df.loc[i][0]
+    # csv_filename = str(df.loc[i][1])
+    # zip_code = str(df.loc[i][3])
 
-    clarifai_app.inputs.bulk_create_images(image_list)
+    # if (health == 'y'):
+            
+    #     concepts=['health', 'is_bee'], # a list of concept names this image is associated with
+    #     not_concepts=None,  # a list of concept names this image is not associated with
+
+    # else:
+    #     concepts = ['is_bee']
+    #     not_concepts = ['health']
+       
+    # print("Before", concepts, " are concepts and not concepts are ", not_concepts)
+    # print("image_id", image_id)
+    # img = clarifai_app.inputs.create_image_from_filename(filename=local_filename, 
+    #                 image_id=image_id,
+    #                 concepts=concepts,
+    #                 not_concepts=not_concepts,
+    #                 metadata={ 'image_id': image_id,
+    #                             'datetime': datetime, 
+    #                             'zip_code': zip_code,
+    #                             },
+    #                 # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
+    #                 # allow_duplicate_url=True,
+    #                 )
+
+    # print("After", img.concepts, " are concepts and not concepts are ", img.not_concepts)
+
+
+    # return prediction_tuple
 
     
 
@@ -317,32 +330,6 @@ def add_new_image_to_db():
     # db.session.commit()
     # flash("Bee added to database. Thank you!")
 
-def process_upload(img_path):
-    """ method that gets called when a user uploads one photo 
-    - Gets prediction for user (using model version n)
-    - Adds new photo to model
-    - Adds new photo to bee_db
-    - Trains new model (version n+1)
-
-    @param img_path , the local path 'uploads/..'
-    @return prediction tuple (response_id, response_confidence)
-    """
-
-    prediction_tuple = predict_with_model(img_path)
-
-    # Attempt to add image to clarafai model
-    # We need to do this first because the model.py database object has a URL.
-    # So first thing we need to create is a URL.
-    # add_image_clar = add_new_image_to_clar(,
-
-
-    #                                         )
-
-    # # Created is a URL ready to add to db.
-    # add_image_db = add_new_image_to_db(user_id=user_id,
-
-
-    return prediction_tuple
 
 
 def get_hi_input_id():
@@ -392,15 +379,18 @@ if __name__ == '__main__':
     # print(get_hi_input_id())
 
     # Add Bees to our database from Clarifai
-    all_bees = clarifai_app.inputs.get_all()
-    load_bees_from_clarifai_to_db(all_bees=all_bees)
+    # all_bees = clarifai_app.inputs.get_all()
+    # load_bees_from_clarifai_to_db(all_bees=all_bees)
 
-    # new_bee = 
-    load_bees_from_clarifai_to_db(all_bees=new_bee)
-
-
-    # cl_model.train(sync=False) # False goes faster
-
+    # Test
     # process_upload( 
-    #     img_path='uploads/download.jpeg')
+        
+    #     user_id=1, 
+    #     health='healthy',
+    #     local_filename='uploads/download.jpeg',
+
+    #     )
+
+
+    print(predict_with_model(path='uploads/download.jpeg'))
 
