@@ -118,37 +118,38 @@ def add_nonbees_to_clar():
     print("ADDING NONBEES")
     image_list = []
     
-    # nonbees = glob.glob('images/not_bees/*png')
+    nonbees = glob.glob('images/not_bees/*png')
 
     # print("nonbees", nonbees)
 
     # Get the maximum bee_id in the database
     next_id = get_hi_input_id() + 1
 
-    # print("next_id", next_id)
+    print( "nextt_id", next_id )
 
 
-
-
-    # # for img_name in nonbees:
+    for i, img_name in enumerate(nonbees):
     # for i in range(200):
 
-    #     img_name = 'images/not_bees/000' + str(i) + '.png'
-    #     nonbee_id = str(nonbee_id + i)
+        nonbee_id = str(next_id + i)
+        
 
-    #     print("Before", img_name, nonbee_id)
+        print("Before", img_name, nonbee_id)
 
 
-    #     img = clarifai_app.inputs.create_image_from_filename(filename=img_name, 
-    #                         image_id=image_id,
-    #                         concepts=None,
-    #                         not_concepts=['is_bee'], 
-    #                         metadata=None,
+        img = clarifai_app.inputs.create_image_from_filename(filename=img_name, 
+                            image_id=nonbee_id,
+                            concepts=None,
+                            not_concepts=['is_bee'], 
+                            metadata=None,
                             
-    #                         allow_duplicate_url=True,
-    #                         )
+                            allow_duplicate_url=True,
+                            )
 
-    #     print("After creating img", str(img.filename)) # For the life of me can't figure out
+        # print("After creating img", str(img.filename), img.image_id) 
+        print("After creating img", dir(img)) 
+
+        # For the life of me can't figure out
     #     # Why can I not see this filename?
     #     # However, it looks like it's working to add the files to the model!
 
@@ -161,7 +162,7 @@ def add_nonbees_to_clar():
     # if image_list != []:
     #     clarifai_app.inputs.bulk_create_images(image_list)
 
-    print( "next_id", next_id )
+    
 
 
 
@@ -356,15 +357,17 @@ def get_hi_input_id():
     # @return maximum , an int
     all_ids = [bee.input_id for bee in clarifai_app.inputs.get_all()]
 
-    print(len(all_ids))
+    count_len = len(all_ids)
+
 
     if all_ids == []:
         return 0
     else:
         
-        maximum = int(max(all_ids))
-        # print(type(maximum)) # an int
-        return maximum
+        # maximum = int(max(all_ids))
+        # # print(type(maximum)) # an int
+        # return maximum
+        return count_len
 
 
 
@@ -385,10 +388,10 @@ if __name__ == '__main__':
     # clarifai_app.inputs.delete_all()
     # print('Successfully deleted all.')
 
-    # # # Give images and concepts from file to Clarifai
+    # # # # Give images and concepts from file to Clarifai
     # add_bees_to_clar(seed_filename)
     # print('Successfully added all bees.')
-    print(add_nonbees_to_clar())
+    add_nonbees_to_clar()
     print('Successfully added all nonbees.')
 
     # Add Bees to our database from Clarifai
