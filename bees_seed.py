@@ -153,14 +153,14 @@ def add_nonbees_to_clar():
     #     # Why can I not see this filename?
     #     # However, it looks like it's working to add the files to the model!
 
-    #     print(img.concepts, " are concepts and not concepts are ", img.not_concepts)
+        print(img.concepts, " are concepts and not concepts are ", img.not_concepts)
 
-    #     image_list.append(img)
+        image_list.append(img)
 
-    # print("Image list added", image_list)
+    print("Image list added", image_list)
 
-    # if image_list != []:
-    #     clarifai_app.inputs.bulk_create_images(image_list)
+    if image_list != []:
+        clarifai_app.inputs.bulk_create_images(image_list)
 
     
 
@@ -172,7 +172,7 @@ def load_bees_from_clarifai_to_db():
     Convert Image objects to Bee objects, & add to our database.
     """
 
-    all_bees = list(clarifai_app.inputs.get_all())
+    all_bees = list()
 
     print(all_bees)
 
@@ -226,18 +226,18 @@ def predict_with_model(path):
     response = cl_model.predict_by_filename(path)
     pprint(response)
     
-    # response_id = response['outputs'][0]['data']['concepts'][0]['id']
+    response_id = response['outputs'][0]['data']['concepts'][0]['id']
     
-    # response_confidence = response['outputs'][0]['data']['concepts'][0]['value']
+    response_confidence = response['outputs'][0]['data']['concepts'][0]['value']
     
-    # response_datetime = response['outputs'][0]['created_at']
+    response_datetime = response['outputs'][0]['created_at']
 
-    # print(response_datetime)
+    print(response_datetime)
 
 
-    # response_tuple = (response_id, response_confidence, response_datetime)
-    # pprint("t", response_tuple)
-    # return response_tuple
+    response_tuple = (response_id, response_confidence, response_datetime)
+    pprint("t", response_tuple)
+    return response_tuple
 
 
 
@@ -342,13 +342,6 @@ def process_upload(img_path):
     # add_image_db = add_new_image_to_db(user_id=user_id,
 
 
-    #                                 )
-
-
-    # Train model!
-
-
-
     return prediction_tuple
 
 
@@ -382,20 +375,29 @@ if __name__ == '__main__':
     # Get model versions:
     # pprint(cl_model.list_versions())
 
-    # print(get_hi_input_id())
 
     # Clear it from Clarifai. Be careful!!!!!!!!!
     # clarifai_app.inputs.delete_all()
     # print('Successfully deleted all.')
 
+
+
     # # # # Give images and concepts from file to Clarifai
     # add_bees_to_clar(seed_filename)
     # print('Successfully added all bees.')
-    add_nonbees_to_clar()
-    print('Successfully added all nonbees.')
+    # add_nonbees_to_clar()
+    # print('Successfully added all nonbees.')
+
+
+    # print(get_hi_input_id())
 
     # Add Bees to our database from Clarifai
-    # load_bees_from_clarifai_to_db()
+    all_bees = clarifai_app.inputs.get_all()
+    load_bees_from_clarifai_to_db(all_bees=all_bees)
+
+    # new_bee = 
+    load_bees_from_clarifai_to_db(all_bees=new_bee)
+
 
     # cl_model.train(sync=False) # False goes faster
 
