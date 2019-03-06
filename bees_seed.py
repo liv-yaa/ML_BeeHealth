@@ -35,7 +35,7 @@ from model import Bee, connect_to_db, db
 
 
 clarifai_app = ClarifaiApp(api_key="58dc8755e39d4043a98554b44bbcaf56") # move this
-MODEL_ID = 'Detection of Health in Bees with Images'
+MODEL_ID = 'BeeHealth'
 cl_model = clarifai_app.models.get(MODEL_ID)
 seed_filename = "bee_data.csv" 
 
@@ -60,30 +60,34 @@ def add_bees_to_clar(csv_filename):
 
     # Get the maximum bee_id in the clarafai model and add 1
     next_id = get_hi_input_id() + 1
-
     print("next_id", next_id)
 
-    # for i in range(len(df)):
-    for i in range(40): # FOR NOW
+    print("ADDING BEE IMAGES")
+
+    for i in range(len(df)):
+    # for i in range(10): # FOR NOW
 
         image_id = str(next_id + i)
         health_ = str(df.loc[i][5])
         datetime = str(df.loc[i][0])
         csv_filename = str(df.loc[i][1])
         zipcode = str(df.loc[i][3])
+        user_id = None
 
         # Edit health (a string) to make it a binary value (better for this purpose)
         health = 'y' if health_ == 'healthy' else 'n'
 
         # Edit fileanme to have the local path:
-        local_filename = 'images/bees/' + csv_filename
+        img_name = 'images/bees/' + csv_filename
+
+        print("local img_name", img_name )
 
         # print(image_id, health, datetime, csv_filename, zipcode, local_filename)
 
         if (health == 'y'):
             
             concepts=['health', 'is_bee'] # a list of concept names this image is associated with
-            not_concepts=None  # a list of concept names this image is not associated with
+            not_concepts=[]  # a list of concept names this image is not associated with
 
         else:
             concepts = ['is_bee']
@@ -91,19 +95,25 @@ def add_bees_to_clar(csv_filename):
            
         print("Before", concepts, " are concepts and not concepts are ", not_concepts)
         print("image_id", image_id)
-        img = clarifai_app.inputs.create_image_from_filename(filename=local_filename, 
+        img = clarifai_app.inputs.create_image_from_filename(filename=img_name, 
                         image_id=image_id,
                         concepts=concepts,
                         not_concepts=not_concepts,
-                        metadata={ 'image_id': image_id,
+                        metadata={ 'image_id' : image_id,
+                                    'user_id': user_id,
                                     'datetime': datetime, 
                                     'zipcode': zipcode,
                                     },
-                        # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
-                        # allow_duplicate_url=True,
+                        allow_duplicate_url=True,
                         )
 
         print("After", img.concepts, " are concepts and not concepts are ", img.not_concepts)
+        print("image_id", img.metadata['image_id'])
+        print("img.input_id", img.input_id)
+        print("img.url", img.url)
+        print("img.filename", img.filename)
+        print()
+        print(dir(img))
 
         image_list.append(img)
 
@@ -112,46 +122,48 @@ def add_bees_to_clar(csv_filename):
 
 
 def add_nonbees_to_clar():
+    """
+    Load images to Clarifai model, using custom tags from the csv file.
+    """
 
-    # Add nonbees: This doesn't work...just manually did it for now :/
-    # SO THIS PART ABOVE WORKS the part now is figuring out how to get nonbees.
     print("ADDING NONBEES")
     image_list = []
     
     nonbees = glob.glob('images/not_bees/*png')
 
-    # print("nonbees", nonbees)
-
     # Get the maximum bee_id in the database
     next_id = get_hi_input_id() + 1
-
-    print( "nextt_id", next_id )
-
 
     for i, img_name in enumerate(nonbees):
     # for i in range(200):
 
-        nonbee_id = str(next_id + i)
+        image_id = str(next_id + i)
         
 
-        print("Before", img_name, nonbee_id)
+        print("Before", img_name, image_id)
 
 
-        img = clarifai_app.inputs.create_image_from_filename(filename=img_name, 
-                            image_id=nonbee_id,
-                            concepts=None,
+        img = clarifai_app.inputs.create_image_from_filename(
+                            filename=img_name, 
+                            image_id=image_id,
+                            concepts=[],
                             not_concepts=['is_bee'], 
-                            metadata=None,
+                            metadata={ 'image_id' : image_id,
+                                'user_id': None,
+                                'datetime': None, 
+                                'zipcode': None,
+                                },
                             
                             allow_duplicate_url=True,
                             )
 
         # print("After creating img", str(img.filename), img.image_id) 
         print("After creating img", dir(img)) 
-
-        # For the life of me can't figure out
-    #     # Why can I not see this filename?
-    #     # However, it looks like it's working to add the files to the model!
+        print("image_id", img.metadata['image_id'])
+        print("img.input_id", img.input_id)
+        print("img.url", img.url)
+        print("img.filename", img.filename)
+        print()
 
         print(img.concepts, " are concepts and not concepts are ", img.not_concepts)
 
@@ -163,13 +175,17 @@ def add_nonbees_to_clar():
         clarifai_app.inputs.bulk_create_images(image_list)
 
 
-def load_bees_from_clarifai_to_db(all_bees):
+def load_bees_from_clarifai_to_db(all_images):
     """ Load Image objects by using GET request from Clarifai API
     https://clarifai.com/developer/guide/inputs#get-inputs 
     Convert Image objects to Bee objects, & add to our database.
-    """
 
-    all_images = list(all_bees)
+    @all_images is both bee and nonbee Images.
+    - nonbee Images will not have metadata
+    - bee Images will have metadata:
+        - metadata will be a dict {}
+
+    """
 
     for img in all_images:
         print(img)
@@ -456,14 +472,14 @@ def get_hi_input_id():
     count_len = len(all_ids)
 
 
-    if all_ids == []:
-        return 0
-    else:
+    if count_len > 0:
         
         # maximum = int(max(all_ids))
         # # print(type(maximum)) # an int
         # return maximum
         return count_len
+    else:
+        return 0
 
 
 
@@ -480,23 +496,32 @@ if __name__ == '__main__':
 
 
     # Clear it from Clarifai. Be careful!!!!!!!!!
-    # clarifai_app.inputs.delete_all()
-    # print('Successfully deleted all.')
+    clarifai_app.inputs.delete_all()
+    print('Successfully deleted all.')
 
 
 
     # # # # Give images and concepts from file to Clarifai
-    # add_bees_to_clar(seed_filename)
-    # print('Successfully added all bees.')
+    add_bees_to_clar(seed_filename)
+    print('Successfully added all bees.')
+
+    # all_ = list(clarifai_app.inputs.get_all())
+    # for i in all_:
+    #     print(i.metadata['image_id'], "is uploaded")
+
     # add_nonbees_to_clar()
     # print('Successfully added all nonbees.')
 
+    all_ = list(clarifai_app.inputs.get_all())
+    for i in all_:
+        print(i.metadata['image_id'], "is uploaded")
 
-    # print(get_hi_input_id())
 
-    # Add Bees to our database from Clarifai
-    all_bees = clarifai_app.inputs.get_all()
-    load_bees_from_clarifai_to_db(all_bees=all_bees)
+    # # print(get_hi_input_id())
+
+    # # Add Bees to our database from Clarifai
+    # all_images = list(clarifai_app.inputs.get_all())
+    # load_bees_from_clarifai_to_db(all_images=all_images)
 
     # Test
     # process_upload( 
