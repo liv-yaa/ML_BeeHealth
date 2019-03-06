@@ -132,49 +132,50 @@ def add_nonbees_to_clar():
     nonbees = glob.glob('images/not_bees/*png')
 
     # Get the maximum bee_id in the database
-    next_id = get_hi_input_id() + 1
+    # next_id = get_hi_input_id() + 1
 
+    next_id = 100000 # Hard coding this b/c my helper function was too slow
     print("next_id", next_id)
 
-    # for i, img_name in enumerate(nonbees):
-    # # for i in range(200):
+    for i, img_name in enumerate(nonbees):
+    # for i in range(200):
 
-    #     image_id = str(next_id + i)
+        image_id = str(next_id + i)
         
 
-    #     print("Before", img_name, image_id)
+        print("Before", img_name, image_id)
 
 
-    #     img = clarifai_app.inputs.create_image_from_filename(
-    #                         filename=img_name, 
-    #                         image_id=image_id,
-    #                         concepts=[],
-    #                         not_concepts=['is_bee'], 
-    #                         metadata={ 'image_id' : image_id,
-    #                             'user_id': None,
-    #                             'datetime': None, 
-    #                             'zipcode': None,
-    #                             },
+        img = clarifai_app.inputs.create_image_from_filename(
+                            filename=img_name, 
+                            image_id=image_id,
+                            concepts=[],
+                            not_concepts=['is_bee'], 
+                            metadata={ 'image_id' : image_id,
+                                'user_id': None,
+                                'datetime': None, 
+                                'zip_code': None,
+                                },
                             
-    #                         allow_duplicate_url=True,
-    #                         )
+                            allow_duplicate_url=True,
+                            )
 
-    #     # print("After creating img", str(img.filename), img.image_id) 
-    #     print("After creating img", dir(img)) 
-    #     print("image_id", img.metadata['image_id'])
-    #     print("img.input_id", img.input_id)
-    #     print("img.url", img.url)
-    #     print("img.filename", img.filename)
-    #     print()
+        # print("After creating img", str(img.filename), img.image_id) 
+        print("After creating img", dir(img)) 
+        print("image_id", img.metadata['image_id'])
+        print("img.input_id", img.input_id)
+        print("img.url", img.url)
+        print("img.filename", img.filename)
+        print()
 
-    #     print(img.concepts, " are concepts and not concepts are ", img.not_concepts)
+        print(img.concepts, " are concepts and not concepts are ", img.not_concepts)
 
-    #     image_list.append(img)
+        image_list.append(img)
 
-    # print("Image list added", image_list)
+    print("Image list added", image_list)
 
-    # if image_list != []:
-    #     clarifai_app.inputs.bulk_create_images(image_list)
+    if image_list != []:
+        clarifai_app.inputs.bulk_create_images(image_list)
 
 
 def load_bees_from_clarifai_to_db(all_images):
@@ -495,15 +496,15 @@ if __name__ == '__main__':
     # for i in all_:
     #     print(i.metadata['image_id'], "is uploaded")
 
-    # add_nonbees_to_clar()
-    # print('Successfully added all nonbees.')
+    add_nonbees_to_clar()
+    print('Successfully added all nonbees.')
 
-    all_ = list(clarifai_app.inputs.get_all())
-    for i in all_:
-        print(i.metadata['image_id'], "is uploaded")
+    # all_ = list(clarifai_app.inputs.get_all())
+    # for i in all_:
+    #     print(i.metadata['image_id'], "is uploaded")
 
     # # Add Bees to our database from Clarifai
-    load_bees_from_clarifai_to_db(all_images=all_)
+    # load_bees_from_clarifai_to_db(all_images=all_)
 
     # Test
     # process_upload( 
