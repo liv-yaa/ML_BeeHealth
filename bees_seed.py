@@ -206,10 +206,10 @@ def load_bees_from_clarifai_to_db(all_images):
         image_not_concepts = img.not_concepts
 
         # Unpack concepts to get image_health: 
-        image_health = 'y' if 'health' in image_concepts and 'is_bee' in image_concepts else 'n'
-
-
-
+        if ('is_bee' in img.image_concepts):
+            image_health = 'y' if 'health' in image_concepts else 'n'
+        else:
+            image_health = None
 
 
         # print("Alert metadata", img.metadata)
@@ -248,7 +248,7 @@ def load_bees_from_clarifai_to_db(all_images):
         # print("image_img_id", image_img_id)
 
 
-        if (img.metadata and i < 10):
+        if (img.metadata and i < 10): # Make sure that only bees are added! Not nonbees!
 
             # Create a bee
             a_bee = Bee(bee_id=i,
