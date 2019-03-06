@@ -235,9 +235,7 @@ def load_bees_from_clarifai_to_db(all_images):
             image_img_id = int(img.metadata['image_id'])
         else:
             image_img_id = None
-                   
-
-
+    
 
         # print("After", image_concepts, " are concepts and not concepts are ", image_not_concepts)
         # print("image_health", image_health)
@@ -246,8 +244,8 @@ def load_bees_from_clarifai_to_db(all_images):
 
         # print("image_dt", image_dt)
         # print("image_user_id", image_user_id)
-        print("image_zip", image_zip) 
-        print("image_img_id", image_img_id)
+        # print("image_zip", image_zip) 
+        # print("image_img_id", image_img_id)
 
 
         if (img.metadata and i < 10):
@@ -258,7 +256,7 @@ def load_bees_from_clarifai_to_db(all_images):
                         url=image_url,
                         health=image_health,
                         zip_code=image_zip,
-                        image_id=image_user_id
+                        image_id=image_img_id
                         )
 
             db.session.add(a_bee)
