@@ -134,45 +134,47 @@ def add_nonbees_to_clar():
     # Get the maximum bee_id in the database
     next_id = get_hi_input_id() + 1
 
-    for i, img_name in enumerate(nonbees):
-    # for i in range(200):
+    print("next_id", next_id)
 
-        image_id = str(next_id + i)
+    # for i, img_name in enumerate(nonbees):
+    # # for i in range(200):
+
+    #     image_id = str(next_id + i)
         
 
-        print("Before", img_name, image_id)
+    #     print("Before", img_name, image_id)
 
 
-        img = clarifai_app.inputs.create_image_from_filename(
-                            filename=img_name, 
-                            image_id=image_id,
-                            concepts=[],
-                            not_concepts=['is_bee'], 
-                            metadata={ 'image_id' : image_id,
-                                'user_id': None,
-                                'datetime': None, 
-                                'zipcode': None,
-                                },
+    #     img = clarifai_app.inputs.create_image_from_filename(
+    #                         filename=img_name, 
+    #                         image_id=image_id,
+    #                         concepts=[],
+    #                         not_concepts=['is_bee'], 
+    #                         metadata={ 'image_id' : image_id,
+    #                             'user_id': None,
+    #                             'datetime': None, 
+    #                             'zipcode': None,
+    #                             },
                             
-                            allow_duplicate_url=True,
-                            )
+    #                         allow_duplicate_url=True,
+    #                         )
 
-        # print("After creating img", str(img.filename), img.image_id) 
-        print("After creating img", dir(img)) 
-        print("image_id", img.metadata['image_id'])
-        print("img.input_id", img.input_id)
-        print("img.url", img.url)
-        print("img.filename", img.filename)
-        print()
+    #     # print("After creating img", str(img.filename), img.image_id) 
+    #     print("After creating img", dir(img)) 
+    #     print("image_id", img.metadata['image_id'])
+    #     print("img.input_id", img.input_id)
+    #     print("img.url", img.url)
+    #     print("img.filename", img.filename)
+    #     print()
 
-        print(img.concepts, " are concepts and not concepts are ", img.not_concepts)
+    #     print(img.concepts, " are concepts and not concepts are ", img.not_concepts)
 
-        image_list.append(img)
+    #     image_list.append(img)
 
-    print("Image list added", image_list)
+    # print("Image list added", image_list)
 
-    if image_list != []:
-        clarifai_app.inputs.bulk_create_images(image_list)
+    # if image_list != []:
+    #     clarifai_app.inputs.bulk_create_images(image_list)
 
 
 def load_bees_from_clarifai_to_db(all_images):
@@ -187,6 +189,12 @@ def load_bees_from_clarifai_to_db(all_images):
 
     """
 
+    print("Length of all_images", len(all_images))
+
+    all_images = all_images[:11]
+
+    i = 1
+
     for img in all_images:
         print(img)
         # print(type(img))
@@ -194,96 +202,76 @@ def load_bees_from_clarifai_to_db(all_images):
        
         image_url = img.url
         image_score = img.score
-        
-            
-        if (img.concepts and img.not_concepts):
-              
-            image_concepts = img.concepts
-            image_not_concepts = img.not_concepts
+        image_concepts = img.concepts
+        image_not_concepts = img.not_concepts
 
-            # Unpack concepts to get image_health: 
-            image_health = 'y' if 'health' in image_concepts and 'is_bee' in image_concepts else 'n'
+        # Unpack concepts to get image_health: 
+        image_health = 'y' if 'health' in image_concepts and 'is_bee' in image_concepts else 'n'
 
 
 
-            if (img.metadata):
-
-                print("Alert metadata", img.metadata)
-                image_dt = img.metadata['datetime']
-                
-
-                # # if (img.metadata['user_id']):
-                #     image_user_id = int(img.metadata['user_id']) ## 
-                    
-
-                if (img.metadata['zipcode']):
-                    image_zip = int(img.metadata['zipcode'])
 
 
-                   
-
-                # # if (img.metadata['image_id']):
-                #     image_img_id = int(img.metadata['image_id'])
-                   
-
-            
+        # print("Alert metadata", img.metadata)
+        if (img.metadata['datetime']):
+            image_dt = img.metadata['datetime']
         else:
-            print("Alert")
-            image_concepts = None
-            image_not_concepts = None
-            image_health = None
-
             image_dt = None
+        
 
+        if (img.metadata['user_id']):
+            image_user_id = int(img.metadata['user_id']) ## 
+        else:
             image_user_id = None
+            
 
+        if (img.metadata['zipcode']):
+            image_zip = int(img.metadata['zipcode'])
+        else:
             image_zip = None
 
+
+        if (img.metadata['image_id']):
+            image_img_id = int(img.metadata['image_id'])
+        else:
             image_img_id = None
+                   
 
-        print("After", image_concepts, " are concepts and not concepts are ", image_not_concepts)
-        print("image_health", image_health)
-        print("image_url", image_url)
-        print("image_score", image_score)
 
-        print("image_dt", image_dt)
-        print("image_user_id", image_user_id)
+
+        # print("After", image_concepts, " are concepts and not concepts are ", image_not_concepts)
+        # print("image_health", image_health)
+        # print("image_url", image_url)
+        # print("image_score", image_score)
+
+        # print("image_dt", image_dt)
+        # print("image_user_id", image_user_id)
         print("image_zip", image_zip) 
         print("image_img_id", image_img_id)
 
 
+        if (img.metadata and i < 10):
 
-        print()
+            # Create a bee
+            a_bee = Bee(bee_id=i,
+                        user_id=None, # All database bees will have no user_id
+                        url=image_url,
+                        health=image_health,
+                        zip_code=image_zip,
+                        image_id=image_user_id
+                        )
 
+            db.session.add(a_bee)
 
+            i = i + 1 # Increment
 
+            print("bee added ", i)
+            print()
 
+    print("Length of all_images", len(all_images))
 
-    #     zipcode = str(image.metadata['zipcode']) 
-
-        # print("zipcode", zipcode)
-    #     # print(type(zipcode))
-
-    #     if 'bee' in image.concepts:
-
-    #         if 'healthy' in image.concepts: 
-    #             health = 'y' 
-
-    #         else:
-    #             health = 'n'
-
-    #         # Create a bee
-    #         a_bee = Bee(bee_id=image_id,
-    #                     user_id=None, # All database bees will have no user_id
-    #                     url=url,
-    #                     health=health,
-    #                     zipcode=zipcode,
-    #                     )
-
-    #         db.session.add(a_bee)
-
-    # # Commit all Bee objects to the database
-    # db.session.commit()
+    # Commit all Bee objects to the database
+    db.session.commit()
 
 
 def predict_with_model(path):
@@ -496,14 +484,14 @@ if __name__ == '__main__':
 
 
     # Clear it from Clarifai. Be careful!!!!!!!!!
-    clarifai_app.inputs.delete_all()
-    print('Successfully deleted all.')
+    # clarifai_app.inputs.delete_all()
+    # print('Successfully deleted all.')
 
 
 
     # # # # Give images and concepts from file to Clarifai
-    add_bees_to_clar(seed_filename)
-    print('Successfully added all bees.')
+    # add_bees_to_clar(seed_filename)
+    # print('Successfully added all bees.')
 
     # all_ = list(clarifai_app.inputs.get_all())
     # for i in all_:
@@ -516,12 +504,8 @@ if __name__ == '__main__':
     for i in all_:
         print(i.metadata['image_id'], "is uploaded")
 
-
-    # # print(get_hi_input_id())
-
     # # Add Bees to our database from Clarifai
-    # all_images = list(clarifai_app.inputs.get_all())
-    # load_bees_from_clarifai_to_db(all_images=all_images)
+    load_bees_from_clarifai_to_db(all_images=all_)
 
     # Test
     # process_upload( 

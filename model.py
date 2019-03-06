@@ -77,7 +77,7 @@ class Bee(db.Model):
                     Uploaded by: {self.user_id}
                     url: {self.url}
                     health: {self.health}
-                    zipcode: {self.zipcode}
+                    zip_code: {self.zip_code}
                     
                     >'''
 
