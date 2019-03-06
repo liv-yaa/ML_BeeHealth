@@ -162,47 +162,66 @@ def add_nonbees_to_clar():
     if image_list != []:
         clarifai_app.inputs.bulk_create_images(image_list)
 
-    
 
-
-def load_bees_from_clarifai_to_db():
+def load_bees_from_clarifai_to_db(all_bees):
     """ Load Image objects by using GET request from Clarifai API
     https://clarifai.com/developer/guide/inputs#get-inputs 
     Convert Image objects to Bee objects, & add to our database.
     """
 
-    all_bees = list()
+    all_bees = list(all_bees)
 
-    print(all_bees)
+    for bee in all_bees:
+        print(bee)
+        print(type(bee))
+        if (bee.metadata):
+            print(bee.metadata) 
+        else:
+            print("Alert")
+            print(bee.bee_id)
+      
+        print()
+
+    # print(all_bees)
 
 
-    for i in range(len(all_bees)):
+    # for i in range(len(all_bees)):
 
-        image = all_bees[i] 
-        url = image.url
-        image_id = int(image.metadata['image_id'])
-        zip_code = str(image.metadata['zip_code']) 
+    #     image = all_bees[i] 
+    #     url = image.url
 
-        if 'bee' in image.concepts:
+    #     # print(dir(image))
 
-            if 'healthy' in image.concepts: 
-                health = 'y' 
+    #     if (image.metadata['image_id']):
+    #         image_id = int(image.metadata['image_id'])
+    #     else:
+    #         image_id = None
 
-            else:
-                health = 'n'
+    #     zip_code = str(image.metadata['zipcode']) 
 
-            # Create a bee
-            a_bee = Bee(bee_id=image_id,
-                        user_id=None, # All database bees will have no user_id
-                        url=url,
-                        health=health,
-                        zip_code=zip_code,
-                        )
+        # print("zip_code", zip_code)
+    #     # print(type(zip_code))
 
-            db.session.add(a_bee)
+    #     if 'bee' in image.concepts:
 
-    # Commit all Bee objects to the database
-    db.session.commit()
+    #         if 'healthy' in image.concepts: 
+    #             health = 'y' 
+
+    #         else:
+    #             health = 'n'
+
+    #         # Create a bee
+    #         a_bee = Bee(bee_id=image_id,
+    #                     user_id=None, # All database bees will have no user_id
+    #                     url=url,
+    #                     health=health,
+    #                     zip_code=zip_code,
+    #                     )
+
+    #         db.session.add(a_bee)
+
+    # # Commit all Bee objects to the database
+    # db.session.commit()
 
 
 def predict_with_model(path):
@@ -247,30 +266,30 @@ def process_upload(user_id, health, local_filename, zipcode):
     @ return the new Image object (Clar), which has a URL, and is ready to become our Bee object.
     """
 
-    print("user_id", user_id)
-    print("health", health)
-    print("local_filename", local_filename)
-    print("zipcode", zipcode)
+    # print("user_id", user_id)
+    # print("health", health)
+    # print("local_filename", local_filename)
+    # print("zipcode", zipcode)
 
     image_id = str(get_hi_input_id() + 1)
-    print("image_id", image_id)
+    # print("image_id", image_id)
 
     # get prediction_tuple which is (response_id, response_confidence, response_datetime)
     prediction_tuple = predict_with_model(local_filename)
-    print("prediction_tuple", prediction_tuple)
+    # print("prediction_tuple", prediction_tuple)
 
     # # Edit health (a string) to make it a binary value (better for this purpose)
     health = 'y' if health == 'healthy' else 'n'
-    print(
-        "health now ", health)
+    # print(
+    #     "health now ", health)
 
     response_id = prediction_tuple[0]
     response_confidence = prediction_tuple[1]
     datetime = prediction_tuple[2]
 
-    print("response_id", response_id)
-    print("response_confidence", response_confidence)
-    print("datetime", datetime)
+    # print("response_id", response_id)
+    # print("response_confidence", response_confidence)
+    # print("datetime", datetime)
 
 
     if (health == 'y'):
@@ -282,8 +301,8 @@ def process_upload(user_id, health, local_filename, zipcode):
         concepts = ['is_bee']
         not_concepts = ['health']
        
-    print("Before", concepts, " are concepts and not concepts are ", not_concepts)
-    print("")
+    # print("Before", concepts, " are concepts and not concepts are ", not_concepts)
+    # print("")
 
     # Create image and add to Clar.
     img = clarifai_app.inputs.create_image_from_filename(
@@ -296,41 +315,46 @@ def process_upload(user_id, health, local_filename, zipcode):
                                 'zipcode': zipcode,
                                 'user_id': user_id,
                                 },
-                    # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
                     allow_duplicate_url=True,
                     )
 
-    print("After", img.concepts, " are concepts and not concepts are ", img.not_concepts)
-    # print("user_id", img.user_id)
-    # print("concepts", img.concepts)
-    # print("not_concepts", img.not_concepts)
-    # print("img.filename", img.filename)
+    # Unpack all data in the newly created Image object    
+    image_concepts = img.concepts
+    image_not_concepts = img.not_concepts
+    print("After", image_concepts, " are concepts and not concepts are ", image_not_concepts)
 
-    # print("zipcode", img.ipcode)
-    # print("image_id", img.image_id)
+    # Unpack concepts to get image_health:
+    image_health = 'y' if 'health' in image_concepts and 'is_bee' in image_concepts else 'n'
+    print("image_health", image_health)
 
-    # print("response_confidence", img.response_confidence)
-    # print("datetime", img.datetime)
+    image_url = img.url ##
+    # print("image_url", image_url)
 
-    print(dir(img))
-    print(img.dict)
-    print(img.url)
-    print("score", img.score)
+    image_score = img.score
+    # print("image_score", image_score)
 
-    print("")
+    image_dt = img.metadata['datetime']
+    # print("image_dt", image_dt)
+
+    image_user_id = int(img.metadata['user_id']) ## 
+    # print("image_user_id", image_user_id)
+
+    image_zip = int(img.metadata['zipcode'])
+    # print("image_zip", image_zip)
+
+    image_img_id = int(img.metadata['image_id'])
+    # print("image_img_id", image_img_id)
+
+
+    print()
     print()
 
-
-    # Save our URL!
-    url = img.url
-
-    # Make a Bee.
-    print("url", url)
-
-    add_new_image_to_db(user_id=user_id,
-                        url=url,
-                        health=health,
-                        zipcode=zipcode,
+    # Create a new Bee and add it to the database, pasing in metadata from img (Image object)
+    add_new_image_to_db(user_id=image_user_id,
+                        url=image_url,
+                        health=image_health,
+                        zipcode=image_zip,
+                        image_id=image_img_id
                         )
 
     return prediction_tuple
@@ -343,6 +367,7 @@ def add_new_image_to_db(user_id, url, health, zipcode):
     """
 
     # Get the maximum bee_id in the database
+    # Note, the bee_id is not the same as the image_id in previous methods!
     result = db.session.query(func.max(Bee.bee_id)).one()
     bee_id = int(result[0]) + 1
 
@@ -350,13 +375,14 @@ def add_new_image_to_db(user_id, url, health, zipcode):
 
 
     # Create a new bee:
-    # bee = Bee(bee_id=bee_id,
-    #             user_id=user_id,
-    #             url=url, # From user_file
-    #             health=health,
-    #             zip_code=zipcode,
+    bee = Bee(bee_id=bee_id,
+                user_id=user_id,
+                url=url, # From user_file
+                health=health,
+                zip_code=zipcode,
+                image_id=image_id,
 
-    #             )
+                )
 
 
 
@@ -366,8 +392,8 @@ def add_new_image_to_db(user_id, url, health, zipcode):
     # print("user_id", bee.user_id)
     # print()
 
-    # db.session.add(bee)
-    # db.session.commit()
+    db.session.add(bee)
+    db.session.commit()
     # flash("Bee added to database. Thank you!")
 
     # return boolean?!
@@ -423,23 +449,23 @@ if __name__ == '__main__':
     # print(get_hi_input_id())
 
     # Add Bees to our database from Clarifai
-    # all_bees = clarifai_app.inputs.get_all()
-    # load_bees_from_clarifai_to_db(all_bees=all_bees)
+    all_bees = clarifai_app.inputs.get_all()
+    load_bees_from_clarifai_to_db(all_bees=all_bees)
 
     # Test
-    process_upload( 
-        user_id=1, 
-        health='healthy',
-        local_filename='uploads/download.jpeg',
-        zipcode='12345'
-        )
+    # process_upload( 
+    #     user_id=1, 
+    #     health='healthy',
+    #     local_filename='uploads/download.jpeg',
+    #     zipcode='12345'
+    #     )
 
-    process_upload( 
-        user_id=1, 
-        health='unhealthy',
-        local_filename='uploads/001_043.png',
-        zipcode='22111'
-        )
+    # process_upload( 
+    #     user_id=1, 
+    #     health='unhealthy',
+    #     local_filename='uploads/001_043.png',
+    #     zipcode='22111'
+    #     )
 
 
     # print(predict_with_model(path='uploads/download.jpeg'))

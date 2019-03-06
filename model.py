@@ -62,6 +62,9 @@ class Bee(db.Model):
     url = db.Column(db.String(250), nullable=True) 
     health = db.Column(db.String(1), nullable=True) # 'y' if healthy, or 'n' if not.
     zip_code = db.Column(db.String(10), nullable=True)
+    image_id = db.Column(db.String(10), nullable=True) # Just added this Tuesday.
+    # We need it to search through for the latest image that's been added, so user can see
+    # They have helped build the database
 
 
     user = db.relationship("User",
