@@ -54,7 +54,7 @@ def add_bees_to_clar(csv_filename):
                     dtype={'health':'category', 
                             'datetime':'datetime64[ns]',
                             'csv_filename':'str',
-                            'zip_code':'str',
+                            'zipcode':'str',
                             } 
     )
 
@@ -70,7 +70,7 @@ def add_bees_to_clar(csv_filename):
         health_ = str(df.loc[i][5])
         datetime = str(df.loc[i][0])
         csv_filename = str(df.loc[i][1])
-        zip_code = str(df.loc[i][3])
+        zipcode = str(df.loc[i][3])
 
         # Edit health (a string) to make it a binary value (better for this purpose)
         health = 'y' if health_ == 'healthy' else 'n'
@@ -78,7 +78,7 @@ def add_bees_to_clar(csv_filename):
         # Edit fileanme to have the local path:
         local_filename = 'images/bees/' + csv_filename
 
-        # print(image_id, health, datetime, csv_filename, zip_code, local_filename)
+        # print(image_id, health, datetime, csv_filename, zipcode, local_filename)
 
         if (health == 'y'):
             
@@ -97,7 +97,7 @@ def add_bees_to_clar(csv_filename):
                         not_concepts=not_concepts,
                         metadata={ 'image_id': image_id,
                                     'datetime': datetime, 
-                                    'zip_code': zip_code,
+                                    'zipcode': zipcode,
                                     },
                         # This could be a JSON object with long/lat https://clarifai.com/developer/guide/searches
                         # allow_duplicate_url=True,
@@ -169,38 +169,84 @@ def load_bees_from_clarifai_to_db(all_bees):
     Convert Image objects to Bee objects, & add to our database.
     """
 
-    all_bees = list(all_bees)
+    all_images = list(all_bees)
 
-    for bee in all_bees:
-        print(bee)
-        print(type(bee))
-        if (bee.metadata):
-            print(bee.metadata) 
+    for img in all_images:
+        print(img)
+        # print(type(img))
+        print(dir(img))
+       
+        image_url = img.url
+        image_score = img.score
+        
+            
+        if (img.concepts and img.not_concepts):
+              
+            image_concepts = img.concepts
+            image_not_concepts = img.not_concepts
+
+            # Unpack concepts to get image_health: 
+            image_health = 'y' if 'health' in image_concepts and 'is_bee' in image_concepts else 'n'
+
+
+
+            if (img.metadata):
+
+                print("Alert metadata", img.metadata)
+                image_dt = img.metadata['datetime']
+                
+
+                # # if (img.metadata['user_id']):
+                #     image_user_id = int(img.metadata['user_id']) ## 
+                    
+
+                if (img.metadata['zipcode']):
+                    image_zip = int(img.metadata['zipcode'])
+
+
+                   
+
+                # # if (img.metadata['image_id']):
+                #     image_img_id = int(img.metadata['image_id'])
+                   
+
+            
         else:
             print("Alert")
-            print(bee.bee_id)
-      
+            image_concepts = None
+            image_not_concepts = None
+            image_health = None
+
+            image_dt = None
+
+            image_user_id = None
+
+            image_zip = None
+
+            image_img_id = None
+
+        print("After", image_concepts, " are concepts and not concepts are ", image_not_concepts)
+        print("image_health", image_health)
+        print("image_url", image_url)
+        print("image_score", image_score)
+
+        print("image_dt", image_dt)
+        print("image_user_id", image_user_id)
+        print("image_zip", image_zip) 
+        print("image_img_id", image_img_id)
+
+
+
         print()
 
-    # print(all_bees)
 
 
-    # for i in range(len(all_bees)):
 
-    #     image = all_bees[i] 
-    #     url = image.url
 
-    #     # print(dir(image))
+    #     zipcode = str(image.metadata['zipcode']) 
 
-    #     if (image.metadata['image_id']):
-    #         image_id = int(image.metadata['image_id'])
-    #     else:
-    #         image_id = None
-
-    #     zip_code = str(image.metadata['zipcode']) 
-
-        # print("zip_code", zip_code)
-    #     # print(type(zip_code))
+        # print("zipcode", zipcode)
+    #     # print(type(zipcode))
 
     #     if 'bee' in image.concepts:
 
@@ -215,7 +261,7 @@ def load_bees_from_clarifai_to_db(all_bees):
     #                     user_id=None, # All database bees will have no user_id
     #                     url=url,
     #                     health=health,
-    #                     zip_code=zip_code,
+    #                     zipcode=zipcode,
     #                     )
 
     #         db.session.add(a_bee)
