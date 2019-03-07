@@ -399,18 +399,18 @@ def process_upload(user_id, health, local_filename, zipcode):
         print("not a bee")
 
 
-
-
     print()
     print()
 
     # Create a new Bee and add it to the database, pasing in metadata from img (Image object)
-    add_new_image_to_db(user_id=image_user_id,
+    success = add_new_image_to_db(user_id=image_user_id,
                         url=image_url,
                         health=image_health,
                         zipcode=image_zip,
                         image_id=image_img_id
                         )
+
+    # new_tuple THURSDAY ADD SUCCESS TO THIS
 
     return prediction_tuple
 
@@ -428,37 +428,44 @@ def add_new_image_to_db(user_id, url, health, zipcode, image_id):
 
     print(bee_id)
 
+    success = False
 
-    # Create a new bee:
-    bee = Bee(bee_id=bee_id,
-                user_id=user_id,
-                url=url, # From user_file
-                health=health,
-                zip_code=zipcode,
-                image_id=image_id,
-
-                )
+    try:
 
 
+        # Create a new bee:
+        bee = Bee(bee_id=bee_id,
+                    user_id=user_id,
+                    url=url, # From user_file
+                    health=health,
+                    zip_code=zipcode,
+                    image_id=image_id,
 
-    print("Bee created successfully.")
-
-    print("Bee id", bee.bee_id)
-    print("user_id", bee.user_id)
-    print()
-
-    db.session.add(bee)
-    db.session.commit()
-    # flash("Bee added to database. Thank you!")
-
-    print("Bee added to database. Thank you!")
+                    )
 
 
-    # i = db.session.query(Bee).filter_by(bee_id=bee_id)
 
-    print("Successfully added to db: ", bee.bee_id)
+        print("Bee created successfully.")
 
-    return None
+        print("Bee id", bee.bee_id)
+        print("user_id", bee.user_id)
+        print()
+
+        db.session.add(bee)
+        db.session.commit()
+        # flash("Bee added to database. Thank you!")
+
+        print("Bee added to database. Thank you!")
+
+
+        # i = db.session.query(Bee).filter_by(bee_id=bee_id)
+
+        print("Successfully added to db: ", bee.bee_id)
+
+        success = True
+
+
+    return success
 
 
 
