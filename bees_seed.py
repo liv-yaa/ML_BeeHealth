@@ -352,6 +352,7 @@ def process_upload(user_id, health, local_filename, zipcode):
                                 'user_id': user_id,
                                 'datetime': datetime, 
                                 'zipcode': zipcode,
+                                'response_confidence': response_confidence,
                                 
                                 },
                     allow_duplicate_url=True,
@@ -362,56 +363,60 @@ def process_upload(user_id, health, local_filename, zipcode):
     image_not_concepts = img.not_concepts
     print("After", image_concepts, " are concepts and not concepts are ", image_not_concepts)
 
-    # # Unpack concepts to get image_health:
+    i = clarifai_app.inputs.get(input_id=image_id)
 
-    # try:
-    #     image_health = 'y' if 'health' in image_concepts and 'is_bee' in image_concepts else 'n'
-    #     print("image_health", image_health)
+    print("Successfully added to clar app: ", i.input_id)
 
-    #     image_url = img.url ##
-    #     print("image_url", image_url)
+    # Unpack concepts to get image_health:
 
-    #     image_score = img.score
-    #     print("image_score", image_score)
+    
+    image_health = 'y' if 'health' in image_concepts and 'is_bee' in image_concepts else 'n'
+    print("image_health", image_health)
 
-    #     image_dt = img.metadata['datetime']
-    #     print("image_dt", image_dt)
+    image_url = img.url ##
+    print("image_url", image_url)
 
-    #     image_user_id = int(img.metadata['user_id']) ## 
-    #     print("image_user_id", image_user_id)
+    image_score = img.score
+    print("image_score", image_score)
 
-    #     image_zip = int(img.metadata['zipcode'])
-    #     print("image_zip", image_zip)
+    if img.metadata:
+        image_dt = img.metadata['datetime']
+        print("image_dt", image_dt)
 
-    #     image_img_id = int(img.metadata['image_id'])
-    #     print("image_img_id", image_img_id)
-    # except NameError:
-    #     print("NameError")
-    # except:
-    #     print("Some other error.")
+        image_user_id = int(img.metadata['user_id']) ## 
+        print("image_user_id", image_user_id)
+
+        image_zip = int(img.metadata['zipcode'])
+        print("image_zip", image_zip)
+
+        image_img_id = int(img.metadata['image_id'])
+        print("image_img_id", image_img_id)
+
+        image_confidence = int(img.metadata['response_confidence'])
+        print("image_confidence", image_confidence)
+
+    else:
+        print("not a bee")
 
 
-    res = clarifai_app.inputs.get(input_id=image_id)
-    for i in res:
-        print("Successfully added to clar app: ", i.input_id)
 
 
     print()
     print()
 
-    # # Create a new Bee and add it to the database, pasing in metadata from img (Image object)
-    # # add_new_image_to_db(user_id=image_user_id,
-    # #                     url=image_url,
-    # #                     health=image_health,
-    # #                     zipcode=image_zip,
-    # #                     image_id=image_img_id
-    # #                     )
+    # Create a new Bee and add it to the database, pasing in metadata from img (Image object)
+    add_new_image_to_db(user_id=image_user_id,
+                        url=image_url,
+                        health=image_health,
+                        zipcode=image_zip,
+                        image_id=image_img_id
+                        )
 
-    # return prediction_tuple
+    return prediction_tuple
 
     
 
-def add_new_image_to_db(user_id, url, health, zipcode):
+def add_new_image_to_db(user_id, url, health, zipcode, image_id):
     """ Get one image (hosted by clarafai) - which has a url (on Clar)
     Create a Bee object and add it to the database 
     """
@@ -429,24 +434,29 @@ def add_new_image_to_db(user_id, url, health, zipcode):
                 user_id=user_id,
                 url=url, # From user_file
                 health=health,
-                zipcode=zipcode,
+                zip_code=zipcode,
                 image_id=image_id,
 
                 )
 
 
 
-    # flash("Bee created successfully.")
+    print("Bee created successfully.")
 
-    # print("Bee id", bee.bee_id)
-    # print("user_id", bee.user_id)
-    # print()
+    print("Bee id", bee.bee_id)
+    print("user_id", bee.user_id)
+    print()
 
     db.session.add(bee)
     db.session.commit()
     # flash("Bee added to database. Thank you!")
 
-    # return boolean?!
+    print("Bee added to database. Thank you!")
+
+
+    # i = db.session.query(Bee).filter_by(bee_id=bee_id)
+
+    print("Successfully added to db: ", bee.bee_id)
 
     return None
 

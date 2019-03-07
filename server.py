@@ -216,6 +216,7 @@ def upload_file():
         prediction_tuple = process_upload(user_id=user_id, 
                                     health=health, 
                                     local_filename=local_filename,
+                                    zipcode=zipcode,
                                     ) # returns prediction_tuple
 
         performance = str(check_prediction(health, prediction_tuple))
