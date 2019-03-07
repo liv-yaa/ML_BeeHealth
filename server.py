@@ -220,8 +220,8 @@ def upload_file():
                                     ) # returns prediction_tuple
 
         performance = str(check_prediction(health, prediction_tuple))
-        print(health)
-        print(performance)   
+        print("health", health)
+        print("performance", performance)   
 
         # This is going to become true once image is added.
         # needed for Jinja conditional...
