@@ -213,32 +213,29 @@ def load_bees_from_clarifai_to_db(all_images):
             image_health = None
 
 
-        # print("Alert metadata", img.metadata)
-        if (img.metadata['datetime']):
-            image_dt = img.metadata['datetime']
-        else:
-            image_dt = None
-        
-
-        # if (img.metadata['user_id']):
-        #     image_user_id = int(img.metadata['user_id']) ## 
-        # else:
-        #     image_user_id = None
-            
-        if img.metadata:
-            if (img.metadata['zipcode']):
-                image_zip = int(img.metadata['zipcode'])
-            elif (img.metadata['zip_code']):
-                image_zip = int(img.metadata['zip_code'])
-        else:
-            image_zip = None
+        try:
+            if (img.metadata['datetime']):
+                image_dt = img.metadata['datetime']
+            else:
+                image_dt = None
+                
+            if img.metadata:
+                if (img.metadata['zipcode']):
+                    image_zip = int(img.metadata['zipcode'])
+                elif (img.metadata['zip_code']):
+                    image_zip = int(img.metadata['zip_code'])
+            else:
+                image_zip = None
 
 
-        if (img.metadata['image_id']):
-            image_img_id = int(img.metadata['image_id'])
-        else:
-            image_img_id = None
-    
+            if (img.metadata['image_id']):
+                image_img_id = int(img.metadata['image_id'])
+            else:
+                image_img_id = None
+        except KeyError:
+            print("KeyError")
+        except:
+            print("Other error")
 
         # print("After", image_concepts, " are concepts and not concepts are ", image_not_concepts)
         # print("image_health", image_health)
@@ -251,7 +248,7 @@ def load_bees_from_clarifai_to_db(all_images):
         # print("image_img_id", image_img_id)
 
 
-        if (img.metadata and i < 10): # Make sure that only bees are added! Not nonbees!
+        if img.concepts and 'is_bee' in img.concepts: # Make sure that only bees are added! Not nonbees!
 
             # Create a bee
             a_bee = Bee(bee_id=i,
@@ -494,24 +491,18 @@ if __name__ == '__main__':
     # add_bees_to_clar(seed_filename)
     # print('Successfully added all bees.')
 
-    all_ = list(clarifai_app.inputs.get_all())
-    for i in all_:
-        print(i.metadata['image_id'], "is uploaded")
+
 
     # add_nonbees_to_clar()
     # print('Successfully added all nonbees.')
 
-    # all_ = list(clarifai_app.inputs.get_all())[:11]
+    all_ = list(clarifai_app.inputs.get_all())
     # for i in all_:
-    #     print(i)
-    #     if(i.metadata):
-    #         print(i.metadata)
-    #         print(i.metadata['image_id'], "is uploaded")
-    #     else:
-    #         print(i, "has no metadata")
+    #     print(i.metadata['image_id'], "is uploaded")
 
     # Add Bees to our database from Clarifai
-    
+    load_bees_from_clarifai_to_db(all_images=all_)
+    print("Upload success")
 
     # Test
     # process_upload( 
