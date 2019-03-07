@@ -154,7 +154,7 @@ def add_nonbees_to_clar():
                             metadata={ 'image_id' : image_id,
                                 'user_id': None,
                                 'datetime': None, 
-                                'zip_code': None,
+                                'zipcode': None,
                                 },
                             
                             allow_duplicate_url=True,
@@ -192,7 +192,7 @@ def load_bees_from_clarifai_to_db(all_images):
 
     print("Length of all_images", len(all_images))
 
-    all_images = all_images[:11]
+    
 
     i = 1
 
@@ -207,7 +207,7 @@ def load_bees_from_clarifai_to_db(all_images):
         image_not_concepts = img.not_concepts
 
         # Unpack concepts to get image_health: 
-        if ('is_bee' in img.image_concepts):
+        if (image_concepts != None):
             image_health = 'y' if 'health' in image_concepts else 'n'
         else:
             image_health = None
@@ -220,14 +220,16 @@ def load_bees_from_clarifai_to_db(all_images):
             image_dt = None
         
 
-        if (img.metadata['user_id']):
-            image_user_id = int(img.metadata['user_id']) ## 
-        else:
-            image_user_id = None
+        # if (img.metadata['user_id']):
+        #     image_user_id = int(img.metadata['user_id']) ## 
+        # else:
+        #     image_user_id = None
             
-
-        if (img.metadata['zipcode']):
-            image_zip = int(img.metadata['zipcode'])
+        if img.metadata:
+            if (img.metadata['zipcode']):
+                image_zip = int(img.metadata['zipcode'])
+            elif (img.metadata['zip_code']):
+                image_zip = int(img.metadata['zip_code'])
         else:
             image_zip = None
 
@@ -264,10 +266,10 @@ def load_bees_from_clarifai_to_db(all_images):
 
             i = i + 1 # Increment
 
-            print("bee added ", i)
+            print("bee added, a_bee.bee_id", a_bee.bee_id)
             print()
 
-    print("Length of all_images", len(all_images))
+    print("Length of all_images ", len(all_images))
 
     # Commit all Bee objects to the database
     db.session.commit()
@@ -428,7 +430,7 @@ def add_new_image_to_db(user_id, url, health, zipcode):
                 user_id=user_id,
                 url=url, # From user_file
                 health=health,
-                zip_code=zipcode,
+                zipcode=zipcode,
                 image_id=image_id,
 
                 )
@@ -492,19 +494,24 @@ if __name__ == '__main__':
     # add_bees_to_clar(seed_filename)
     # print('Successfully added all bees.')
 
-    # all_ = list(clarifai_app.inputs.get_all())
+    all_ = list(clarifai_app.inputs.get_all())
+    for i in all_:
+        print(i.metadata['image_id'], "is uploaded")
+
+    # add_nonbees_to_clar()
+    # print('Successfully added all nonbees.')
+
+    # all_ = list(clarifai_app.inputs.get_all())[:11]
     # for i in all_:
-    #     print(i.metadata['image_id'], "is uploaded")
+    #     print(i)
+    #     if(i.metadata):
+    #         print(i.metadata)
+    #         print(i.metadata['image_id'], "is uploaded")
+    #     else:
+    #         print(i, "has no metadata")
 
-    add_nonbees_to_clar()
-    print('Successfully added all nonbees.')
-
-    # all_ = list(clarifai_app.inputs.get_all())
-    # for i in all_:
-    #     print(i.metadata['image_id'], "is uploaded")
-
-    # # Add Bees to our database from Clarifai
-    # load_bees_from_clarifai_to_db(all_images=all_)
+    # Add Bees to our database from Clarifai
+    
 
     # Test
     # process_upload( 
