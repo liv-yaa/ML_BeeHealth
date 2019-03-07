@@ -191,10 +191,9 @@ def load_bees_from_clarifai_to_db(all_images):
     """
 
     print("Length of all_images", len(all_images))
-
     
-
-    i = 1
+    # Initialize bee_id
+    i = 1 
 
     for img in all_images:
         print(img)
@@ -236,17 +235,6 @@ def load_bees_from_clarifai_to_db(all_images):
             print("KeyError")
         except:
             print("Other error")
-
-        # print("After", image_concepts, " are concepts and not concepts are ", image_not_concepts)
-        # print("image_health", image_health)
-        # print("image_url", image_url)
-        # print("image_score", image_score)
-
-        # print("image_dt", image_dt)
-        # print("image_user_id", image_user_id)
-        # print("image_zip", image_zip) 
-        # print("image_img_id", image_img_id)
-
 
         if img.concepts and 'is_bee' in img.concepts: # Make sure that only bees are added! Not nonbees!
 
@@ -320,92 +308,92 @@ def process_upload(user_id, health, local_filename, zipcode):
     # print("zipcode", zipcode)
 
     image_id = str(get_hi_input_id() + 1)
-    # print("image_id", image_id)
+    print("image_id", image_id)
 
     # get prediction_tuple which is (response_id, response_confidence, response_datetime)
     prediction_tuple = predict_with_model(local_filename)
-    # print("prediction_tuple", prediction_tuple)
+    print("prediction_tuple", prediction_tuple)
 
-    # # Edit health (a string) to make it a binary value (better for this purpose)
-    health = 'y' if health == 'healthy' else 'n'
-    # print(
-    #     "health now ", health)
+    # # # Edit health (a string) to make it a binary value (better for this purpose)
+    # health = 'y' if health == 'healthy' else 'n'
+    # # print(
+    # #     "health now ", health)
 
-    response_id = prediction_tuple[0]
-    response_confidence = prediction_tuple[1]
-    datetime = prediction_tuple[2]
+    # response_id = prediction_tuple[0]
+    # response_confidence = prediction_tuple[1]
+    # datetime = prediction_tuple[2]
 
-    # print("response_id", response_id)
-    # print("response_confidence", response_confidence)
-    # print("datetime", datetime)
+    # # print("response_id", response_id)
+    # # print("response_confidence", response_confidence)
+    # # print("datetime", datetime)
 
 
-    if (health == 'y'):
+    # if (health == 'y'):
             
-        concepts=['health', 'is_bee'] # a list of concept names this image is associated with
-        not_concepts=None  # a list of concept names this image is not associated with
+    #     concepts=['health', 'is_bee'] # a list of concept names this image is associated with
+    #     not_concepts=None  # a list of concept names this image is not associated with
 
-    else:
-        concepts = ['is_bee']
-        not_concepts = ['health']
+    # else:
+    #     concepts = ['is_bee']
+    #     not_concepts = ['health']
        
-    # print("Before", concepts, " are concepts and not concepts are ", not_concepts)
-    # print("")
+    # # print("Before", concepts, " are concepts and not concepts are ", not_concepts)
+    # # print("")
 
-    # Create image and add to Clar.
-    img = clarifai_app.inputs.create_image_from_filename(
-                    filename=local_filename, 
-                    image_id=image_id,
-                    concepts=concepts,
-                    not_concepts=not_concepts,
-                    metadata={ 'image_id': image_id,
-                                'datetime': datetime, 
-                                'zipcode': zipcode,
-                                'user_id': user_id,
-                                },
-                    allow_duplicate_url=True,
-                    )
+    # # Create image and add to Clar.
+    # # img = clarifai_app.inputs.create_image_from_filename(
+    # #                 filename=local_filename, 
+    # #                 image_id=image_id,
+    # #                 concepts=concepts,
+    # #                 not_concepts=not_concepts,
+    # #                 metadata={ 'image_id': image_id,
+    # #                             'datetime': datetime, 
+    # #                             'zipcode': zipcode,
+    # #                             'user_id': user_id,
+    # #                             },
+    # #                 allow_duplicate_url=True,
+    # #                 )
 
-    # Unpack all data in the newly created Image object    
-    image_concepts = img.concepts
-    image_not_concepts = img.not_concepts
-    print("After", image_concepts, " are concepts and not concepts are ", image_not_concepts)
+    # # Unpack all data in the newly created Image object    
+    # image_concepts = img.concepts
+    # image_not_concepts = img.not_concepts
+    # print("After", image_concepts, " are concepts and not concepts are ", image_not_concepts)
 
-    # Unpack concepts to get image_health:
-    image_health = 'y' if 'health' in image_concepts and 'is_bee' in image_concepts else 'n'
-    print("image_health", image_health)
+    # # Unpack concepts to get image_health:
+    # image_health = 'y' if 'health' in image_concepts and 'is_bee' in image_concepts else 'n'
+    # print("image_health", image_health)
 
-    image_url = img.url ##
-    # print("image_url", image_url)
+    # image_url = img.url ##
+    # # print("image_url", image_url)
 
-    image_score = img.score
-    # print("image_score", image_score)
+    # image_score = img.score
+    # # print("image_score", image_score)
 
-    image_dt = img.metadata['datetime']
-    # print("image_dt", image_dt)
+    # image_dt = img.metadata['datetime']
+    # # print("image_dt", image_dt)
 
-    image_user_id = int(img.metadata['user_id']) ## 
-    # print("image_user_id", image_user_id)
+    # image_user_id = int(img.metadata['user_id']) ## 
+    # # print("image_user_id", image_user_id)
 
-    image_zip = int(img.metadata['zipcode'])
-    # print("image_zip", image_zip)
+    # image_zip = int(img.metadata['zipcode'])
+    # # print("image_zip", image_zip)
 
-    image_img_id = int(img.metadata['image_id'])
-    # print("image_img_id", image_img_id)
+    # image_img_id = int(img.metadata['image_id'])
+    # # print("image_img_id", image_img_id)
 
 
-    print()
-    print()
+    # print()
+    # print()
 
-    # Create a new Bee and add it to the database, pasing in metadata from img (Image object)
-    add_new_image_to_db(user_id=image_user_id,
-                        url=image_url,
-                        health=image_health,
-                        zipcode=image_zip,
-                        image_id=image_img_id
-                        )
+    # # Create a new Bee and add it to the database, pasing in metadata from img (Image object)
+    # # add_new_image_to_db(user_id=image_user_id,
+    # #                     url=image_url,
+    # #                     health=image_health,
+    # #                     zipcode=image_zip,
+    # #                     image_id=image_img_id
+    # #                     )
 
-    return prediction_tuple
+    # return prediction_tuple
 
     
 
@@ -496,28 +484,28 @@ if __name__ == '__main__':
     # add_nonbees_to_clar()
     # print('Successfully added all nonbees.')
 
-    all_ = list(clarifai_app.inputs.get_all())
-    # for i in all_:
-    #     print(i.metadata['image_id'], "is uploaded")
+    # all_ = list(clarifai_app.inputs.get_all())
+    # # for i in all_:
+    # #     print(i.metadata['image_id'], "is uploaded")
 
-    # Add Bees to our database from Clarifai
-    load_bees_from_clarifai_to_db(all_images=all_)
-    print("Upload success")
+    # # Add Bees to our database from Clarifai
+    # load_bees_from_clarifai_to_db(all_images=all_)
+    # print("Upload success")
 
     # Test
-    # process_upload( 
-    #     user_id=1, 
-    #     health='healthy',
-    #     local_filename='uploads/download.jpeg',
-    #     zipcode='12345'
-    #     )
+    process_upload( 
+        user_id=1, 
+        health='healthy',
+        local_filename='uploads/download.jpeg',
+        zipcode='12345'
+        )
 
-    # process_upload( 
-    #     user_id=1, 
-    #     health='unhealthy',
-    #     local_filename='uploads/001_043.png',
-    #     zipcode='22111'
-    #     )
+    process_upload( 
+        user_id=1, 
+        health='unhealthy',
+        local_filename='uploads/001_043.png',
+        zipcode='22111'
+        )
 
 
     # print(predict_with_model(path='uploads/download.jpeg'))
