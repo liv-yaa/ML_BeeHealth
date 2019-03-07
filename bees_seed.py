@@ -191,7 +191,7 @@ def load_bees_from_clarifai_to_db(all_images):
     """
 
     print("Length of all_images", len(all_images))
-    
+
     # Initialize bee_id
     i = 1 
 
@@ -302,10 +302,10 @@ def process_upload(user_id, health, local_filename, zipcode):
     @ return the new Image object (Clar), which has a URL, and is ready to become our Bee object.
     """
 
-    # print("user_id", user_id)
-    # print("health", health)
-    # print("local_filename", local_filename)
-    # print("zipcode", zipcode)
+    print("user_id", user_id)
+    print("health", health)
+    print("local_filename", local_filename)
+    print("zipcode", zipcode)
 
     image_id = str(get_hi_input_id() + 1)
     print("image_id", image_id)
@@ -314,76 +314,90 @@ def process_upload(user_id, health, local_filename, zipcode):
     prediction_tuple = predict_with_model(local_filename)
     print("prediction_tuple", prediction_tuple)
 
-    # # # Edit health (a string) to make it a binary value (better for this purpose)
-    # health = 'y' if health == 'healthy' else 'n'
-    # # print(
-    # #     "health now ", health)
+    # # Edit health (a string) to make it a binary value (better for this purpose)
+    health = 'y' if health == 'healthy' else 'n'
+    print(
+        "health now ", health)
 
-    # response_id = prediction_tuple[0]
-    # response_confidence = prediction_tuple[1]
-    # datetime = prediction_tuple[2]
+    response_id = prediction_tuple[0]
+    response_confidence = prediction_tuple[1]
+    datetime = prediction_tuple[2]
 
-    # # print("response_id", response_id)
-    # # print("response_confidence", response_confidence)
-    # # print("datetime", datetime)
+    # print("response_id", response_id)
+    # print("response_confidence", response_confidence)
+    # print("datetime", datetime)
 
 
-    # if (health == 'y'):
+    if (health == 'y'):
             
-    #     concepts=['health', 'is_bee'] # a list of concept names this image is associated with
-    #     not_concepts=None  # a list of concept names this image is not associated with
+        concepts=['health', 'is_bee'] # a list of concept names this image is associated with
+        not_concepts=[]  # a list of concept names this image is not associated with
 
-    # else:
-    #     concepts = ['is_bee']
-    #     not_concepts = ['health']
+    else:
+        concepts = ['is_bee']
+        not_concepts = ['health']
        
-    # # print("Before", concepts, " are concepts and not concepts are ", not_concepts)
-    # # print("")
+    print("Before", concepts, " are concepts and not concepts are ", not_concepts)
+    print("")
 
-    # # Create image and add to Clar.
-    # # img = clarifai_app.inputs.create_image_from_filename(
-    # #                 filename=local_filename, 
-    # #                 image_id=image_id,
-    # #                 concepts=concepts,
-    # #                 not_concepts=not_concepts,
-    # #                 metadata={ 'image_id': image_id,
-    # #                             'datetime': datetime, 
-    # #                             'zipcode': zipcode,
-    # #                             'user_id': user_id,
-    # #                             },
-    # #                 allow_duplicate_url=True,
-    # #                 )
+    # Create image and add to Clar.
+
+
+    img = clarifai_app.inputs.create_image_from_filename(
+                    filename=local_filename, 
+                    image_id=image_id,
+                    concepts=concepts,
+                    not_concepts=not_concepts,
+                    metadata={ 'image_id': image_id,
+                                'user_id': user_id,
+                                'datetime': datetime, 
+                                'zipcode': zipcode,
+                                
+                                },
+                    allow_duplicate_url=True,
+                    )
 
     # # Unpack all data in the newly created Image object    
-    # image_concepts = img.concepts
-    # image_not_concepts = img.not_concepts
-    # print("After", image_concepts, " are concepts and not concepts are ", image_not_concepts)
+    image_concepts = img.concepts
+    image_not_concepts = img.not_concepts
+    print("After", image_concepts, " are concepts and not concepts are ", image_not_concepts)
 
     # # Unpack concepts to get image_health:
-    # image_health = 'y' if 'health' in image_concepts and 'is_bee' in image_concepts else 'n'
-    # print("image_health", image_health)
 
-    # image_url = img.url ##
-    # # print("image_url", image_url)
+    # try:
+    #     image_health = 'y' if 'health' in image_concepts and 'is_bee' in image_concepts else 'n'
+    #     print("image_health", image_health)
 
-    # image_score = img.score
-    # # print("image_score", image_score)
+    #     image_url = img.url ##
+    #     print("image_url", image_url)
 
-    # image_dt = img.metadata['datetime']
-    # # print("image_dt", image_dt)
+    #     image_score = img.score
+    #     print("image_score", image_score)
 
-    # image_user_id = int(img.metadata['user_id']) ## 
-    # # print("image_user_id", image_user_id)
+    #     image_dt = img.metadata['datetime']
+    #     print("image_dt", image_dt)
 
-    # image_zip = int(img.metadata['zipcode'])
-    # # print("image_zip", image_zip)
+    #     image_user_id = int(img.metadata['user_id']) ## 
+    #     print("image_user_id", image_user_id)
 
-    # image_img_id = int(img.metadata['image_id'])
-    # # print("image_img_id", image_img_id)
+    #     image_zip = int(img.metadata['zipcode'])
+    #     print("image_zip", image_zip)
+
+    #     image_img_id = int(img.metadata['image_id'])
+    #     print("image_img_id", image_img_id)
+    # except NameError:
+    #     print("NameError")
+    # except:
+    #     print("Some other error.")
 
 
-    # print()
-    # print()
+    res = clarifai_app.inputs.get(input_id=image_id)
+    for i in res:
+        print("Successfully added to clar app: ", i.input_id)
+
+
+    print()
+    print()
 
     # # Create a new Bee and add it to the database, pasing in metadata from img (Image object)
     # # add_new_image_to_db(user_id=image_user_id,
