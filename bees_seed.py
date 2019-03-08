@@ -311,7 +311,7 @@ def process_upload(user_id, health, local_filename, zipcode):
     print("image_id", image_id)
 
     # get prediction_tuple which is (response_id, response_confidence, response_datetime)
-    prediction_tuple = predict_with_model(local_filename)
+    prediction_tuple = predict_with_model(local_filename) #Clar method
     print("prediction_tuple", prediction_tuple)
 
     # # Edit health (a string) to make it a binary value (better for this purpose)
@@ -417,6 +417,32 @@ def process_upload(user_id, health, local_filename, zipcode):
     # I am adding this because in order 
 
     return prediction_tuple, success
+
+
+def give_model_feedback(input_id, concepts, not_concepts, feedback_info):
+    """ https://www.clarifai.com/developer/guide/feedback#prediction-feedback
+    # This is going to depend on performance. 
+
+    Here:
+    - event_type : 'annotation' for prediction feedback
+    - output_id/search_id : the id ass'd with the output recueved from the prediction call
+    - end_user_id: should be the user from this session
+    - session_id : 
+
+    If the prediction is correct:
+    
+
+    """
+
+    clarifai_app.send_concept_feedback(
+        input_id="",
+        url="",
+        concepts=[],
+        not_concepts=[],
+        feedback_info=None, # 
+
+        ) # Returns None. Just passes this along to Clarafai.
+
 
     
 
