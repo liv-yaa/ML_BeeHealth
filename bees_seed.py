@@ -319,9 +319,12 @@ def process_upload(user_id, health, local_filename, zipcode):
     print(
         "health now ", health)
 
-    response_id = prediction_tuple[0]
-    response_confidence = prediction_tuple[1]
-    datetime = prediction_tuple[2]
+    try:
+        response_id = prediction_tuple[0]
+        response_confidence = prediction_tuple[1]
+        datetime = prediction_tuple[2]
+    except:
+        print("index out of range")
 
     # print("response_id", response_id)
     # print("response_confidence", response_confidence)
@@ -411,8 +414,9 @@ def process_upload(user_id, health, local_filename, zipcode):
                         )
 
     # new_tuple THURSDAY ADD SUCCESS TO THIS
+    # I am adding this because in order 
 
-    return prediction_tuple
+    return prediction_tuple, success
 
     
 
@@ -463,6 +467,9 @@ def add_new_image_to_db(user_id, url, health, zipcode, image_id):
         print("Successfully added to db: ", bee.bee_id)
 
         success = True
+
+    except:
+        print("Unable to create Bee object.")
 
 
     return success

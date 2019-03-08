@@ -213,23 +213,27 @@ def upload_file():
         # Also adds the new Bee to our database and to Clar app.
         # get prediction_tuple which is (response_id, response_confidence, response_datetime)
 
-        success_tuple = process_upload(user_id=user_id, 
+        prediction_tuple = process_upload(user_id=user_id, 
                                     health=health, 
                                     local_filename=local_filename,
-                                    zipcode=zipcode,
+                                    zipcode=int(zipcode),
                                     ) # returns prediction_tuple
 
-        performance = str(check_prediction(health, success_tuple))
+        performance = str(check_prediction(health, prediction_tuple))
         print("health", health)
-        print("performance", performance)   
+        print("performance", performance) 
+        try:
+            print("Success? ", prediction_tuple[2])  
+        except:
+            print("Not successful")
 
         # # This is going to become true once image is added.
         # # needed for Jinja conditional...
         image_added = "None"     
         add_image_attempt="none"
 
-        # prediction_tuple="slkjdf"
-        # performance = "ljhlg"
+        prediction_tuple="slkjdf"
+        performance = "ljhlg"
 
 
         return render_template("upload_success.html", 
