@@ -268,7 +268,7 @@ def predict_with_model(path):
     @path = local filename
     """
 
-    # Set a model version id because I want to keep track of progress
+    # # Set a model version id because I want to keep track of progress
     # model.model_version = model_version_id
 
     # print(model.model_version)
@@ -276,22 +276,25 @@ def predict_with_model(path):
     # Train model!
     cl_model.train(sync=False) # False goes faster
 
-
     response = cl_model.predict_by_filename(path)
     # pprint(response)
-    
-    response_id = response['outputs'][0]['data']['concepts'][0]['id']
-    
-    response_confidence = response['outputs'][0]['data']['concepts'][0]['value']
-    
-    response_datetime = response['outputs'][0]['created_at']
 
-    # print(response_datetime)
+    response_dict = {}
+
+    is_bee_response_name = response['outputs'][0]['data']['concepts'][0]['name']
+    is_bee_response_value = response['outputs'][0]['data']['concepts'][0]['value']
+    
+    health_response_name = response['outputs'][0]['data']['concepts'][1]['name']
+    health_response_value = response['outputs'][0]['data']['concepts'][1]['value']
+
+    # Add results to a succinct dictionary
+    response_dict['is_bee'] = (is_bee_response_name, is_bee_response_value)
+    response_dict['health'] = (health_response_name, health_response_value)
 
 
-    response_tuple = (response_id, response_confidence, response_datetime)
-    print("t", response_tuple)
-    return response_tuple
+    print(response_dict)
+        
+    return response_dict
 
 
 
@@ -301,127 +304,137 @@ def process_upload(user_id, health, local_filename, zipcode):
 
     @ return the new Image object (Clar), which has a URL, and is ready to become our Bee object.
     """
-
-    print("user_id", user_id)
-    print("health", health)
-    print("local_filename", local_filename)
-    print("zipcode", zipcode)
-
-    image_id = str(get_hi_input_id() + 1)
-    print("image_id", image_id)
-
     # get prediction_tuple which is (response_id, response_confidence, response_datetime)
     prediction_tuple = predict_with_model(local_filename) #Clar method
     print("prediction_tuple", prediction_tuple)
 
-    # # Edit health (a string) to make it a binary value (better for this purpose)
-    health = 'y' if health == 'healthy' else 'n'
-    print(
-        "health now ", health)
-
+    # Get the rest of the values from prediction_tuple
     try:
         response_id = prediction_tuple[0]
-        response_confidence = prediction_tuple[1]
-        datetime = prediction_tuple[2]
+        response_name = prediction_tuple[1]
+        response_confidence = prediction_tuple[2]
+        response_datetime = prediction_tuple[3]
     except:
         print("index out of range")
 
-    # print("response_id", response_id)
-    # print("response_confidence", response_confidence)
-    # print("datetime", datetime)
+    print("response_id", response_id)
+    print("response_confidence", response_confidence)  
+    print("response_name", response_name)
+    print("response_datetime", response_datetime)
 
 
-    if (health == 'y'):
+
+    # image_id = str(get_hi_input_id() + 1)
+    # # print("image_id", image_id)
+
+    # # # Edit health (a string) to make it a binary value (better for this purpose)
+    # health = 'y' if health == 'healthy' else 'n'
+    # print(
+    #     "health now ", health)
+
+    # if (health == 'y'):
             
-        concepts=['health', 'is_bee'] # a list of concept names this image is associated with
-        not_concepts=[]  # a list of concept names this image is not associated with
+    #     concepts=['health', 'is_bee'] # a list of concept names this image is associated with
+    #     not_concepts=[]  # a list of concept names this image is not associated with
 
-    else:
-        concepts = ['is_bee']
-        not_concepts = ['health']
+    # else:
+    #     concepts = ['is_bee']
+    #     not_concepts = ['health']
        
-    print("Before", concepts, " are concepts and not concepts are ", not_concepts)
-    print("")
+    # print("Before", concepts, " are concepts and not concepts are ", not_concepts)
+    # print("")
+    # print("user_id", user_id)
+    # print("health", health)
+    # print("local_filename", local_filename)
+    # print("zipcode", zipcode)
+
+
+
+
+
+
+
+
 
     # Create image and add to Clar.
 
 
-    img = clarifai_app.inputs.create_image_from_filename(
-                    filename=local_filename, 
-                    image_id=image_id,
-                    concepts=concepts,
-                    not_concepts=not_concepts,
-                    metadata={ 'image_id': image_id,
-                                'user_id': user_id,
-                                'datetime': datetime, 
-                                'zipcode': zipcode,
-                                'response_confidence': response_confidence,
+    # img = clarifai_app.inputs.create_image_from_filename(
+    #                 filename=local_filename, 
+    #                 image_id=image_id,
+    #                 concepts=concepts,
+    #                 not_concepts=not_concepts,
+    #                 metadata={ 'image_id': image_id,
+    #                             'user_id': user_id,
+    #                             'datetime': datetime, 
+    #                             'zipcode': zipcode,
+    #                             'response_confidence': response_confidence,
                                 
-                                },
-                    allow_duplicate_url=True,
-                    )
+    #                             },
+    #                 allow_duplicate_url=True,
+    #                 )
 
-    # # Unpack all data in the newly created Image object    
-    image_concepts = img.concepts
-    image_not_concepts = img.not_concepts
-    print("After", image_concepts, " are concepts and not concepts are ", image_not_concepts)
+    # # # Unpack all data in the newly created Image object    
+    # image_concepts = img.concepts
+    # image_not_concepts = img.not_concepts
+    # print("After", image_concepts, " are concepts and not concepts are ", image_not_concepts)
 
-    i = clarifai_app.inputs.get(input_id=image_id)
+    # i = clarifai_app.inputs.get(input_id=image_id)
 
-    print("Successfully added to clar app: ", i.input_id)
+    # print("Successfully added to clar app: ", i.input_id)
 
-    # Unpack concepts to get image_health:
+    # # Unpack concepts to get image_health:
 
     
-    image_health = 'y' if 'health' in image_concepts and 'is_bee' in image_concepts else 'n'
-    print("image_health", image_health)
+    # image_health = 'y' if 'health' in image_concepts and 'is_bee' in image_concepts else 'n'
+    # print("image_health", image_health)
 
-    image_url = img.url ##
-    print("image_url", image_url)
+    # image_url = img.url ##
+    # print("image_url", image_url)
 
-    image_score = img.score
-    print("image_score", image_score)
+    # image_score = img.score
+    # print("image_score", image_score)
 
-    if img.metadata:
-        image_dt = img.metadata['datetime']
-        print("image_dt", image_dt)
+    # if img.metadata:
+    #     image_dt = img.metadata['datetime']
+    #     print("image_dt", image_dt)
 
-        image_user_id = int(img.metadata['user_id']) ## 
-        print("image_user_id", image_user_id)
+    #     image_user_id = int(img.metadata['user_id']) ## 
+    #     print("image_user_id", image_user_id)
 
-        image_zip = int(img.metadata['zipcode'])
-        print("image_zip", image_zip)
+    #     image_zip = int(img.metadata['zipcode'])
+    #     print("image_zip", image_zip)
 
-        image_img_id = int(img.metadata['image_id'])
-        print("image_img_id", image_img_id)
+    #     image_img_id = int(img.metadata['image_id'])
+    #     print("image_img_id", image_img_id)
 
-        image_confidence = int(img.metadata['response_confidence'])
-        print("image_confidence", image_confidence)
+    #     image_confidence = int(img.metadata['response_confidence'])
+    #     print("image_confidence", image_confidence)
 
-    else:
-        print("not a bee")
+    # else:
+    #     print("not a bee")
 
 
-    print()
-    print()
+    # print()
+    # print()
 
-    # Create a new Bee and add it to the database, pasing in metadata from img (Image object)
-    success = add_new_image_to_db(user_id=image_user_id,
-                        url=image_url,
-                        health=image_health,
-                        zipcode=image_zip,
-                        image_id=image_img_id
-                        )
+    # # Create a new Bee and add it to the database, pasing in metadata from img (Image object)
+    # success = add_new_image_to_db(user_id=image_user_id,
+    #                     url=image_url,
+    #                     health=image_health,
+    #                     zipcode=image_zip,
+    #                     image_id=image_img_id
+    #                     )
 
     # new_tuple THURSDAY ADD SUCCESS TO THIS
     # I am adding this because in order 
 
-    return prediction_tuple, success
+    # return prediction_tuple, success
 
 
 def give_model_feedback(input_id, concepts, not_concepts, feedback_info):
     """ https://www.clarifai.com/developer/guide/feedback#prediction-feedback
-    # This is going to depend on performance. 
+    # This is going to depend on performance 
 
     Here:
     - event_type : 'annotation' for prediction feedback
@@ -435,11 +448,11 @@ def give_model_feedback(input_id, concepts, not_concepts, feedback_info):
     """
 
     clarifai_app.send_concept_feedback(
-        input_id="",
-        url="",
-        concepts=[],
-        not_concepts=[],
-        feedback_info=None, # 
+        input_id=input_id,
+        url=url,
+        concepts=concepts,
+        not_concepts=not_concepts,
+        feedback_info=feedback_info, # 
 
         ) # Returns None. Just passes this along to Clarafai.
 
@@ -521,6 +534,20 @@ def get_hi_input_id():
 
 
 
+def check_prediction(health_string, prediction_tuple):
+    """ Checks whether prediction tuple matches input of health specified by user """
+    response_string = prediction_tuple[0]
+    response_confidence = prediction_tuple[1]
+
+    print("response_string", response_string)
+    print(
+        "response_confidence", response_confidence
+        )
+
+    return response_string == health_string
+
+
+
 
 if __name__ == '__main__':
 
@@ -556,21 +583,22 @@ if __name__ == '__main__':
     # load_bees_from_clarifai_to_db(all_images=all_)
     # print("Upload success")
 
-    # Test
-    process_upload( 
-        user_id=1, 
-        health='healthy',
-        local_filename='uploads/download.jpeg',
-        zipcode='12345'
-        )
+    # # Test
+    # process_upload( 
+    #     user_id=1, 
+    #     health='healthy',
+    #     local_filename='uploads/download.jpeg',
+    #     zipcode='12345'
+    #     )
 
-    process_upload( 
-        user_id=1, 
-        health='unhealthy',
-        local_filename='uploads/001_043.png',
-        zipcode='22111'
-        )
+    # process_upload( 
+    #     user_id=1, 
+    #     health='unhealthy',
+    #     local_filename='uploads/001_043.png',
+    #     zipcode='22111'
+    #     )
 
 
-    # print(predict_with_model(path='uploads/download.jpeg'))
+    print(predict_with_model(path='uploads/download.jpeg'))
+    print(predict_with_model(path='uploads/001_043.png'))
 
