@@ -37,7 +37,8 @@ from model import Bee, connect_to_db, db
 clarifai_app = ClarifaiApp(api_key="58dc8755e39d4043a98554b44bbcaf56") # move this
 MODEL_ID = 'BeeHealth'
 cl_model = clarifai_app.models.get(MODEL_ID)
-seed_filename = "bee_data.csv" 
+seed_filename = "bee_data.csv"
+THRESHOLD = 0.4     # Value for prediction 
 
 
 def add_bees_to_clar(csv_filename):
@@ -277,7 +278,7 @@ def predict_with_model(path):
     cl_model.train(sync=False) # False goes faster
 
     response = cl_model.predict_by_filename(path)
-    pprint(response)
+    # pprint(response)
 
     response_dict = {}
 
@@ -285,7 +286,7 @@ def predict_with_model(path):
 
         response_name_i = response['outputs'][0]['data']['concepts'][i]['name']
 
-        print(response_name_i)
+        # print(response_name_i)
 
         if response_name_i == 'health':
             health_response_name = response['outputs'][0]['data']['concepts'][i]['name']
@@ -296,17 +297,17 @@ def predict_with_model(path):
             is_bee_response_value = response['outputs'][0]['data']['concepts'][i]['value']
     
 
-    print("is_bee_response_name", is_bee_response_name)
-    print("is_bee_response_value", is_bee_response_value)
-    print("health_response_name", health_response_name)
-    print("health_response_value", health_response_value)
+    # print("is_bee_response_name", is_bee_response_name)
+    # print("is_bee_response_value", is_bee_response_value)
+    # print("health_response_name", health_response_name)
+    # print("health_response_value", health_response_value)
 
     # Add results to a succinct dictionary
     response_dict['is_bee'] = (is_bee_response_name, is_bee_response_value)
     response_dict['health'] = (health_response_name, health_response_value)
 
 
-    print(response_dict)
+    # print(response_dict)
         
     return response_dict
 
@@ -323,13 +324,13 @@ def process_upload(user_id, health, local_filename, zipcode):
     """
     # # Edit health (a string) to make it a binary value (better for this purpose)
     health = 'y' if health == 'healthy' else 'n'
-    print(
-        "health now ", health)
+    # print(
+        # "health now ", health)
 
 
     # Get prediction_dict which is key:(name, value)
     prediction_dict = predict_with_model(local_filename) #Clar method
-    print("prediction_dict", prediction_dict)
+    # print("prediction_dict", prediction_dict)
 
     # Get the rest of the values from prediction_tuple
     
@@ -342,43 +343,61 @@ def process_upload(user_id, health, local_filename, zipcode):
     print("is_bee", is_bee_output_id, is_bee_output_value)
     print("health", health_output_id, health_output_value)
 
-    # predicted_concepts = []
-    # predicted_not_concepts = []
+    predicted_concepts = []
+    predicted_not_concepts = []
 
 
-    # if is_bee_output_id == 'is_bee':
+    if is_bee_output_id == 'is_bee':
 
-    #     if is_bee_output_value > 0.5:
-
-    #         predicted_concepts.append('is_bee')
-
-    #     else:
-    #         predicted_concepts.append('')
-
-    # elif health_output_id == 'health':
-
-    #     if health_output_value > 0.5:
-    #         predicted_not_concepts.append('is_be')
-
-
-
-    # if (health == 'y'):
         
-    #     concepts=['health', 'is_bee'] # a list of concept names this image is associated with
-    #     not_concepts=[]  # a list of concept names this image is not associated with
 
-    #     give_model_feedback(
-    #         input_id=, 
-    #         url=url,
-    #         concepts=concepts,
-    #         not_concepts=not_concepts, 
-    #         predicted_concepts=predicted_concepts,
-    #         output_id=output_id,
-    #         )
+        if is_bee_output_value > THRESHOLD: # Should I change this?
 
-    # else:
-    #     concepts = ['is_bee']
-    #     not_concepts = ['health']
+            predicted_concepts.append('is_bee')
+            print('Prediction says is_bee')
+
+
+    else:
+        print('Prediction says NOT is_bee')
+
+
+    if health_output_id == 'health':
+
+        
+
+        if health_output_value > THRESHOLD: # Should I change this?
+            predicted_not_concepts.append('health')
+            print("Prediction says health")
+
+    else:
+        print('Prediction says NOT health')
+
+
+    print("predicted_concepts", predicted_concepts)
+    print("predicted_not_concepts", predicted_not_concepts)
+
+
+
+    if ('health' in concepts):
+
+        if ('health' in predicted_concepts):
+
+            give_model_feedback(
+                input_id='health', 
+                url=url,                 
+                concepts=predicted_concepts,
+                not_concepts=predicted_not_concepts,
+                output_id='health',
+                )
+
+        else:
+            give_model_feedback(
+                input_id='health', 
+                url=url,                 
+                concepts=predicted_concepts,
+                not_concepts=predicted_not_concepts,
+                output_id='health',
+                )
 
 
        
@@ -502,11 +521,13 @@ def give_model_feedback(input_id, url, concepts, not_concepts, output_id):
 
     cl_model.send_concept_feedback(
         input_id='{input_id}',
+        input_id=input_id,
         url=url,
         concepts=concepts,
         not_concepts=not_concepts,
         feedback_info=FeedbackInfo(event_type='annotation',
                                     output_id='{output_id}',
+                                    output_id=output_id,
                                     ), # 
 
         ) # Returns None. Just passes this along to Clarafai.
