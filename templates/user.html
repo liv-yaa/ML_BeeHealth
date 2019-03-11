@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<!-- {% if "user_id" in session %} --> 
+{% if "user_id" in session %} 
 <!-- for now!! -->
     
 
@@ -57,10 +57,7 @@
 
     {% endif %}
 
-<!-- 
-{% endif %}  --><!-- for now!! -->
-
-  
+  {% endif %}
 
     <script>
       $('#submit-form').on('submit', (evt) => {
@@ -90,5 +87,7 @@
 
 
     </script>
+
+    
 
 {% endblock %}
