@@ -16,50 +16,61 @@
     <br>
     <h5> healthy bees: </h5>
 
-    <ul id="categories" class="clr">
-    
-        {% for bee in healthy_bees %}
-            <li class="pusher"></li>
-                <li>
-                    <div>
-                        <h1>{{ bee.bee_id, bee.health }}</h1>
-                        <p> zip: {{ bee.zip_code }} </p>
-                        <img src={{ bee.url }} 
-                            alt="healthy bee {{ bee.bee_id}}" 
-                            height="100" 
-                            width="100"> 
-                    </div>
-                </li>
-            <li class="pusher"></li>
-            <li class="pusher"></li>
-            
-        {% endfor %}
+    <div class="grid">
+        <ul id="hexGrid" class="clr">
 
-    </ul>
-    
-    <br><br><br>
-    <h5> unhealthy bees: </h5>
 
-    <ul id="categories" class="clr">
-        {% for bee in unhealthy_bees %}
-
-            <li class="pusher"></li>
-                <li>
-                    <div>
-                        <h1>{{ bee.bee_id, bee.health }}</h1>
-                        <p> zip: {{ bee.zip_code }} </p>
-                        <img src={{ bee.url }} 
-                            alt="unhealthy bee {{ bee.bee_id}}" 
-                            height="100" 
-                            width="100">
-                    </div>
-                </li>
-            <li class="pusher"></li>
-            <li class="pusher"></li>   
-            
-        {% endfor %}
         
-    </ul>
+            {% for bee in healthy_bees %}
+                <li class="pusher"></li>
+                    <li>
+                        <div>
+                            <h1>{{ bee.bee_id, bee.health }}</h1>
+                            <p> zip: {{ bee.zip_code }} </p>
+                            <img src={{ bee.url }} 
+                                alt="healthy bee {{ bee.bee_id}}" 
+                                height="100" 
+                                width="100"> 
+                        </div>
+                    </li>
+                <li class="pusher"></li>
+                <li class="pusher"></li>
+                
+            {% endfor %}
+
+        </ul>
+        
+        
+
+    </div>
+    <br><br><br>
+
+    <h5> unhealthy bees: </h5>
+    <div class="grid">
+        
+
+        <ul id="hexGrid" class="clr">
+            {% for bee in unhealthy_bees %}
+
+                <li class="pusher"></li>
+                    <li>
+                        <div>
+                            <h1>{{ bee.bee_id, bee.health }}</h1>
+                            <p> zip: {{ bee.zip_code }} </p>
+                            <img src={{ bee.url }} 
+                                alt="unhealthy bee {{ bee.bee_id}}" 
+                                height="100" 
+                                width="100">
+                        </div>
+                    </li>
+                <li class="pusher"></li>
+                <li class="pusher"></li>   
+                
+            {% endfor %}
+            
+        </ul>
+    </div>
+
 
 <br><br>
 <a href="/charts">Learn about our machine learning model</a>

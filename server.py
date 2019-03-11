@@ -56,7 +56,7 @@ def index():
 
     # For loop? idk
 
-    healthy_bees = random.sample(healthy, 15)
+    healthy_bees = random.sample(healthy, 16)
 
     unhealthy_bees = random.sample(unhealthy, 16)
 
@@ -66,6 +66,8 @@ def index():
                             user_id=user_id,
                             healthy_bees=healthy_bees,
                             unhealthy_bees=unhealthy_bees,
+
+                            # Should i create allbees? 
                             
                             )
 
