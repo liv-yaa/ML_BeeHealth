@@ -12,7 +12,7 @@ from werkzeug.utils import secure_filename
 from sqlalchemy import func
 
 from model import Bee, User, connect_to_db, db
-from bees_seed import process_upload, cl_model
+from bees_seed import process_upload, cl_model, give_model_feedback, predict_with_model
 
 from os.path import join, dirname, realpath
 
@@ -211,7 +211,9 @@ def upload_file():
         # Use method to our model's prediction
         
         # Also adds the new Bee to our database and to Clar app.
-        # get prediction_tuple which is (response_id, response_confidence, response_datetime)
+        # get prediction_tuple which is (response_id, response_name,
+        # response_confidence, response_datetime)
+    # 
 
         prediction_tuple = process_upload(user_id=user_id, 
                                     health=health, 
@@ -220,12 +222,22 @@ def upload_file():
                                     ) # returns prediction_tuple
 
         performance = str(check_prediction(health, prediction_tuple))
-        print("health", health)
-        print("performance", performance) 
-        try:
-            print("Success? ", prediction_tuple[2])  
-        except:
-            print("Not successful")
+        print("health", health) # Prediction (string)
+        print("performance", performance) # Boolean
+
+        if performance:
+            try:
+                print("Prediction was accurate ", prediction_tuple[2])
+                print("Adding image to model as a positive example. ")
+                # add image as a positive example  
+            except:
+                print("Error with performance")
+
+        else:
+            print("Prediction was not accurate. ")
+            print("Adding image to model as a NEGATIVE example. ")
+
+                # Add image 
 
         # # This is going to become true once image is added.
         # # needed for Jinja conditional...
@@ -272,12 +284,17 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-def check_prediction(health_string, prediction_tuple):
-    """ Checks whether prediction tuple matches input of health specified by user """
-    response_string = prediction_tuple[0]
-    response_confidence = prediction_tuple[1]
+# def check_prediction(health_string, prediction_tuple):
+#     """ Checks whether prediction tuple matches input of health specified by user """
+#     response_string = prediction_tuple[0]
+#     response_confidence = prediction_tuple[1]
 
-    return response_string == health_string
+#     print("response_string", response_string)
+#     print(
+#         "response_confidence", response_confidence
+#         )
+
+#     return response_string == health_string
 
 
 
@@ -294,17 +311,19 @@ if __name__ == '__main__':
     # Use the flask DebugToolbar
     DebugToolbarExtension(app)
 
-    # print(check_prediction("unhealth", predict_with_model( 
-    #     path='uploads/download.jpeg')))
-    # print(check_prediction("health", predict_with_model( 
-    #     path='uploads/download.jpeg')))
-    # print(check_prediction("unhealth", predict_with_model( 
-    #     path='uploads/038_293.png')))
-    # print(check_prediction("health", predict_with_model( 
-    #     path='uploads/038_293.png')))
+    print(check_prediction("unhealth", predict_with_model( 
+        path='uploads/download.jpeg')))
+    print(check_prediction("health", predict_with_model( 
+        path='uploads/download.jpeg')))
+    print(check_prediction("unhealth", predict_with_model( 
+        path='uploads/038_293.png')))
+    print(check_prediction("health", predict_with_model( 
+        path='uploads/038_293.png')))
 
 
-    app.run(host="0.0.0.0", debug=True)
+
+
+    # app.run(host="0.0.0.0", debug=True)
 
 
 
