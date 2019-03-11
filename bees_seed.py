@@ -13,7 +13,7 @@ FROM CLARIFAI API - gets images
 """
 
 # API Requests / Get
-from clarifai.rest import ClarifaiApp #  Clarifai Application Object
+from clarifai.rest import FeedbackInfo, ClarifaiApp #  Clarifai Application Object
                                         #   This is the entry point of the Clarifai Client API.
                                         #   With authentication to an application, you can access
                                         #   all the models, concepts, and inputs in this application through
@@ -277,15 +277,29 @@ def predict_with_model(path):
     cl_model.train(sync=False) # False goes faster
 
     response = cl_model.predict_by_filename(path)
-    # pprint(response)
+    pprint(response)
 
     response_dict = {}
 
-    is_bee_response_name = response['outputs'][0]['data']['concepts'][0]['name']
-    is_bee_response_value = response['outputs'][0]['data']['concepts'][0]['value']
+    for i in range(2):
+
+        response_name_i = response['outputs'][0]['data']['concepts'][i]['name']
+
+        print(response_name_i)
+
+        if response_name_i == 'health':
+            health_response_name = response['outputs'][0]['data']['concepts'][i]['name']
+            health_response_value = response['outputs'][0]['data']['concepts'][i]['value']
+
+        elif response_name_i == 'is_bee':
+            is_bee_response_name = response['outputs'][0]['data']['concepts'][i]['name']
+            is_bee_response_value = response['outputs'][0]['data']['concepts'][i]['value']
     
-    health_response_name = response['outputs'][0]['data']['concepts'][1]['name']
-    health_response_value = response['outputs'][0]['data']['concepts'][1]['value']
+
+    print("is_bee_response_name", is_bee_response_name)
+    print("is_bee_response_value", is_bee_response_value)
+    print("health_response_name", health_response_name)
+    print("health_response_value", health_response_value)
 
     # Add results to a succinct dictionary
     response_dict['is_bee'] = (is_bee_response_name, is_bee_response_value)
@@ -299,50 +313,79 @@ def predict_with_model(path):
 
 
 def process_upload(user_id, health, local_filename, zipcode):
-    """ Get prediction tuple from a user's uploaded image (which has metadata)
-    Create a new Image object and add it to Clarifai 
+    """ Get prediction dict from a user's uploaded image (which has response)
+    Determine whether prediction was accurate.
+    Help train the model based on this information.
+    Create a new Image object and add it to Clarifai. 
 
-    @ return the new Image object (Clar), which has a URL, and is ready to become our Bee object.
+    @ return the new Image object (Clar), which has a URL, and is ready to become 
+    our Bee object in the database
     """
-    # get prediction_tuple which is (response_id, response_confidence, response_datetime)
-    prediction_tuple = predict_with_model(local_filename) #Clar method
-    print("prediction_tuple", prediction_tuple)
+    # # Edit health (a string) to make it a binary value (better for this purpose)
+    health = 'y' if health == 'healthy' else 'n'
+    print(
+        "health now ", health)
+
+
+    # Get prediction_dict which is key:(name, value)
+    prediction_dict = predict_with_model(local_filename) #Clar method
+    print("prediction_dict", prediction_dict)
 
     # Get the rest of the values from prediction_tuple
-    try:
-        response_id = prediction_tuple[0]
-        response_name = prediction_tuple[1]
-        response_confidence = prediction_tuple[2]
-        response_datetime = prediction_tuple[3]
-    except:
-        print("index out of range")
+    
+    is_bee_output_id = prediction_dict['is_bee'][0]
+    is_bee_output_value = prediction_dict['is_bee'][1]
+    health_output_id = prediction_dict['health'][0]
+    health_output_value = prediction_dict['health'][1]
+    
 
-    print("response_id", response_id)
-    print("response_confidence", response_confidence)  
-    print("response_name", response_name)
-    print("response_datetime", response_datetime)
+    print("is_bee", is_bee_output_id, is_bee_output_value)
+    print("health", health_output_id, health_output_value)
+
+    # predicted_concepts = []
+    # predicted_not_concepts = []
 
 
+    # if is_bee_output_id == 'is_bee':
 
-    # image_id = str(get_hi_input_id() + 1)
-    # # print("image_id", image_id)
+    #     if is_bee_output_value > 0.5:
 
-    # # # Edit health (a string) to make it a binary value (better for this purpose)
-    # health = 'y' if health == 'healthy' else 'n'
-    # print(
-    #     "health now ", health)
+    #         predicted_concepts.append('is_bee')
+
+    #     else:
+    #         predicted_concepts.append('')
+
+    # elif health_output_id == 'health':
+
+    #     if health_output_value > 0.5:
+    #         predicted_not_concepts.append('is_be')
+
+
 
     # if (health == 'y'):
-            
+        
     #     concepts=['health', 'is_bee'] # a list of concept names this image is associated with
     #     not_concepts=[]  # a list of concept names this image is not associated with
+
+    #     give_model_feedback(
+    #         input_id=, 
+    #         url=url,
+    #         concepts=concepts,
+    #         not_concepts=not_concepts, 
+    #         predicted_concepts=predicted_concepts,
+    #         output_id=output_id,
+    #         )
 
     # else:
     #     concepts = ['is_bee']
     #     not_concepts = ['health']
+
+
        
-    # print("Before", concepts, " are concepts and not concepts are ", not_concepts)
-    # print("")
+
+    # # Get other metadata needed
+    # image_id = str(get_hi_input_id() + 1)
+    # # print("image_id", image_id)
     # print("user_id", user_id)
     # print("health", health)
     # print("local_filename", local_filename)
@@ -351,6 +394,12 @@ def process_upload(user_id, health, local_filename, zipcode):
 
 
 
+
+    # We need to get 
+        # input_id (str) - the id of what it SHOULD BE
+        # url (str), 
+        # concepts, not_concepts (inferred), 
+        # output_id (required) - the id of the output RECIEVED from the API call
 
 
 
@@ -432,27 +481,33 @@ def process_upload(user_id, health, local_filename, zipcode):
     # return prediction_tuple, success
 
 
-def give_model_feedback(input_id, concepts, not_concepts, feedback_info):
+def give_model_feedback(input_id, url, concepts, not_concepts, output_id):
     """ https://www.clarifai.com/developer/guide/feedback#prediction-feedback
     # This is going to depend on performance 
 
     Here:
-    - event_type : 'annotation' for prediction feedback
-    - output_id/search_id : the id ass'd with the output recueved from the prediction call
-    - end_user_id: should be the user from this session
-    - session_id : 
+    - input_id = what it should be ('health' or 'is_bee')
+    - output_id = the id ass'd with the output recueved from the prediction call
 
     If the prediction is correct:
     
 
     """
+    # We need to get 
+        # input_id (str) - the id of what it SHOULD BE
+        # url (str), 
+        # concepts, not_concepts (inferred), 
+        # output_id (required) - the id of the output RECIEVED from the API call
 
-    clarifai_app.send_concept_feedback(
-        input_id=input_id,
+
+    cl_model.send_concept_feedback(
+        input_id='{input_id}',
         url=url,
         concepts=concepts,
         not_concepts=not_concepts,
-        feedback_info=feedback_info, # 
+        feedback_info=FeedbackInfo(event_type='annotation',
+                                    output_id='{output_id}',
+                                    ), # 
 
         ) # Returns None. Just passes this along to Clarafai.
 
@@ -583,20 +638,22 @@ if __name__ == '__main__':
     # load_bees_from_clarifai_to_db(all_images=all_)
     # print("Upload success")
 
-    # # Test
-    # process_upload( 
-    #     user_id=1, 
-    #     health='healthy',
-    #     local_filename='uploads/download.jpeg',
-    #     zipcode='12345'
-    #     )
+    # Test
+    process_upload( 
+        user_id=1, 
+        health='healthy',
+        local_filename='uploads/download.jpeg',
+        zipcode='12345'
+        )
+    print(
+        )
 
-    # process_upload( 
-    #     user_id=1, 
-    #     health='unhealthy',
-    #     local_filename='uploads/001_043.png',
-    #     zipcode='22111'
-    #     )
+    process_upload( 
+        user_id=1, 
+        health='unhealthy',
+        local_filename='uploads/001_043.png',
+        zipcode='22111'
+        )
 
 
     print(predict_with_model(path='uploads/download.jpeg'))
