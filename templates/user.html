@@ -9,10 +9,10 @@
     <br><br>
 
     <h2>Upload a photo! </h2>
-    <form action="/upload-success" enctype="multipart/form-data" method="POST" > 
+    <form id="submit-form" action="/upload-success" enctype="multipart/form-data" method="POST" > 
 
         <br>
-        <input type="file" name="file">
+        <input type="file" name="file" id="file">
 
         <div>
           <label> How is the health of this bee?
@@ -27,6 +27,16 @@
     </form>
 
 
+
+    <div>
+      <span id = "status" ></span>
+      <!-- Link to gif -->
+      <img src="" id="load"> 
+
+
+    </div>
+
+
     <br><br>
     {% if user_bees %}
 
@@ -35,7 +45,7 @@
       <ul>
       {% for photo in user_bees %}
         <li>
-          <img src="photo.url">
+          <img src="{{ photo.url }}">
 
         </li>
       {% endfor %}
@@ -52,6 +62,33 @@
 
   
 
+    <script>
+      $('#submit-form').on('submit', (evt) => {
+        evt.preventDefault();
 
+        $('#status').html('<i>Loading...</i>');
+        $("#load").attr("src", "/static/images/load.gif");
+
+
+        const formInputs = {
+          'file': $('#file').val(),
+          'health': $('#health').val(),
+          'zipcode': $('#zipcode').val()
+
+        };
+
+        $.post('/upload-success', formInputs, (results) => {
+          alert(results);
+
+          // We know it is finished
+          $('#status').html('');  // remove "loading" message
+
+          $('#load').attr("src", "");
+
+        });
+      });
+
+
+    </script>
 
 {% endblock %}
