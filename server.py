@@ -56,19 +56,16 @@ def index():
 
     # For loop? idk
 
-    healthy_bees5 = random.sample(healthy, 5)
-    healthy_bees7 = random.sample(healthy, 7)
-    unhealthy_bees6 = random.sample(unhealthy, 6)
-    unhealthy_bees4 = random.sample(unhealthy, 4)
+    healthy_bees = random.sample(healthy, 15)
+
+    unhealthy_bees = random.sample(unhealthy, 16)
+
 
 
     return render_template("index.html", 
                             user_id=user_id,
-                            healthy_bees5=healthy_bees5,
-                            healthy_bees7=healthy_bees7,
-
-                            unhealthy_bees6=unhealthy_bees6,
-                            unhealthy_bees4=unhealthy_bees4,
+                            healthy_bees=healthy_bees,
+                            unhealthy_bees=unhealthy_bees,
                             
                             )
 
