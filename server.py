@@ -46,6 +46,8 @@ def index():
     If a user is logged in, let them upload a photo.
 
     """
+    # Get current user
+    user_id = session.get("user_id")
 
     # Get list of bees
 
@@ -61,11 +63,13 @@ def index():
 
 
     return render_template("index.html", 
+                            user_id=user_id,
                             healthy_bees5=healthy_bees5,
                             healthy_bees7=healthy_bees7,
 
                             unhealthy_bees6=unhealthy_bees6,
                             unhealthy_bees4=unhealthy_bees4,
+                            
                             )
 
 
@@ -311,19 +315,19 @@ if __name__ == '__main__':
     # Use the flask DebugToolbar
     DebugToolbarExtension(app)
 
-    print(check_prediction("unhealth", predict_with_model( 
-        path='uploads/download.jpeg')))
-    print(check_prediction("health", predict_with_model( 
-        path='uploads/download.jpeg')))
-    print(check_prediction("unhealth", predict_with_model( 
-        path='uploads/038_293.png')))
-    print(check_prediction("health", predict_with_model( 
-        path='uploads/038_293.png')))
+    # print(check_prediction("unhealth", predict_with_model( 
+    #     path='uploads/download.jpeg')))
+    # print(check_prediction("health", predict_with_model( 
+    #     path='uploads/download.jpeg')))
+    # print(check_prediction("unhealth", predict_with_model( 
+    #     path='uploads/038_293.png')))
+    # print(check_prediction("health", predict_with_model( 
+    #     path='uploads/038_293.png')))
 
 
 
 
-    # app.run(host="0.0.0.0", debug=True)
+    app.run(host="0.0.0.0", debug=True)
 
 
 
