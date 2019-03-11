@@ -347,57 +347,57 @@ def process_upload(user_id, health, local_filename, zipcode):
     predicted_not_concepts = []
 
 
-    if is_bee_output_id == 'is_bee':
+    # if is_bee_output_id == 'is_bee':
 
         
 
-        if is_bee_output_value > THRESHOLD: # Should I change this?
+    #     if is_bee_output_value > THRESHOLD: # Should I change this?
 
-            predicted_concepts.append('is_bee')
-            print('Prediction says is_bee')
-
-
-    else:
-        print('Prediction says NOT is_bee')
+    #         predicted_concepts.append('is_bee')
+    #         print('Prediction says is_bee')
 
 
-    if health_output_id == 'health':
+    # else:
+    #     print('Prediction says NOT is_bee')
+
+
+    # if health_output_id == 'health':
 
         
 
-        if health_output_value > THRESHOLD: # Should I change this?
-            predicted_not_concepts.append('health')
-            print("Prediction says health")
+    #     if health_output_value > THRESHOLD: # Should I change this?
+    #         predicted_not_concepts.append('health')
+    #         print("Prediction says health")
 
-    else:
-        print('Prediction says NOT health')
-
-
-    print("predicted_concepts", predicted_concepts)
-    print("predicted_not_concepts", predicted_not_concepts)
+    # else:
+    #     print('Prediction says NOT health')
 
 
+    # print("predicted_concepts", predicted_concepts)
+    # print("predicted_not_concepts", predicted_not_concepts)
 
-    if ('health' in concepts):
 
-        if ('health' in predicted_concepts):
 
-            give_model_feedback(
-                input_id='health', 
-                url=url,                 
-                concepts=predicted_concepts,
-                not_concepts=predicted_not_concepts,
-                output_id='health',
-                )
+    # if ('health' in concepts):
 
-        else:
-            give_model_feedback(
-                input_id='health', 
-                url=url,                 
-                concepts=predicted_concepts,
-                not_concepts=predicted_not_concepts,
-                output_id='health',
-                )
+    #     if ('health' in predicted_concepts):
+
+    #         give_model_feedback(
+    #             input_id='health', 
+    #             url=url,                 
+    #             concepts=predicted_concepts,
+    #             not_concepts=predicted_not_concepts,
+    #             output_id='health',
+    #             )
+
+    #     else:
+    #         give_model_feedback(
+    #             input_id='health', 
+    #             url=url,                 
+    #             concepts=predicted_concepts,
+    #             not_concepts=predicted_not_concepts,
+    #             output_id='health',
+    #             )
 
 
        
@@ -520,14 +520,14 @@ def give_model_feedback(input_id, url, concepts, not_concepts, output_id):
 
 
     cl_model.send_concept_feedback(
-        input_id='{input_id}',
-        input_id=input_id,
-        url=url,
-        concepts=concepts,
-        not_concepts=not_concepts,
+        # input_id='{input_id}', # What format should this be in?? String!
+        input_id=input_id, # String
+        url=url, # String
+        concepts=concepts, # List of strings
+        not_concepts=not_concepts, # List of strings
         feedback_info=FeedbackInfo(event_type='annotation',
-                                    output_id='{output_id}',
-                                    output_id=output_id,
+                                    # output_id='{output_id}', @ 
+                                    output_id=output_id, # This should be a string idk why its in a dict
                                     ), # 
 
         ) # Returns None. Just passes this along to Clarafai.
