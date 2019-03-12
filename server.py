@@ -37,8 +37,25 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 # Ask Jinja to give us an error if there is an undefined variable in scope
 app.jinja_env.undefined = StrictUndefined
 
-
 @app.route('/')
+def landing():
+    """ Home page (the database viewer, image uploader) 
+    Obviously, they need to be images next!
+
+    If a user is logged in, let them upload a photo.
+
+    """
+    # Get current user
+    user_id = session.get("user_id")
+
+    # Get list of bees
+
+
+    return render_template("landing.html", user_id=user_id)                     
+                            
+
+
+@app.route('/index')
 def index():
     """ Home page (the database viewer, image uploader) 
     Obviously, they need to be images next!
@@ -146,7 +163,7 @@ def logout():
 
     del session["user_id"]
     flash("Logged Out.")
-    return redirect("/")
+    return redirect("/index")
 
 
 @app.route('/users')
@@ -154,7 +171,8 @@ def get_users():
     """ Get all users - temporary for now - should be viewable by Admin only. """
 
     users = User.query.all()
-    return render_template("all_users.html", users=users)
+    return render_template("all_users.html", 
+                    users=users)
 
 
 @app.route("/users/<int:user_id>", methods=['GET'])
