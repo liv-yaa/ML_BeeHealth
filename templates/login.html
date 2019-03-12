@@ -1,36 +1,34 @@
-{% extends 'base.html' %}
+{% extends 'base2.html' %}
 {% block content %}
 
-<h3><a href="/">HOME</a></h3>
-  <br><br>
-  <h5>Login</h5>
- 
-    <form action="/login" method="POST"> 
+<div class="well spaced" style="width:40%;">
+<h3>Login</h3>
 
-    <div>
-      <label>Email:
-        <input type="email" name="email" id="name-input" required>
-      </label>
-    </div>
+<form action="/login" method="POST"> 
 
-    <div>
-      <label>Password:
-        <input type="password" name="password" id="password-input" required>
-      </label>
-    </div>
+  <div class="form-group">
 
-    <div>
-      <input type="submit" value="Log In">
-    </div>
+  
+    <label>Email:
+      <input type="email" name="email" id="name-input" required>
+    </label>
+  </div>
 
-  </form>
+  <div>
+    <label>Password:
+      <input type="password" name="password" id="password-input" required>
+    </label>
+  </div>
 
+  <div>
+    <input type="submit" value="Log In">
+  </div>
 
-  <a href="/register"> Or, register</a>
-
+</form>
+</div>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<a href="/register"> Or, register</a>
+
 
 {% endblock %}
