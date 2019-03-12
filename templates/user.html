@@ -40,16 +40,48 @@
     <br><br>
     {% if user_bees %}
 
-      <h2>All of Your Photos </h2>
+      <h1 "w3-center" > All of Your Photos </h2>
 
-      <ul>
-      {% for photo in user_bees %}
-        <li>
-          <img src="{{ photo.url }}">
+        <div class="grid">
+          <div class="w3-row-padding w3-center" appml-data="images">
+            <div class="w3-col m4 w3-padding-16" appml-repeat="image">
+              <ul id="hexGrid" class="clr">
+         
+                {% for photo in user_bees %}
 
-        </li>
-      {% endfor %}
-      </ul>
+                  <li class="hex">
+                    
+                    <div class="hexIn">
+
+                        <a class="hexLink" href="#">
+
+                            <div class="img" style='background-image:url(https://images.unsplash.com/photo-1417436026361-a033044d901f?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;w=1080&amp;fit=max&amp;s=faa4e192f33e0d6b7ce0e54f15140e42);'>
+                                <!-- Change this  -->
+
+                                <img src={{ photo.url }} 
+                                
+                                style="width:100%"
+                                onclick="onClick(this)" 
+                                class="w3-hover-opacity"
+                                >
+                            
+                            </div>
+
+
+                            
+
+                        </a>
+                    </div>
+                    
+                </li>
+
+
+
+                {% endfor %}
+
+              </ul>
+            </div>
+          </div>
 
     {% else %}
 
@@ -80,7 +112,7 @@
           // We know it is finished
           $('#status').html('');  // remove "loading" message
 
-          $('#load').attr("src", "");
+          $('#load').hide();
 
         });
       });
