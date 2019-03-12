@@ -11,12 +11,15 @@
 {% endif %}
 
 
-
-<h3> View Our Bee Photo Database </h3>
+<!-- Container (Projects) -->
+<section class="w3-content w3-container w3-padding-64">
+<h1 class="w3-center">Bee Photo Database</h1>
     <br>
-    <h5> healthy bees: </h5>
+    <p class="w3-center">Healthy Bees - click to see detail </h5>
 
     <div class="grid">
+        <div class="w3-row-padding w3-center" appml-data="images">
+        <div class="w3-col m4 w3-padding-16" appml-repeat="image">
         <ul id="hexGrid" class="clr">
 
             {% for bee in healthy_bees %}
@@ -27,11 +30,14 @@
                         <a class="hexLink" href="#">
 
                             <div class="img" style='background-image:url(https://images.unsplash.com/photo-1417436026361-a033044d901f?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;w=1080&amp;fit=max&amp;s=faa4e192f33e0d6b7ce0e54f15140e42);'>
+                                <!-- Change this  -->
 
                                 <img src={{ bee.url }} 
                                 alt="healthy bee {{ bee.bee_id}}" 
-                                height="100" 
-                                width="100">
+                                style="width:100%"
+                                onclick="onClick(this)" 
+                                class="w3-hover-opacity"
+                                >
                             
                             </div>
 
@@ -55,8 +61,9 @@
         </ul>
         
         
-
     </div>
+    </div>
+</div>
     <br><br><br>
 
     <h5> unhealthy bees: </h5>
@@ -102,10 +109,26 @@
 
     </div>
 
+</section>
+
 
 <br><br>
-<a href="/charts">Learn about our machine learning model</a>
 
-<br>
-<a href="/links">Learn about honeybee health outcomes and updates</a>
+
+<!-- Modal for full size images on click-->
+<div id="modal" class="w3-modal w3-black" onclick="this.style.display='none'">
+  <span class="w3-closebtn w3-hover-red w3-text-white w3-xxxlarge w3-container w3-display-topright">×</span>
+  <div class="w3-modal-content w3-animate-zoom w3-center w3-transparent w3-padding-64">
+    <img id="img" style="max-width:100%">
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="w3-container w3-dark-grey w3-hover-black w3-padding-8 w3-center">
+    <a href="/charts">Learn about our machine learning model</a>
+
+    <br>
+    <a href="/links">Learn about honeybee health outcomes and updates</a>
+  
+</footer>
 {% endblock %}
