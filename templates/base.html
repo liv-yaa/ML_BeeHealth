@@ -72,11 +72,61 @@
 
 
 {% else %}
-    <a href="/login">You are not logged in. Want to?</a>
-    <br>
-    <a href="/register">Or, Register</a>
+    <p><a href="#ex1" rel="modal:open">Login or Register</a></p>
 
 {% endif %}
+
+<!-- Login or Register Modal -->
+<div id="ex1" class="modal">
+  <div class="well spaced" style="width:40%;">
+    <h3>Login</h3>
+    <form action="/login" method="POST"> 
+
+      <div class="form-group">
+        <label>Email:
+          <input type="email" name="email" id="name-input" required>
+        </label>
+      </div>
+
+      <div>
+        <label>Password:
+          <input type="password" name="password" id="password-input" required>
+        </label>
+      </div>
+
+      <div>
+        <input type="submit" value="Log In" class="btn btn-danger">
+      </div>
+
+    </form>
+    <br>
+    <h3> Or Register</h3>
+
+    <form action="/register" method="POST">
+
+      <div class="form-group">
+        <label>
+          Email:
+          <input type="email" name="email" class="form-control">
+        </label>
+      </div>
+
+      <div>
+        <label>
+          Password
+          <input type="password" name="password" class="form-control">
+        </label>
+      </div>
+
+      <div>
+        <input type="submit" value="Register" class="btn btn-danger">
+      </div>
+
+    </form>
+  </div>
+
+  <a href="#" rel="modal:close">Close</a>
+</div>
 
 
 {% block content %}

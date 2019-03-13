@@ -24,6 +24,7 @@ function submitForm() {
 
     };
 
+
   $.post('/upload-success', formInputs, (results) => {
       alert(results);
 

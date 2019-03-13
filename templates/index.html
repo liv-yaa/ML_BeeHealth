@@ -11,8 +11,6 @@
 {% endif %}
 
 <!-- Button trigger modal -->
-
-
 <!--Modal HTML embedded directly into document
 <div id="ex1" class="modal">
   <p>Here is a bee image</p>
@@ -25,117 +23,118 @@
 
 
 <!-- Container (Projects) -->
-<section class="w3-content w3-container w3-padding-64">
-<h1 class="w3-center">Bee Photo Database</h1>
-    <br>
-    <p class="w3-center">Healthy Bees - click to see detail </h5>
+<div class="all-bees">
+    <section class="w3-content w3-container w3-padding-64">
+    <h1 class="w3-center">Bee Photo Database</h1>
+        <br>
+        <p class="w3-center">Healthy Bees - click to see detail </h5>
 
-    <div class="grid">
-        <div class="w3-row-padding w3-center" appml-data="images">
-            <div class="w3-col m4 w3-padding-16" appml-repeat="image">
-                <ul id="hexGrid" class="clr">
+        <div class="grid">
+            <div class="w3-row-padding w3-center" appml-data="images">
+                <div class="w3-col m4 w3-padding-16" appml-repeat="image">
+                    <ul id="hexGrid" class="clr">
 
-                    {% for bee in healthy_bees %}
-
-
-                        <li class="hex">
-                        <!-- Modal HTML embedded directly into document -->
-                        <div id="ex1" class="modal">
-                          
-                          <img src="{{ bee.url }}">
-                          <p>{{ bee.health }}</p>
-                          <p>{{ bee.zip_code }}</p>
+                        {% for bee in healthy_bees %}
 
 
-                          <a href="#" rel="modal:close">Close</a>
-                        </div>
+                            <li class="hex">
+                            <!-- Modal HTML embedded directly into document -->
+                            <div id="ex2" class="modal">
+                              
+                              <img src="{{ bee.url }}">
+                              <p>{{ bee.health }}</p>
+                              <p>{{ bee.zip_code }}</p>
 
-                            
-                            <div class="hexIn">
 
-                                <a class="hexLink" href="#ex1" rel="modal:open">
-
-                                    <div class="img" style='background-image:url();'>
-                                        <!-- Change this  -->
-
-                                        <img src={{ bee.url }} 
-                                        alt="healthy bee {{ bee.bee_id}}" 
-                                        style="width:100%"
-                                        onclick="onClick(this)" 
-                                        class="w3-hover-opacity"
-                                        >
-                                    
-                                    </div>
-
-                                    {% if bee.health == 'y' %}
-                                        <h1 id="demo1">Healthy Bee No. {{ bee.bee_id }}</h1>
-                                    {% else %}
-                                        <h1 id="demo1">Unealthy Bee No. {{ bee.bee_id }}y</h1>
-                                    {% endif %}
-
-                                </a>
+                              <a href="#" rel="modal:close">Close</a>
                             </div>
+
+                                
+                                <div class="hexIn">
+
+                                    <a class="hexLink" href="#ex2" rel="modal:open">
+
+                                        <div class="img" style='background-image:url();'>
+                                            <!-- Change this  -->
+
+                                            <img src={{ bee.url }} 
+                                            alt="healthy bee {{ bee.bee_id}}" 
+                                            style="width:100%"
+                                            onclick="onClick(this)" 
+                                            class="w3-hover-opacity"
+                                            >
+                                        
+                                        </div>
+
+                                        {% if bee.health == 'y' %}
+                                            <h1 id="demo1">Healthy Bee No. {{ bee.bee_id }}</h1>
+                                        {% else %}
+                                            <h1 id="demo1">Unealthy Bee No. {{ bee.bee_id }}y</h1>
+                                        {% endif %}
+
+                                    </a>
+                                </div>
+                                
+                            </li>
+
                             
-                        </li>
+                        {% endfor %}
 
-                        
-                    {% endfor %}
-
-                </ul>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
-    <br><br>
+        <br><br>
 
-    <h5> unhealthy bees: </h5>
+        <h5> unhealthy bees: </h5>
 
-    <div class="grid">
-        <div class="w3-row-padding w3-center" appml-data="images">
-            <div class="w3-col m4 w3-padding-16" appml-repeat="image">
-                <ul id="hexGrid" class="clr">
+        <div class="grid">
+            <div class="w3-row-padding w3-center" appml-data="images">
+                <div class="w3-col m4 w3-padding-16" appml-repeat="image">
+                    <ul id="hexGrid" class="clr">
 
-                    {% for bee in unhealthy_bees %}
-                        <li class="hex">
+                        {% for bee in unhealthy_bees %}
+                            <li class="hex">
+                                
+                                <div class="hexIn">
+
+                                    <a class="hexLink" href="#">
+
+                                        <div class="img" style='background-image:url();'>
+
+                                            <img src={{ bee.url }} 
+                                            alt="healthy bee {{ bee.bee_id}}" 
+                                            style="width:100%"
+                                            onclick="onClick(this)" 
+                                            class="w3-hover-opacity">
+                                        
+                                        </div>
+
+                                        {% if bee.health == 'y' %}
+                                            <h1 id="demo1">Healthy Bee No. {{ bee.bee_id }}</h1>
+                                        {% else %}
+                                            <h1 id="demo1">Unealthy Bee No. {{ bee.bee_id }}y</h1>
+                                        {% endif %}
+
+
+                                        <p id="demo2"> zip: {{ bee.zip_code }} </p>
+
+                                    </a>
+                                </div>
+                                
+                            </li>
+
                             
-                            <div class="hexIn">
+                        {% endfor %}
 
-                                <a class="hexLink" href="#">
-
-                                    <div class="img" style='background-image:url();'>
-
-                                        <img src={{ bee.url }} 
-                                        alt="healthy bee {{ bee.bee_id}}" 
-                                        style="width:100%"
-                                        onclick="onClick(this)" 
-                                        class="w3-hover-opacity">
-                                    
-                                    </div>
-
-                                    {% if bee.health == 'y' %}
-                                        <h1 id="demo1">Healthy Bee No. {{ bee.bee_id }}</h1>
-                                    {% else %}
-                                        <h1 id="demo1">Unealthy Bee No. {{ bee.bee_id }}y</h1>
-                                    {% endif %}
-
-
-                                    <p id="demo2"> zip: {{ bee.zip_code }} </p>
-
-                                </a>
-                            </div>
-                            
-                        </li>
-
-                        
-                    {% endfor %}
-
-                </ul>
-        
+                    </ul>
+            
+                </div>
             </div>
         </div>
-    </div>
 
-</section>
-
+    </section>
+</div>
 
 <br><br>
 
