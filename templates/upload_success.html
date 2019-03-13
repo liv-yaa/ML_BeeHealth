@@ -19,13 +19,14 @@
 
         <br>
         {% if message %}
-            {{ message }}
+            {{ message }} <br><br>
         {% endif %}
 
         
         {% if new_bee %}
-            {{ new_bee }} <br>
-            {{ new_bee.url }} <br>
+            Thank you for adding a bee to our machine learning model!
+<!--             {{ new_bee }} <br>
+            {{ new_bee.url }} <br> -->
             <img src="{{ new_bee.url }}" alt="new_bee"> <br>
         {% endif %}
 
