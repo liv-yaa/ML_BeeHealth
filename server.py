@@ -119,7 +119,9 @@ def register_process():
     flash("Logged in")
 
     # Redirect to the users page
-    return redirect(f'/users/{a_user.user_id}')
+    # return redirect(f'/users/{a_user.user_id}')
+
+    return redirect('/index')
 
 
 @app.route('/login', methods=['GET'])
@@ -154,7 +156,8 @@ def login_process():
     session["user_id"] = user.user_id
 
     flash("Logged in")
-    return redirect(f"/users/{user.user_id}") 
+    # return redirect(f"/users/{user.user_id}") 
+    return redirect('/index') 
 
 
 @app.route('/logout')
