@@ -412,9 +412,6 @@ def process_upload(user_id, health, local_filename, zipcode):
     print("zipcode", zipcode)
 
 
-
-
-
     # We need to get 
         # input_id (str) - the id of what it SHOULD BE
         # url (str), 
@@ -448,50 +445,52 @@ def process_upload(user_id, health, local_filename, zipcode):
 
     i = clarifai_app.inputs.get(input_id=image_id)
 
-    # print("Successfully added to clar app: ", i.input_id)
+    print("Successfully added to clar app: ", i.input_id)
 
-    # # # Unpack concepts to get image_health:
+    # # Unpack concepts to get image_health:
 
     
-    # image_health = 'y' if 'health' in image_concepts and 'is_bee' in image_concepts else 'n'
-    # print("image_health", image_health)
+    image_health = 'y' if 'health' in image_concepts and 'is_bee' in image_concepts else 'n'
+    print("image_health", image_health)
 
-    # image_url = img.url ##
-    # print("image_url", image_url)
+    image_url = img.url ##
+    print("image_url", image_url)
 
-    # image_score = img.score
-    # print("image_score", image_score)
+    image_score = img.score
+    print("image_score", image_score)
 
-    # if img.metadata:
-    #     image_dt = img.metadata['datetime']
-    #     print("image_dt", image_dt)
+    if img.metadata:
+        # image_dt = img.metadata['datetime']
+        # print("image_dt", image_dt)
 
-    #     image_user_id = int(img.metadata['user_id']) ## 
-    #     print("image_user_id", image_user_id)
+        image_user_id = int(img.metadata['user_id']) ## 
+        print("image_user_id", image_user_id)
 
-    #     image_zip = int(img.metadata['zipcode'])
-    #     print("image_zip", image_zip)
+        image_zip = int(img.metadata['zipcode'])
+        print("image_zip", image_zip)
 
-    #     image_img_id = int(img.metadata['image_id'])
-    #     print("image_img_id", image_img_id)
+        image_img_id = int(img.metadata['image_id'])
+        print("image_img_id", image_img_id)
 
-    #     image_confidence = int(img.metadata['response_confidence'])
-    #     print("image_confidence", image_confidence)
+        # image_confidence = int(img.metadata['response_confidence'])
+        # print("image_confidence", image_confidence)
 
-    # else:
-    #     print("not a bee")
+    else:
+        print("not a bee")
 
 
-    # # print()
-    # # print()
+    # print()
+    # print()
 
-    # # # Create a new Bee and add it to the database, pasing in metadata from img (Image object)
-    # success = add_new_image_to_db(user_id=image_user_id,
-    #                     url=image_url,
-    #                     health=image_health,
-    #                     zipcode=image_zip,
-    #                     image_id=image_img_id
-    #                     )
+    # # Create a new Bee and add it to the database, pasing in metadata from img (Image object)
+    success = add_new_image_to_db(user_id=image_user_id,
+                        url=image_url,
+                        health=image_health,
+                        zipcode=image_zip,
+                        image_id=image_img_id
+                        )
+
+    print(success)
 
     # # new_tuple THURSDAY ADD SUCCESS TO THIS
     # # I am adding this because in order 
