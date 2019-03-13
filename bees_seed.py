@@ -483,20 +483,29 @@ def process_upload(user_id, health, local_filename, zipcode):
     # print()
 
     # # Create a new Bee and add it to the database, pasing in metadata from img (Image object)
-    success = add_new_image_to_db(user_id=image_user_id,
+    prediction_success = add_new_image_to_db(user_id=image_user_id,
                         url=image_url,
                         health=image_health,
                         zipcode=image_zip,
                         image_id=image_img_id
                         )
 
-    print(success)
+    print(prediction_success)
 
     # # new_tuple THURSDAY ADD SUCCESS TO THIS
     # # I am adding this because in order 
 
-    # return prediction_tuple, success
-    # # Needs to return health, performance
+
+    bee_confidence = prediction_dict['is_bee'][1]
+    health_confidence = prediction_dict['health'][1]
+
+
+    output = (bee_confidence, health_confidence, prediction_success)
+
+    print("output", output)
+
+    return output
+    # Needs to return health, performance
 
 
 def give_model_feedback(input_id, url, concepts, not_concepts, output_id):

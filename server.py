@@ -236,44 +236,60 @@ def upload_file():
         # response_confidence, response_datetime)
     # 
 
-        prediction_tuple = process_upload(user_id=user_id, 
+        prediction_output = process_upload(user_id=user_id, 
                                     health=health, 
                                     local_filename=local_filename,
                                     zipcode=int(zipcode),
-                                    ) # returns prediction_tuple
+                                    ) # returns (bee_confidence, health_confidence, prediction_success)
 
-        performance = str(check_prediction(health, prediction_tuple))
-        print("health", health) # Prediction (string)
-        print("performance", performance) # Boolean
 
-        if performance:
-            try:
-                print("Prediction was accurate ", prediction_tuple[2])
-                print("Adding image to model as a positive example. ")
-                # add image as a positive example  
-            except:
-                print("Error with performance")
 
-        else:
-            print("Prediction was not accurate. ")
-            print("Adding image to model as a NEGATIVE example. ")
+        bee_confidence = prediction_output[0]
 
-                # Add image 
+        if bee_confidence < 0.5:
+            bee_performance = False
 
-        # # This is going to become true once image is added.
-        # # needed for Jinja conditional...
-        image_added = "None"     
-        add_image_attempt="none"
 
-        prediction_tuple="slkjdf"
-        performance = "ljhlg"
+        # health_confidence = prediction_output[1]
+        prediction_success = prediction_output[2]
+
+        # bee_performance = str(check_prediction('is_bee', ))
+        # health_performance = str(check_prediction(health, prediction_output))
+
+        # print("health", health) # Prediction (string)
+        # print("performance", performance)
+
+        # if performance:
+        #     try:
+        #         print("Prediction was accurate ")
+        #         print("Adding image to model as a positive example. ")
+        #         # add image as a positive example  
+        #     except:
+        #         print("Error with performance")
+
+        # else:
+        #     print("Prediction was not accurate. ")
+        #     print("Adding image to model as a NEGATIVE example. ")
+
+        #         # Add image 
+
+        # # # This is going to become true once image is added.
+        # # # needed for Jinja conditional...
+        # image_added = prediction_output[2]   
+        # add_image_attempt="none"
+
+        # # prediction_tuple="slkjdf"
+        # performance = "ljhlg"
+
+
 
 
         return render_template("upload_success.html", 
-                                        prediction_tuple=prediction_tuple,
-                                        performance=performance, # Needs to be true to have success
-                                        image_added=image_added,
-                                        add_image_attempt=add_image_attempt,
+                                        prediction_success=prediction_success,
+                                        # bee_performance=bee_performance, # Needs to be true to have success
+                                        # health_performance=health_performance,
+                                        # image_added=image_added,
+                                        # add_image_attempt=add_image_attempt,
                                        
                                         )
 
@@ -305,17 +321,28 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-def check_prediction(health_string, prediction_tuple):
-    """ Checks whether prediction tuple matches input of health specified by user """
-    response_string = prediction_tuple[0]
-    response_confidence = prediction_tuple[1]
+def check_prediction(expected, prediction_output):
+    """ Checks whether prediction output matches input of health specified by user
 
-    print("response_string", response_string)
+    health_string = "health" or "not_health"
+    prediction_output = (bee_confidence, health_confidence, prediction_success)
+     """
+    bee_confidence = prediction_output[0]
+    health_confidence = prediction_output[1]
+    prediction_success = prediction_output[2]
+
     print(
-        "response_confidence", response_confidence
+        "expected", health_string
+        )
+    print("bee_confidence", bee_confidence)
+    print(
+        "health_confidence", health_confidence
+        )
+    print(
+        "prediction_success", prediction_success
         )
 
-    return response_string == health_string
+    # return response_string == health_string
 
 
 
