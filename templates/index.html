@@ -10,28 +10,23 @@
 
 {% endif %}
 
+<!-- Button trigger modal -->
 
-<!-- Modal -->
-<div class="light-modal" id="unique-id" role="dialog" aria-labelledby="light-modal-label" aria-hidden="false">
-    <div class="light-modal-content animated zoomInUp">
-        <!-- light modal header -->
-        <div class="light-modal-header">
-            <h3 class="light-modal-heading">Modal Title</h3>
-            <a href="#" class="light-modal-close-icon" aria-label="close">&times;</a>
-        </div>
 
-        <!-- light modal body -->
-        <div class="light-modal-body">
-            Test
-            <img src="">
-        </div>
-
-        <!-- light modal footer -->
-        <div class="light-modal-footer">
-            <a href="#" class="light-modal-close-btn" aria-label="close">Close</a>
-        </div>
-    </div>
+<!-- Modal HTML embedded directly into document -->
+<div id="ex1" class="modal">
+  <p>Thanks for clicking. That felt good.</p>
+  <a href="#" rel="modal:close">Close</a>
 </div>
+
+<!-- Link to open the modal -->
+<p><a href="#ex1" rel="modal:open">Open Modal</a></p>
+
+
+
+
+
+
 
 
 
@@ -51,7 +46,7 @@
                             
                             <div class="hexIn">
 
-                                <a class="hexLink" href="#">
+                                <a class="hexLink" href="#ex1" rel="modal:open">
 
                                     <div class="img" style='background-image:url();'>
                                         <!-- Change this  -->
@@ -70,6 +65,8 @@
                                     {% else %}
                                         <h1 id="demo1">Unealthy Bee No. {{ bee.bee_id }}y</h1>
                                     {% endif %}
+
+                                    
 
 
                                     <p id="demo2"> zip: {{ bee.zip_code }} </p>

@@ -267,12 +267,14 @@ video {
   float: right;
   font-size: 1.2rem;
 }
+
 h1 {
   font-size: 3rem;
   text-transform: uppercase;
   margin-top: 0;
   letter-spacing: .3rem;
 }
+
 #polina button { 
   display: block;
   width: 80%;
@@ -286,6 +288,7 @@ h1 {
   cursor: pointer;
   transition: .3s background;
 }
+
 #polina button:hover { 
    background: rgba(0,0,0,0.5);
 }
