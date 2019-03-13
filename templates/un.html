@@ -23,3 +23,34 @@
             <br> Cannot add image to model {{ add_image_attempt }}
 
         {% endif %} -->
+
+
+                # if performance:
+        #     try:
+        #         print("Prediction was accurate ")
+        #         print("Adding image to model as a positive example. ")
+        #         # add image as a positive example  
+        #     except:
+        #         print("Error with performance")
+
+        # else:
+        #     print("Prediction was not accurate. ")
+        #     print("Adding image to model as a NEGATIVE example. ")
+
+        #         # Add image 
+
+        # # # This is going to become true once image is added.
+        # # # needed for Jinja conditional...
+        # image_added = prediction_output[2]   
+        # add_image_attempt="none"
+
+        # # prediction_tuple="slkjdf"
+        # performance = "ljhlg"
+
+
+        
+## Helper functions ##
+def allowed_file(filename):
+    """ Determines whether filename is legal """
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS

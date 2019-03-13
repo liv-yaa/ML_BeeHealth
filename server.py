@@ -243,7 +243,7 @@ def upload_file():
                                     ) # returns (bee_confidence, health_confidence, prediction_success)
 
 
-
+        message = ""
         bee_confidence = False
         health_confidence = False
         prediction_success = False
@@ -255,41 +255,29 @@ def upload_file():
         except:
             print("bad array")
 
-        # if bee_confidence > 0.5:
-        #     bee_performance = True
+
+
+        if bee_confidence >= 0.5:
+
+
+            if health_confidence >= 0.5:
+                message += "Bee was predicted to be a healthy bee"
+
+            elif health_confidence < 0.5:
+                message += "Bee was predicted to be an unhealthy bee"
 
 
 
+        else:
+            message += "error"
 
+            if health_confidence >= 0.5:
+                message += ("Bee did not pass prediction for is_bee",
+                    "yet it was predicted to be healthy")
 
-        # bee_performance = str(check_prediction('is_bee', ))
-        # health_performance = str(check_prediction(health, prediction_output))
-
-        # print("health", health) # Prediction (string)
-        # print("performance", performance)
-
-        # if performance:
-        #     try:
-        #         print("Prediction was accurate ")
-        #         print("Adding image to model as a positive example. ")
-        #         # add image as a positive example  
-        #     except:
-        #         print("Error with performance")
-
-        # else:
-        #     print("Prediction was not accurate. ")
-        #     print("Adding image to model as a NEGATIVE example. ")
-
-        #         # Add image 
-
-        # # # This is going to become true once image is added.
-        # # # needed for Jinja conditional...
-        # image_added = prediction_output[2]   
-        # add_image_attempt="none"
-
-        # # prediction_tuple="slkjdf"
-        # performance = "ljhlg"
-
+            elif health_confidence > 0.5:
+                message += ("Bee did not pass prediction for is_bee",
+                    "and it was predicted to be healthy")
 
 
 
@@ -297,11 +285,12 @@ def upload_file():
                                         prediction_success=prediction_success,
                                         bee_confidence=bee_confidence,
                                         health_confidence=health_confidence,
+
+                                        message=message,
                                         
                                        
                                         # health_performance=health_performance,
                                         # image_added=image_added,
-                                        # add_image_attempt=add_image_attempt,
                                        
                                         )
 
@@ -331,30 +320,6 @@ def allowed_file(filename):
     """ Determines whether filename is legal """
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-def check_prediction(expected, prediction_output):
-    """ Checks whether prediction output matches input of health specified by user
-
-    health_string = "health" or "not_health"
-    prediction_output = (bee_confidence, health_confidence, prediction_success)
-     """
-    bee_confidence = prediction_output[0]
-    health_confidence = prediction_output[1]
-    prediction_success = prediction_output[2]
-
-    print(
-        "expected", health_string
-        )
-    print("bee_confidence", bee_confidence)
-    print(
-        "health_confidence", health_confidence
-        )
-    print(
-        "prediction_success", prediction_success
-        )
-
-    # return response_string == health_string
 
 
 
