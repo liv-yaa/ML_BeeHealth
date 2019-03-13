@@ -271,7 +271,7 @@ def upload_file():
 
         return render_template("upload_success.html", 
                                         prediction_tuple=prediction_tuple,
-                                        performance=performance,
+                                        performance=performance, # Needs to be true to have success
                                         image_added=image_added,
                                         add_image_attempt=add_image_attempt,
                                        

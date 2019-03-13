@@ -347,62 +347,63 @@ def process_upload(user_id, health, local_filename, zipcode):
     predicted_not_concepts = []
 
 
-    # if is_bee_output_id == 'is_bee':
+    if is_bee_output_id == 'is_bee':
 
         
 
-    #     if is_bee_output_value > THRESHOLD: # Should I change this?
+        if is_bee_output_value > THRESHOLD: # Should I change this?
 
-    #         predicted_concepts.append('is_bee')
-    #         print('Prediction says is_bee')
-
-
-    # else:
-    #     print('Prediction says NOT is_bee')
+            predicted_concepts.append('is_bee')
+            print('Prediction says is_bee')
 
 
-    # if health_output_id == 'health':
+    else:
+        predicted_not_concepts.append('is_bee')
+        print('Prediction says NOT is_bee')
+
+
+    if health_output_id == 'health':
 
         
 
-    #     if health_output_value > THRESHOLD: # Should I change this?
-    #         predicted_not_concepts.append('health')
-    #         print("Prediction says health")
+        if health_output_value > THRESHOLD: # Should I change this?
+            predicted_not_concepts.append('health')
+            print("Prediction says health")
 
-    # else:
-    #     print('Prediction says NOT health')
-
-
-    # print("predicted_concepts", predicted_concepts)
-    # print("predicted_not_concepts", predicted_not_concepts)
+    else:
+        print('Prediction says NOT health')
 
 
+    print("predicted_concepts", predicted_concepts)
+    print("predicted_not_concepts", predicted_not_concepts)
 
-    # if ('health' in concepts):
 
-    #     if ('health' in predicted_concepts):
 
-    #         give_model_feedback(
-    #             input_id='health', 
-    #             url=url,                 
-    #             concepts=predicted_concepts,
-    #             not_concepts=predicted_not_concepts,
-    #             output_id='health',
-    #             )
+    # # if ('health' in concepts):
 
-    #     else:
-    #         give_model_feedback(
-    #             input_id='health', 
-    #             url=url,                 
-    #             concepts=predicted_concepts,
-    #             not_concepts=predicted_not_concepts,
-    #             output_id='health',
-    #             )
+    # #     if ('health' in predicted_concepts):
+
+    # #         give_model_feedback(
+    # #             input_id='health', 
+    # #             url=url,                 
+    # #             concepts=predicted_concepts,
+    # #             not_concepts=predicted_not_concepts,
+    # #             output_id='health',
+    # #             )
+
+    # #     else:
+    # #         give_model_feedback(
+    # #             input_id='health', 
+    # #             url=url,                 
+    # #             concepts=predicted_concepts,
+    # #             not_concepts=predicted_not_concepts,
+    # #             output_id='health',
+    # #             )
 
 
        
 
-    # # Get other metadata needed
+    # Get other metadata needed
     image_id = str(get_hi_input_id() + 1)
     # print("image_id", image_id)
     print("user_id", user_id)
@@ -428,13 +429,13 @@ def process_upload(user_id, health, local_filename, zipcode):
     img = clarifai_app.inputs.create_image_from_filename(
                     filename=local_filename, 
                     image_id=image_id,
-                    concepts=concepts,
-                    not_concepts=not_concepts,
+                    concepts=predicted_concepts,
+                    not_concepts=predicted_not_concepts,
                     metadata={ 'image_id': image_id,
                                 'user_id': user_id,
-                                'datetime': datetime, 
+                                # 'datetime': datetime, 
                                 'zipcode': zipcode,
-                                'response_confidence': response_confidence,
+                                # 'response_confidence': response_confidence,
                                 
                                 },
                     allow_duplicate_url=True,
@@ -447,56 +448,56 @@ def process_upload(user_id, health, local_filename, zipcode):
 
     i = clarifai_app.inputs.get(input_id=image_id)
 
-    print("Successfully added to clar app: ", i.input_id)
+    # print("Successfully added to clar app: ", i.input_id)
 
-    # # Unpack concepts to get image_health:
+    # # # Unpack concepts to get image_health:
 
     
-    image_health = 'y' if 'health' in image_concepts and 'is_bee' in image_concepts else 'n'
-    print("image_health", image_health)
+    # image_health = 'y' if 'health' in image_concepts and 'is_bee' in image_concepts else 'n'
+    # print("image_health", image_health)
 
-    image_url = img.url ##
-    print("image_url", image_url)
+    # image_url = img.url ##
+    # print("image_url", image_url)
 
-    image_score = img.score
-    print("image_score", image_score)
+    # image_score = img.score
+    # print("image_score", image_score)
 
-    if img.metadata:
-        image_dt = img.metadata['datetime']
-        print("image_dt", image_dt)
+    # if img.metadata:
+    #     image_dt = img.metadata['datetime']
+    #     print("image_dt", image_dt)
 
-        image_user_id = int(img.metadata['user_id']) ## 
-        print("image_user_id", image_user_id)
+    #     image_user_id = int(img.metadata['user_id']) ## 
+    #     print("image_user_id", image_user_id)
 
-        image_zip = int(img.metadata['zipcode'])
-        print("image_zip", image_zip)
+    #     image_zip = int(img.metadata['zipcode'])
+    #     print("image_zip", image_zip)
 
-        image_img_id = int(img.metadata['image_id'])
-        print("image_img_id", image_img_id)
+    #     image_img_id = int(img.metadata['image_id'])
+    #     print("image_img_id", image_img_id)
 
-        image_confidence = int(img.metadata['response_confidence'])
-        print("image_confidence", image_confidence)
+    #     image_confidence = int(img.metadata['response_confidence'])
+    #     print("image_confidence", image_confidence)
 
-    else:
-        print("not a bee")
+    # else:
+    #     print("not a bee")
 
 
-    # print()
-    # print()
+    # # print()
+    # # print()
 
-    # # Create a new Bee and add it to the database, pasing in metadata from img (Image object)
-    success = add_new_image_to_db(user_id=image_user_id,
-                        url=image_url,
-                        health=image_health,
-                        zipcode=image_zip,
-                        image_id=image_img_id
-                        )
+    # # # Create a new Bee and add it to the database, pasing in metadata from img (Image object)
+    # success = add_new_image_to_db(user_id=image_user_id,
+    #                     url=image_url,
+    #                     health=image_health,
+    #                     zipcode=image_zip,
+    #                     image_id=image_img_id
+    #                     )
 
-    # new_tuple THURSDAY ADD SUCCESS TO THIS
-    # I am adding this because in order 
+    # # new_tuple THURSDAY ADD SUCCESS TO THIS
+    # # I am adding this because in order 
 
-    return prediction_tuple, success
-    # Needs to return health, performance
+    # return prediction_tuple, success
+    # # Needs to return health, performance
 
 
 def give_model_feedback(input_id, url, concepts, not_concepts, output_id):
