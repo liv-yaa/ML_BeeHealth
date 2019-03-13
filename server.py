@@ -244,14 +244,23 @@ def upload_file():
 
 
 
-        bee_confidence = prediction_output[0]
+        bee_confidence = False
+        health_confidence = False
+        prediction_success = False
+        try:
+            bee_confidence = prediction_output[0]
+            health_confidence = prediction_output[1]
+            prediction_success = prediction_output[2]
 
-        if bee_confidence < 0.5:
-            bee_performance = False
+        except:
+            print("bad array")
+
+        # if bee_confidence > 0.5:
+        #     bee_performance = True
 
 
-        # health_confidence = prediction_output[1]
-        prediction_success = prediction_output[2]
+
+
 
         # bee_performance = str(check_prediction('is_bee', ))
         # health_performance = str(check_prediction(health, prediction_output))
@@ -286,7 +295,10 @@ def upload_file():
 
         return render_template("upload_success.html", 
                                         prediction_success=prediction_success,
-                                        # bee_performance=bee_performance, # Needs to be true to have success
+                                        bee_confidence=bee_confidence,
+                                        health_confidence=health_confidence,
+                                        
+                                       
                                         # health_performance=health_performance,
                                         # image_added=image_added,
                                         # add_image_attempt=add_image_attempt,

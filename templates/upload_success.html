@@ -6,14 +6,27 @@
 
     {% if prediction_success %}
     <br>
-    <br>
+    <br>{% if bee_confidence %} 
+        bee_confidence {{ bee_confidence }}
+        {% endif %}
+
+
+
+        {% if health_confidence %} 
+        health_confidence {{ health_confidence }}
+        {% endif %}
+
+
+
 
 
     {% else %}       
 
-        The model did not predict successfully.
+    The model did not predict successfully.
 
     {% endif %}
+
+    test
     
     <br> 
 
