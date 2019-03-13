@@ -13,11 +13,11 @@
 <!-- Button trigger modal -->
 
 
-<!-- Modal HTML embedded directly into document -->
+<!--Modal HTML embedded directly into document
 <div id="ex1" class="modal">
   <p>Here is a bee image</p>
   <a href="#" rel="modal:close">Close</a>
-</div>
+</div> -->
 
 <!-- Link to open the modal -->
 <!-- <p><a href="#ex1" rel="modal:open">Open Modal</a></p> -->
@@ -36,7 +36,20 @@
                 <ul id="hexGrid" class="clr">
 
                     {% for bee in healthy_bees %}
+
+
                         <li class="hex">
+                        <!-- Modal HTML embedded directly into document -->
+                        <div id="ex1" class="modal">
+                          
+                          <img src="{{ bee.url }}">
+                          <p>{{ bee.health }}</p>
+                          <p>{{ bee.zip_code }}</p>
+
+
+                          <a href="#" rel="modal:close">Close</a>
+                        </div>
+
                             
                             <div class="hexIn">
 

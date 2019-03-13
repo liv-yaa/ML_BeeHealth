@@ -8,118 +8,102 @@
     <h3>{{ user.email }} is the user at this URL. ID#{{ user.user_id }}</h3>
     <br><br>
 
-    <h2>Upload a photo! </h2>
-    <form id="submit-form" action="/upload-success" enctype="multipart/form-data" method="POST" > 
+    <div id="beeform">
 
-        <br>
-        <input type="file" name="file" id="file">
+      <h2>Upload a photo! </h2>
+      <form id="submit-form" action="/upload-success" enctype="multipart/form-data" method="POST" > 
 
-        <div>
-          <label> How is the health of this bee?
-            <input type="health" name="health" id="health" required>
-          </label>
-            <label> What is your zipcode?
-              <input type="zipcode" name="zipcode" id="zipcode" required>
-          </label>
-        </div>
-        
-        <button type="submit" value="Submit Photo"> Submit Photo </button>
-    </form>
+          <br>
+          <input type="file" name="file" id="file">
 
-
-
-    <div>
-      <span id = "status" ></span>
-      <!-- Link to gif -->
-      <img src="/static/images/load.gif" id="load"> 
-
-
+          <div>
+            <label> How is the health of this bee?
+              <input type="health" name="health" id="health" required>
+            </label>
+              <label> What is your zipcode?
+                <input type="zipcode" name="zipcode" id="zipcode" required>
+            </label>
+          </div>
+          
+          <button type="submit" value="Submit Photo"> Submit Photo </button>
+      </form>
     </div>
 
 
-    <br><br>
-    {% if user_bees %}
+    <div id="spinner">
+      <span id = "status" ></span>
+      <!-- Link to gif -->
+      <img src="/static/images/load.gif" id="load"> 
+    </div>
 
-      <h1 "w3-center" > All of Your Photos </h2>
+    <div id="bee-success">
+      
+      test
+    </div>
 
-        <div class="grid">
-          <div class="w3-row-padding w3-center" appml-data="images">
-            <div class="w3-col m4 w3-padding-16" appml-repeat="image">
-              <ul id="hexGrid" class="clr">
-         
-                {% for photo in user_bees %}
-
-                  <li class="hex">
-                    
-                    <div class="hexIn">
-
-                        <a class="hexLink" href="#">
-
-                            <div class="img" style='background-image:url(https://images.unsplash.com/photo-1417436026361-a033044d901f?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;w=1080&amp;fit=max&amp;s=faa4e192f33e0d6b7ce0e54f15140e42);'>
-                                <!-- Change this  -->
-
-                                <img src={{ photo.url }} 
-                                
-                                style="width:100%"
-                                onclick="onClick(this)" 
-                                class="w3-hover-opacity"
-                                >
-                            
-                            </div>
+    
+    
+    <div id="all-photos">
 
 
-                            
+      <br><br>
+      {% if user_bees %}
 
-                        </a>
-                    </div>
-                    
-                </li>
+        <h1 "w3-center" > All of Your Photos </h2>
+
+          <div class="grid">
+            <div class="w3-row-padding w3-center" appml-data="images">
+              <div class="w3-col m4 w3-padding-16" appml-repeat="image">
+                <ul id="hexGrid" class="clr">
+           
+                  {% for photo in user_bees %}
+
+                    <li class="hex">
+                      
+                      <div class="hexIn">
+
+                          <a class="hexLink" href="#">
+
+                              <div class="img" style='background-image:url(https://images.unsplash.com/photo-1417436026361-a033044d901f?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;w=1080&amp;fit=max&amp;s=faa4e192f33e0d6b7ce0e54f15140e42);'>
+                                  <!-- Change this  -->
+
+                                  <img src={{ photo.url }} 
+                                  
+                                  style="width:100%"
+                                  onclick="onClick(this)" 
+                                  class="w3-hover-opacity"
+                                  >
+                              
+                              </div>
+
+
+                              
+
+                          </a>
+                      </div>
+                      
+                  </li>
 
 
 
-                {% endfor %}
+                  {% endfor %}
 
-              </ul>
+                </ul>
+              </div>
             </div>
-          </div>
 
-    {% else %}
+      {% else %}
 
-      Users photos would have been here. None yet tho
+        Users photos would have been here. None yet tho
 
-    {% endif %}
+      {% endif %}
+    <div>
 
   {% endif %}
 
-<!--     <script>
-      $('#submit-form').on('submit', (evt) => {
-        evt.preventDefault();
-
-        $('#status').html('<i>Loading...</i>');
-        $("#load").attr("src", "/static/images/load.gif");
 
 
-        const formInputs = {
-          'file': $('#file').val(),
-          'health': $('#health').val(),
-          'zipcode': $('#zipcode').val()
-
-        };
-
-        $.post('/upload-success', formInputs, (results) => {
-          alert(results);
-
-          // We know it is finished
-          $('#status').html('');  // remove "loading" message
-
-          $('#load').hide();
-
-        });
-      });
-
-
-    </script> -->
-
+<script src="/static/js/form.js" type="text/javascript"></script>
     
 
 {% endblock %}

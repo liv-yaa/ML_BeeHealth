@@ -1,5 +1,16 @@
 "use-strict";
 
+$(document).ready(function() {
+  $('#spinner').hide();
+  $('#bee-success').hide();
+
+});
+
+
+
+
+
+
 function submitForm() {
   $('#submit-form').on('submit', (evt) => {
     evt.preventDefault();
@@ -27,12 +38,14 @@ function submitForm() {
   });
 }
 
+
 function imageModal() {
         $('.pop').on('click', function() {
             $('.imagepreview').attr('src', $(this).find('img').attr('src'));
             $('#imagemodal').modal('show');   
         });     
 };
+
 
 submitForm();
 imageModal();
