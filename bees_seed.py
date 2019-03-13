@@ -378,29 +378,6 @@ def process_upload(user_id, health, local_filename, zipcode):
     print("predicted_not_concepts", predicted_not_concepts)
 
 
-
-    # # if ('health' in concepts):
-
-    # #     if ('health' in predicted_concepts):
-
-    # #         give_model_feedback(
-    # #             input_id='health', 
-    # #             url=url,                 
-    # #             concepts=predicted_concepts,
-    # #             not_concepts=predicted_not_concepts,
-    # #             output_id='health',
-    # #             )
-
-    # #     else:
-    # #         give_model_feedback(
-    # #             input_id='health', 
-    # #             url=url,                 
-    # #             concepts=predicted_concepts,
-    # #             not_concepts=predicted_not_concepts,
-    # #             output_id='health',
-    # #             )
-
-
        
 
     # Get other metadata needed
@@ -490,7 +467,7 @@ def process_upload(user_id, health, local_filename, zipcode):
                         image_id=image_img_id
                         )
 
-    print(prediction_success)
+    # print("prediction_success", prediction_success)
 
     # # new_tuple THURSDAY ADD SUCCESS TO THIS
     # # I am adding this because in order 
@@ -500,7 +477,22 @@ def process_upload(user_id, health, local_filename, zipcode):
     health_confidence = prediction_dict['health'][1]
 
 
-    output = (bee_confidence, health_confidence, prediction_success)
+    # Find that new bee
+    new_bee = prediction_success[1]
+
+    # try:
+
+    #     print("New bee image_id ", new_bee.image_id)
+    #     print("New bee image_url ", new_bee.url)
+    #     print("new_bee", new_bee)
+
+    # except:
+    #     print("New bee not created.")
+
+
+
+
+    output = (bee_confidence, health_confidence, prediction_success[0], new_bee)
 
     print("output", output)
 
@@ -590,12 +582,14 @@ def add_new_image_to_db(user_id, url, health, zipcode, image_id):
         print("Successfully added to db: ", bee.bee_id)
 
         success = True
+        return (success, bee)
 
     except:
         print("Unable to create Bee object.")
+        return (success, None)
 
 
-    return success
+    
 
 
 

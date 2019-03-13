@@ -250,14 +250,15 @@ def upload_file():
         bee_confidence = False
         health_confidence = False
         prediction_success = False
+        new_bee = False
         try:
             bee_confidence = prediction_output[0]
             health_confidence = prediction_output[1]
             prediction_success = prediction_output[2]
+            new_bee = prediction_output[3]
 
         except:
-            print("bad array")
-
+            print("Array Index out of range")
 
 
         if bee_confidence >= 0.5:
@@ -268,6 +269,14 @@ def upload_file():
 
             elif health_confidence < 0.5:
                 message += "Bee was predicted to be an unhealthy bee"
+
+            message += "Bee added to the model."
+
+            # give_model_feedback(input_id = new_bee.input_id, 
+            #     url = new_bee.input_id, 
+            #     concepts = ['is_bee', 'health'], 
+            #     not_concepts = [], 
+            #     output_id = ?)
 
 
 
@@ -290,6 +299,7 @@ def upload_file():
                                         health_confidence=health_confidence,
 
                                         message=message,
+                                        new_bee=new_bee, # Bee Object
                                         
                                        
                                         )

@@ -4,33 +4,39 @@
 <br><br>
 {% if "user_id" in session %}
 
-    {% if prediction_success %}
-    <br>
-    <br>{% if bee_confidence %} 
-        bee_confidence {{ bee_confidence }}
+    {% if prediction_success %} 
+        <br>
+
+        {% if bee_confidence %} 
+            bee_confidence {{ bee_confidence }}
         {% endif %}
 
         <br>
 
         {% if health_confidence %} 
-        health_confidence {{ health_confidence }}
+            health_confidence {{ health_confidence }}
         {% endif %}
 
         <br>
+        {% if message %}
+            {{ message }}
+        {% endif %}
 
-        {{ message }}
-
-
-
+        
+        {% if new_bee %}
+            {{ new_bee }} <br>
+            {{ new_bee.url }} <br>
+            <img src="{{ new_bee.url }}" alt="new_bee"> <br>
+        {% endif %}
 
 
     {% else %}       
 
-    The model did not predict successfully.
+        The model did not predict successfully.
 
     {% endif %}
 
-    test
+    
     
     <br> 
 
