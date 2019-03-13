@@ -1,9 +1,9 @@
 {% extends 'base2.html' %}
 {% block content %}
 
-<h3><a href="/">Just a lonely landing page....</a></h3>
+<!-- <h3><a href="/">Just a lonely landing page....</a></h3>
   <br><br>
-
+ -->
 
 
 
@@ -11,9 +11,62 @@
 
 </video>
 
-<a href="/login"> Login </a>
+<!-- <a href="/login"> Login </a>
 <a href="/register"> Or, register</a>
+ -->
 
+<div class="container">
+    <a id="modal_trigger" href="#modal" class="btn">Login or Register??? </a>
+
+    <div id="modal" class="popupContainer" style="display:none;">
+        <header class="popupHeader">
+            <span class="header_title">Painel</span>
+            <span class="modal_close"><i class="icon-close"></i></span>
+        </header>
+
+        <section class="popupBody">
+            <div class="social_login">
+                <div class="">
+                </div>
+
+              
+
+                <div class="action_btns">
+                    <div class="one_half"><a href="#" id="login_form" class="btn">Entrar</a></div>
+                    <div class="one_half last"><a href="#" id="register_form" class="btn">Criar uma conta</a></div>
+                </div>
+            </div>
+
+            <!-- Username & Password Login form -->
+            <div class="user_login">
+                <form method="post" action="{$systemsslurl}dologin.php">
+        <div class="form-group">
+          <div class="input-group input-group-lg">
+            <span class="input-group-addon"><span aria-hidden="true" class="icon-envelope"></span></span>
+            <input class="form-control" name="username" type="text" placeholder="E-mail">
+          </div>
+        </div>             
+        <div class="form-group">
+          <div class="input-group input-group-lg">
+            <span class="input-group-addon"><span aria-hidden="true" class="icon-lock"></span></span>
+            <input class="form-control" name="password" type="password" placeholder="Senha">
+          </div>
+        </div>     
+                        <div class="row">
+
+          <label class="checkbox-inline remember"><input type="checkbox" name="rememberme" id="rememberme" checked="true" style="display:none;"></label>        
+        
+         <div class="col-md-12">
+          <p><input type="submit" name="submit" class="btn btn-primary btn-lg btn-block" value="Entrar" onclick="centeredbar.go(60)"></p>
+        </div>
+      </div>
+    </form>
+
+                <center><a href="#" class="forgot_password"> Esqueceu sua senha?</a>
+            </center></div> 
+          
+    </section></div>
+</div>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>

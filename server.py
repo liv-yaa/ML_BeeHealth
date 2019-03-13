@@ -5,13 +5,13 @@ import random, os, pdb
 from jinja2 import StrictUndefined
 
 from flask import Flask, render_template, request, flash, redirect, session, send_from_directory
-from flask_debugtoolbar import DebugToolbarExtension
+from flask_debugtoolbar import DebugToolbarExtension 
 
 from werkzeug.utils import secure_filename
 
 from sqlalchemy import func
 
-from model import Bee, User, connect_to_db, db
+from model import Bee, User, connect_to_db, db, check_prediction
 from bees_seed import process_upload, cl_model, give_model_feedback, predict_with_model
 
 from os.path import join, dirname, realpath
