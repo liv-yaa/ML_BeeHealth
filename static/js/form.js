@@ -9,8 +9,6 @@ $(document).ready(function() {
 
 
 
-
-
 function submitForm() {
   $('#submit-form').on('submit', (evt) => {
     evt.preventDefault();
@@ -39,13 +37,6 @@ function submitForm() {
 }
 
 
-function imageModal() {
-        $('.pop').on('click', function() {
-            $('.imagepreview').attr('src', $(this).find('img').attr('src'));
-            $('#imagemodal').modal('show');   
-        });     
-};
 
 
 submitForm();
-imageModal();

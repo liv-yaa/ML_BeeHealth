@@ -11,65 +11,72 @@
 
 <!-- </video> -->
 
-<a href="/login"> Login </a>
-<a href="/register"> Or, register</a>
+
+<p><a href="#ex1" rel="modal:open">Login or Register</a></p>
 
 
-<div class="container">
-    <a id="modal_trigger" href="#modal" class="btn">Login or Register??? </a>
+<!-- Modal -->
+<div id="ex1" class="modal">
+  <div class="well spaced" style="width:40%;">
+    <h3>Login</h3>
+    <form action="/login" method="POST"> 
 
-    <div id="modal" class="popupContainer" style="display:none;">
-        <header class="popupHeader">
-            <span class="header_title">Painel</span>
-            <span class="modal_close"><i class="icon-close"></i></span>
-        </header>
-
-        <section class="popupBody">
-            <div class="social_login">
-                <div class="">
-                </div>
-
-              
-
-                <div class="action_btns">
-                    <div class="one_half"><a href="#" id="login_form" class="btn">Entrar</a></div>
-                    <div class="one_half last"><a href="#" id="register_form" class="btn">Criar uma conta</a></div>
-                </div>
-            </div>
-
-            <!-- Username & Password Login form -->
-            <div class="user_login">
-                <form method="post" action="{$systemsslurl}dologin.php">
-        <div class="form-group">
-          <div class="input-group input-group-lg">
-            <span class="input-group-addon"><span aria-hidden="true" class="icon-envelope"></span></span>
-            <input class="form-control" name="username" type="text" placeholder="E-mail">
-          </div>
-        </div>             
-        <div class="form-group">
-          <div class="input-group input-group-lg">
-            <span class="input-group-addon"><span aria-hidden="true" class="icon-lock"></span></span>
-            <input class="form-control" name="password" type="password" placeholder="Senha">
-          </div>
-        </div>     
-                        <div class="row">
-
-          <label class="checkbox-inline remember"><input type="checkbox" name="rememberme" id="rememberme" checked="true" style="display:none;"></label>        
-        
-         <div class="col-md-12">
-          <p><input type="submit" name="submit" class="btn btn-primary btn-lg btn-block" value="Entrar" onclick="centeredbar.go(60)"></p>
-        </div>
+      <div class="form-group">
+        <label>Email:
+          <input type="email" name="email" id="name-input" required>
+        </label>
       </div>
-    </form>
 
-                <center><a href="#" class="forgot_password"> Esqueceu sua senha?</a>
-            </center></div> 
-          
-    </section></div>
+      <div>
+        <label>Password:
+          <input type="password" name="password" id="password-input" required>
+        </label>
+      </div>
+
+      <div>
+        <input type="submit" value="Log In">
+      </div>
+
+    </form>
+  </div>
+
+
+
+  <!-- <a href="/register"> Or, register</a> -->
+  <div class="well spaced" style="width:40%;">
+    <h3> Or Register</h3>
+
+    <form action="/register" method="POST">
+
+      <div class="form-group">
+        <label>
+          Email:
+          <input type="email" name="email" class="form-control">
+        </label>
+      </div>
+
+      <div>
+        <label>
+          Password
+          <input type="password" name="password" class="form-control">
+        </label>
+      </div>
+
+      <div>
+        <input type="submit" value="Register" class="btn btn-danger">
+      </div>
+
+    </form>
+  </div>
+
+
+
+  <a href="#" rel="modal:close">Close</a>
 </div>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 
 {% endblock %}
