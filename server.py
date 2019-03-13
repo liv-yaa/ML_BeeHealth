@@ -11,8 +11,8 @@ from werkzeug.utils import secure_filename
 
 from sqlalchemy import func
 
-from model import Bee, User, connect_to_db, db, check_prediction
-from bees_seed import process_upload, cl_model, give_model_feedback, predict_with_model
+from model import Bee, User, connect_to_db, db
+from bees_seed import process_upload, cl_model, give_model_feedback, predict_with_model, check_prediction
 
 from os.path import join, dirname, realpath
 
@@ -305,17 +305,17 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-# def check_prediction(health_string, prediction_tuple):
-#     """ Checks whether prediction tuple matches input of health specified by user """
-#     response_string = prediction_tuple[0]
-#     response_confidence = prediction_tuple[1]
+def check_prediction(health_string, prediction_tuple):
+    """ Checks whether prediction tuple matches input of health specified by user """
+    response_string = prediction_tuple[0]
+    response_confidence = prediction_tuple[1]
 
-#     print("response_string", response_string)
-#     print(
-#         "response_confidence", response_confidence
-#         )
+    print("response_string", response_string)
+    print(
+        "response_confidence", response_confidence
+        )
 
-#     return response_string == health_string
+    return response_string == health_string
 
 
 
