@@ -289,9 +289,6 @@ def upload_file():
                                         message=message,
                                         
                                        
-                                        # health_performance=health_performance,
-                                        # image_added=image_added,
-                                       
                                         )
 
     else:
