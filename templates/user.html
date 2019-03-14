@@ -2,13 +2,13 @@
 {% block content %}
 
 {% if "user_id" in session %} 
-<!-- for now!! -->
-    
 
-    <h3>{{ user.email }} is the user at this URL. ID#{{ user.user_id }}</h3>
-    <br><br>
 
-    <div id="beeform">
+<!-- Modal HTML embedded directly into document -->
+<div id="ex2" class="modal">
+  <!-- <p>Here is a bee image</p> -->
+
+  <div id="beeform">
 
       <h2>Upload a photo! </h2>
       <form id="submit-form" action="/upload-success" enctype="multipart/form-data" method="POST" > 
@@ -41,6 +41,19 @@
       test
     </div>
 
+
+
+  <a href="#" rel="modal:close">Close</a>
+</div> 
+
+<!-- Link to open the modal -->
+<p><a href="#ex2" rel="modal:open">Upload a Photo</a></p>
+    
+
+    <h3>{{ user.email }} is the user at this URL. ID#{{ user.user_id }}</h3>
+    <br><br>
+
+    
     
     
     <div id="all-photos">
