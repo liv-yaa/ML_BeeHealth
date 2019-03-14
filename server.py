@@ -19,6 +19,7 @@ from os.path import join, dirname, realpath
 
 # Create a Flask app
 app = Flask(__name__)
+app.secret_key = "SECRET"
 
 # Added this config statement based on this demo for Amazon S3 integration: http://zabana.me/notes/upload-files-amazon-s3-flask.html
 app.config.from_object("config")
