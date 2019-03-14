@@ -3,8 +3,7 @@
 
 {% if "user_id" in session %} 
 
-
-<!-- Modal HTML embedded directly into document -->
+<!-- Modal for form -->
 <div id="ex2" class="modal">
   <!-- <p>Here is a bee image</p> -->
 
@@ -46,73 +45,80 @@
   <a href="#" rel="modal:close">Close</a>
 </div> 
 
+<!-- Modal for bee image -->
+<div id="ex3" class="modal">
+  <p>Here is a bee image</p>
+  <a href="#" rel="modal:close">Close</a>
+</div> 
+
 <!-- Link to open the modal -->
 <p><a href="#ex2" rel="modal:open">Upload a Photo</a></p>
-    
 
-    <h3>{{ user.email }} is the user at this URL. ID#{{ user.user_id }}</h3>
-    <br><br>
+<!-- <h3>{{ user.email }} is the user at this URL. ID#{{ user.user_id }}</h3>
+<br><br> -->
 
-    
-    
-    
-    <div id="all-photos">
+<p><a href="#ex3" rel="modal:open">See a bee </a></p>
 
+{% if user_bees %}
 
-      <br><br>
-      {% if user_bees %}
+<!-- Container for All Bees -->
+  <div class="all-photos">
+    <h1 "w3-center" > All of Your Bee Photos </h1>
 
-        <h1 "w3-center" > All of Your Photos </h2>
+    <div class="grid">
+      <div class="w3-row-padding w3-center" appml-data="images">
+        <div class="w3-col m4 w3-padding-16" appml-repeat="image">
+          <ul id="hexGrid" class="clr">
+     
+            {% for photo in user_bees %}
 
-          <div class="grid">
-            <div class="w3-row-padding w3-center" appml-data="images">
-              <div class="w3-col m4 w3-padding-16" appml-repeat="image">
-                <ul id="hexGrid" class="clr">
-           
-                  {% for photo in user_bees %}
+              <li class="hex">
 
-                    <li class="hex">
-                      
-                      <div class="hexIn">
+                <!-- Modal HTML embedded directly into document -->
+                <div id="ex4" class="modal">
+                  
+                  <img src="{{ photo.url }}">
+                  <p>{{ photo.health }}</p>
+                  <p>{{ photo.zip_code }}</p>
 
-                          <a class="hexLink" href="#">
+                  <a href="#" rel="modal:close">Close</a>
+                </div>
+                
+                <div class="hexIn">
 
-                              <div class="img" style='background-image:url(https://images.unsplash.com/photo-1417436026361-a033044d901f?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;w=1080&amp;fit=max&amp;s=faa4e192f33e0d6b7ce0e54f15140e42);'>
-                                  <!-- Change this  -->
-
-                                  <img src={{ photo.url }} 
-                                  
-                                  style="width:100%"
-                                  onclick="onClick(this)" 
-                                  class="w3-hover-opacity"
-                                  >
-                              
-                              </div>
+                    <a class="hexLink" href="#ex4" rel="modal:open">
+                        <div class="img" style='background-image:url();'>
 
 
-                              
+                          <img src={{ photo.url }} 
+                          
+                          style="width:100%"
+                          onclick="onClick(this)" 
+                          class="w3-hover-opacity"
+                          >
+                        </div>
+                    </a>
+                </div> 
+              </li>
 
-                          </a>
-                      </div>
-                      
-                  </li>
+            {% endfor %}
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
 
 
+{% else %}
 
-                  {% endfor %}
-
-                </ul>
-              </div>
-            </div>
-
-      {% else %}
-
-        Users photos would have been here. None yet tho
-
-      {% endif %}
-    <div>
+    Users photos would have been here. None yet tho
 
   {% endif %}
+<div>
+
+{% endif %}
 
 
 
