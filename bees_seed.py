@@ -23,10 +23,6 @@ from clarifai.rest import FeedbackInfo, ClarifaiApp #  Clarifai Application Obje
                                         # |  To access the concepts: use ``app.concepts``
 
 import os
-import json
-import requests
-import glob
-from pprint import pprint
 
 from sqlalchemy import func
 import pandas as pd
