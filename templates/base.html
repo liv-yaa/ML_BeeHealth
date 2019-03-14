@@ -9,72 +9,46 @@
 
     
     <link rel="stylesheet" href="/static/css/hex.css">
-    <!-- <link rel="stylesheet" href="/static/css/bootstrap_modal.css"> -->
-
-
-
 
 
 
 </head>
 <body>
-<!-- 
+
+<!-- Navbar! -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Navbar</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div class="collapse navbar-collapse" id="navbarNavDropdown">
-    <ul class="navbar-nav">
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+    <a class="navbar-brand" href="/">The Bee Machine</a>
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
       <li class="nav-item active">
         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Features</a>
+        {% if "user_id" in session %}
+
+          <a class="nav-link" href="/logout">Log Out</a>
+
+        {% else %}
+          <a class="nav-link" href="#ex1" rel="modal:open">Log In / Register</a>
+        {% endif %}
+        
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Pricing</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown link
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
+        <a class="nav-link disabled" href="#">Disabled</a>
       </li>
     </ul>
-  </div> 
+
+  </div>
 </nav>
- -->
-
-<!-- <video poster="https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/polina.jpg" id="bgvid" playsinline autoplay muted loop> 
-
-<source src="/static/images/bees.mp4" type="video/mp4">
-
-</video>
- -->
-<!-- <div id="polina">
-<h1>Polina</h1>
-<p>filmed by Alexander Wagner 2011
-<p><a href="http://thenewcode.com/777/Create-Fullscreen-HTML5-Page-Background-Video">original article</a>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur porta dictum turpis, eu mollis justo gravida ac. Proin non eros blandit, rutrum est a, cursus quam. Nam ultricies, velit ac suscipit vehicula, turpis eros sollicitudin lacus, at convallis mauris magna non justo. Etiam et suscipit elit. Morbi eu ornare nulla, sit amet ornare est. Sed vehicula ipsum a mattis dapibus. Etiam volutpat vel enim at auctor.</p>
-<p>Aenean pharetra convallis pellentesque. Vestibulum et metus lectus. Nunc consectetur, ipsum in viverra eleifend, erat erat ultricies felis, at ultricies mi massa eu ligula. Suspendisse in justo dapibus metus sollicitudin ultrices id sed nisl.</p>
-<button>Pause</button>
-</div> -->
-
-<h3><a href="/">The Bee Machine</a></h3>
-
-{% if "user_id" in session %}
-    <h5><a href="/logout"> You are logged in. Want to log out? </a></h5>
 
 
-{% else %}
-    <p><a href="#ex1" rel="modal:open">Login or Register</a></p>
 
-{% endif %}
+    <!-- <p><a href="#ex1" rel="modal:open">Login or Register</a></p> -->
+
+
 
 <!-- Login or Register Modal -->
 <div id="ex1" class="modal">

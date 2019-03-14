@@ -38,19 +38,16 @@
     {% endif %}
 
     
-    
-    <br> 
-
-    
 
 
-    <br>
 
-    <br><br>
-    <a href="/"> Go Back to Home </a>
-    <br>
-    <a href="/users/<int:user_id>"> Want to submit a photo? </a>
+{% else %}
 
 {% endif %}
+
+<br><br>
+<a href="/"> Go Back to Home </a>
+<br>
+<a href="/users/{{ int:user_id }}"> Submit another photo? </a>
 
 {% endblock %}
