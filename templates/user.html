@@ -57,8 +57,6 @@
 <!-- <h3>{{ user.email }} is the user at this URL. ID#{{ user.user_id }}</h3>
 <br><br> -->
 
-<p><a href="#ex3" rel="modal:open">See a bee </a></p>
-
 {% if user_bees %}
 
 <!-- Container for All Bees -->
@@ -78,8 +76,19 @@
                 <div id="ex4" class="modal">
                   
                   <img src="{{ photo.url }}">
-                  <p>{{ photo.health }}</p>
-                  <p>{{ photo.zip_code }}</p>
+                  <h1 id="demo1" align="center">
+                    <br>
+                    {% if photo.health.upper() == 'Y' %}
+                      Healthy
+                    {% else %}
+                      Not Healthy
+                    {% endif %}
+                    <br>
+                    Zipcode: {{ photo.zip_code }}<br>
+                    ID: {{ photo.image_id }}<br>
+                    
+                  </h1>
+
 
                   <a href="#" rel="modal:close">Close</a>
                 </div>
@@ -96,6 +105,9 @@
                           onclick="onClick(this)" 
                           class="w3-hover-opacity"
                           >
+                          <h1 id="demo1">
+                            No. {{ photo.image_id }}
+                          </h1>
                         </div>
                     </a>
                 </div> 
