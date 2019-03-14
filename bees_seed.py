@@ -22,7 +22,7 @@ from clarifai.rest import FeedbackInfo, ClarifaiApp #  Clarifai Application Obje
                                         # |  To access the inputs: use ``app.inputs``
                                         # |  To access the concepts: use ``app.concepts``
 
-
+import os
 import json
 import requests
 import glob
@@ -33,8 +33,9 @@ import pandas as pd
 
 from model import Bee, connect_to_db, db
 
+CLARAFAI_KEY = os.environ["CLARAFAI_KEY"]
 
-clarifai_app = ClarifaiApp(api_key="58dc8755e39d4043a98554b44bbcaf56") # move this
+clarifai_app = ClarifaiApp(api_key=CLARAFAI_KEY) # move this
 MODEL_ID = 'BeeHealth'
 cl_model = clarifai_app.models.get(MODEL_ID)
 seed_filename = "bee_data.csv"
