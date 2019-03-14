@@ -642,41 +642,39 @@ if __name__ == '__main__':
     # clarifai_app.inputs.delete_all()
     # print('Successfully deleted all.')
 
-
-
     # # # # Give images and concepts from file to Clarifai
     # add_bees_to_clar(seed_filename)
     # print('Successfully added all bees.')
 
 
-
     # add_nonbees_to_clar()
     # print('Successfully added all nonbees.')
 
-    # all_ = list(clarifai_app.inputs.get_all())
-    # # for i in all_:
-    # #     print(i.metadata['image_id'], "is uploaded")
 
-    # # Add Bees to our database from Clarifai
-    # load_bees_from_clarifai_to_db(all_images=all_)
-    # print("Upload success")
+    all_ = list(clarifai_app.inputs.get_all())
+    for i in all_:
+        print(i.metadata['image_id'], "is uploaded")
+
+    # Add Bees to our database from Clarifai
+    load_bees_from_clarifai_to_db(all_images=all_)
+    print("Upload success")
 
     # Test
-    process_upload( 
-        user_id=1, 
-        health='healthy',
-        local_filename='uploads/download.jpeg',
-        zipcode='12345'
-        )
-    print(
-        )
+    # process_upload( 
+    #     user_id=1, 
+    #     health='healthy',
+    #     local_filename='uploads/download.jpeg',
+    #     zipcode='12345'
+    #     )
+    # print(
+    #     )
 
-    process_upload( 
-        user_id=1, 
-        health='unhealthy',
-        local_filename='uploads/001_043.png',
-        zipcode='22111'
-        )
+    # process_upload( 
+    #     user_id=1, 
+    #     health='unhealthy',
+    #     local_filename='uploads/001_043.png',
+    #     zipcode='22111'
+    #     )
 
 
     # print(predict_with_model(path='uploads/download.jpeg'))
