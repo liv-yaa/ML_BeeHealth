@@ -241,7 +241,7 @@ def load_bees_from_clarifai_to_db(all_images):
                         user_id=None, # All database bees will have no user_id
                         url=image_url,
                         health=image_health,
-                        zip_code=image_zip,
+                        zip_code=None,
                         image_id=image_img_id
                         )
 
