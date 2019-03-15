@@ -1,5 +1,10 @@
-.modal-header {
+#id {
   padding: 0;
+  background-color: yellow;
+}
+
+.modal-header {
+  padding: 10px;
 }
 
 .modal-header .close {

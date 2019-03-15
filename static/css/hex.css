@@ -307,8 +307,14 @@ a:hover{
 @media screen and (max-width: 500px) { 
   div{width:70%;} 
 }
+
+
 @media screen and (max-device-width: 800px) {
   html { background: url(https://thenewcode.com/assets/images/polina.jpg) #000 no-repeat center center fixed; }
   #bgvid { display: none; }
 }
 
+
+#link img {
+  width: 500px;
+}
