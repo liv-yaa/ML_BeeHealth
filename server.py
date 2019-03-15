@@ -128,8 +128,6 @@ def register_process():
         max_id = int(result[0]) + 1
     except TypeError:
         max_id = 1
-        
-
 
 
     # Create a new user and add them to the session.
@@ -180,8 +178,8 @@ def login_process():
     session["user_id"] = user.user_id
 
     flash("Logged in")
-    # return redirect(f"/users/{user.user_id}") 
-    return redirect('/index') 
+    return redirect(f"/users/{user.user_id}") 
+    # return redirect('/index') 
 
 
 @app.route('/logout')
@@ -214,6 +212,7 @@ def user_detail(user_id):
     user_bees = user.get_user_bees()
 
     return render_template("user.html", 
+                            user_id=user_id,
                             user=user,
                             user_bees=user_bees,
                             )
