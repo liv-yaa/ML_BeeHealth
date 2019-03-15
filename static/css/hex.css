@@ -4,6 +4,7 @@ https://codepen.io/chpecson/pen/oLWmKV
 https://codepen.io/dudleystorey/pen/knqyK
 */
 
+
 #heart {
   color: #f77;
 }
@@ -17,9 +18,32 @@ img:hover {
     padding: 0;
 }
 body {
-    background: rgb(255, 135, 31);
+    background: rgb(0, 135, 31);
 }
 
+.modal {
+  display: none;
+  vertical-align: middle;
+  position: relative;
+  z-index: 2;
+  max-width: 500px;
+  box-sizing: border-box;
+  width: 90%;
+  background: #f8f9fa4d;
+  padding: 15px 30px;
+}
+
+.db-image {
+  display: none;
+  vertical-align: middle;
+  position: relative;
+  z-index: 2;
+  max-width: 500px;
+  box-sizing: border-box;
+  width: 90%;
+  background: #f8f9fa4d;
+  padding: 15px 30px;
+}
 
 #hexGrid {
   display: flex;
@@ -228,16 +252,9 @@ transition: 0.8s;
     #hexGrid {
         font-size: 8px;
     }
-  
-
-  
- 
 }
 
-body {
-  margin: 0;
-  background: rgb(255, 135, 31); 
-}
+
 video { 
     position: fixed;
     top: 50%;
@@ -248,9 +265,9 @@ video {
     height: auto;
     z-index: -100;
     transform: translateX(-50%) translateY(-50%);
- background: url('//demosthenes.info/assets/images/polina.jpg') no-repeat;
-  background-size: cover;
-  transition: 1s opacity;
+    background: url() no-repeat;
+    background-size: cover;
+    transition: 1s opacity;
 }
 .stopfade { 
    opacity: .5;
@@ -265,6 +282,19 @@ video {
   width: 33%;
   margin:2rem;
   float: right;
+  font-size: 1.2rem;
+}
+
+
+#polina-wide { 
+  font-family: Agenda-Light, Agenda Light, Agenda, Arial Narrow, sans-serif;
+  font-weight:100; 
+  background: rgba(0,0,0,0.3);
+  color: white;
+  padding: 2rem;
+  width: 70%;
+  margin:2rem;
+  float: center;
   font-size: 1.2rem;
 }
 
@@ -301,6 +331,7 @@ a {
   padding: .5rem;
   transition: .6s background; 
 }
+
 a:hover{
   background:rgba(0,0,0,0.9);
 }
@@ -310,11 +341,10 @@ a:hover{
 
 
 @media screen and (max-device-width: 800px) {
-  html { background: url(https://thenewcode.com/assets/images/polina.jpg) #000 no-repeat center center fixed; }
+  html { background: url() #000 no-repeat center center fixed; }
   #bgvid { display: none; }
 }
 
-
-#link img {
-  width: 500px;
+.navbar-dark .navbar-toggler-icon {
+    background-image: url('/static/images/bee-icon.svg')!important;
 }
