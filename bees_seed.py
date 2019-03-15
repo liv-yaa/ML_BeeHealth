@@ -209,26 +209,24 @@ def load_bees_from_clarifai_to_db(all_images):
         else:
             image_health = None
 
+        image_dt = None
+        image_zip = None
+        image_img_id = None
 
         try:
             if (img.metadata['datetime']):
                 image_dt = img.metadata['datetime']
-            else:
-                image_dt = None
+
                 
             if img.metadata:
                 if (img.metadata['zipcode']):
                     image_zip = int(img.metadata['zipcode'])
                 elif (img.metadata['zip_code']):
                     image_zip = int(img.metadata['zip_code'])
-            else:
-                image_zip = None
-
 
             if (img.metadata['image_id']):
                 image_img_id = int(img.metadata['image_id'])
-            else:
-                image_img_id = None
+
         except KeyError:
             print("KeyError")
         except:
@@ -241,7 +239,7 @@ def load_bees_from_clarifai_to_db(all_images):
                         user_id=None, # All database bees will have no user_id
                         url=image_url,
                         health=image_health,
-                        zip_code=None,
+                        zip_code=image_zip,
                         image_id=image_img_id
                         )
 
