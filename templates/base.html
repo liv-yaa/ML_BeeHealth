@@ -29,21 +29,22 @@
 
 
 
-  <div class="pos-f-t">
+<div class="pos-f-t">
     <div class="collapse" id="navbarToggleExternalContent">
       <div class="bg-dark p-4">
         <h4 class="text-white">The Bee Machine</h4>
-      {% if "user_id" in session %}
-          <span class="text-muted"><a href="/logout">Log Out</a></span>
+          {% if "user_id" in session %}
+              <!-- <span class="text-muted"><a href="/users/{{ user_id }}"> Want to submit a photo? </a></span> -->
+              <span class="text-muted"><a href="/logout">Log Out</a></span>
 
-      {% else %}
+          {% else %}
 
-          
-          <span class="text-muted"><a href="#ex1" rel="modal:open">Login or Register</a></span>
-          <span class="text-muted"><a href="/users/{{ user_id }}"> Want to submit a photo? </a></span>
+              
+              <span class="text-muted"><a href="#ex1" rel="modal:open">Login or Register</a></span>
+              
 
 
-      {% endif %}
+          {% endif %}
 
 
         
@@ -54,7 +55,8 @@
         <span class="navbar-toggler-icon"></span>
       </button>
     </nav>
-  </div>
+</div>
+
 
 
 

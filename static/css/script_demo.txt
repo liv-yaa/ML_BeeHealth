@@ -1,0 +1,91 @@
+HI everyone, thanks for coming out to see HB's demo night. 
+
+My name is Olivia
+
+&& I chose HB because I wanted to pivot from work in molecular biology research
+
+&& get my hands on some faster-moving projects.
+
+My interest in the complexity of meta populations led me to work at a biotech startup
+doing research on the populations of soil microbiomes.
+
+Now, I'm excited to be working with a dataset involving honeybees.
+
+Honeybees are, as you know, a critical part of agriculture.
+
+However, their population sizes are dwindling due to a host of complex factors
+including 
+    parasites or pathogens,
+    loss of habitat
+    loss of biodiversity
+
+** A COMPLEX PROBLEM **
+
+
+When I found this dataset on Kaggle my idea was to create an app that could use
+machine learning to categorize honeybees health.
+
+It would be a powerful tool that could help any person contribute to our 
+knowledge about 
+
+
+
+
+Today I'm excited to show you my app, "The Bee Machine"
+
+The bee machine uses the Kaggle Honeybee dataset as a LEARNING database
+
+Using an image processing and machine learning API called Clarafai,
+
+I have built A MODEL THAT CAN RECOGNIZE HONEYBEE HEALTH.
+
+
+
+
+Learning how to use the API was the most exciting part.
+
+Most of my work has been done on the  backend,
+
+But i'd love to quickly introcude the technologies that made the app possible
+
+
+The dataset is from Kaggle
+
+
+The Database uses SQLAlchemy, with a simple model:
+
+    class USER represents the users of the app
+
+    class BEE represents a bee image, including metadata.
+
+    They have a one-to-many relationship, since Users can upload multiple bees.
+
+
+
+My backend was implemented in PYTHON using some statistical libraries including 
+NUMPY.
+
+I interacted with the Clarafai API and 
+
+Frontend with JQuery
+
+
+
+
+*** Each time the user uploads a photo, they are IMPROVING the MACHINE LEARNING MODEL. ***
+
+
+
+
+
+
+
+
+
+
+Thanks and if you want to chat about machine learning, find me afterwards!
+
+
+
+
+

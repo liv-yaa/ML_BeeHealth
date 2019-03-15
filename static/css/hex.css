@@ -17,9 +17,7 @@ img:hover {
     margin: 0;
     padding: 0;
 }
-body {
-    background: rgb(0, 135, 31);
-}
+
 
 .modal {
   display: none;
@@ -312,7 +310,7 @@ h1 {
   border: none; 
   margin: 1rem auto; 
   font-size: 1.3rem;
-  background: rgba(255,255,255,0.23);
+  background:rgba(255,256,148,0.9);
   color: #fff;
   border-radius: 3px; 
   cursor: pointer;
@@ -320,20 +318,22 @@ h1 {
 }
 
 #polina button:hover { 
-   background: rgba(0,0,0,0.5);
+   background:rgba(255,255,255,0.9);
 }
 
 a {
   display: inline-block;
-  color: #fff;
+  color: #ffe269;
   text-decoration: none;
-  background:rgba(0,0,0,0.5);
+  background:rgba(255,255,255,0.9);
   padding: .5rem;
   transition: .6s background; 
 }
 
 a:hover{
-  background:rgba(0,0,0,0.9);
+  background: rgba(255, 255, 255, 0.9);
+  color: #fcb600;
+  text-decoration: none;
 }
 @media screen and (max-width: 500px) { 
   div{width:70%;} 
@@ -347,4 +347,26 @@ a:hover{
 
 .navbar-dark .navbar-toggler-icon {
     background-image: url('/static/images/bee-icon.svg')!important;
+}
+
+.bg-dark {
+    background-color: #ffc82f82!important;
+}
+
+body {
+    background-color: #ffc82f82!important;
+}
+
+.a-navbar {
+  display: inline-block;
+  color: #f9eac0;
+  text-decoration: none;
+  background: rgb(251, 188, 16);
+ 
+  padding: .5rem;
+  transition: .6s background; 
+}
+
+.a-navbar:hover{
+  background:rgba(0,0,0,0.9);
 }
