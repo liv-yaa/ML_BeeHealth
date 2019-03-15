@@ -90,6 +90,21 @@ def index():
                             )
 
 
+@app.route('/base')
+def base():
+    """ 
+
+    If a user is logged in, let them change navbar
+
+    """
+    # Get current user
+    user_id = session.get("user_id")
+
+    # Get list of bees
+
+
+    return render_template("base.html", user_id=user_id)                     
+                            
 
 @app.route('/register', methods=['GET'])
 def register_form():
@@ -167,7 +182,7 @@ def logout():
 
     del session["user_id"]
     flash("Logged Out.")
-    return redirect("/index")
+    return redirect("/")
 
 
 @app.route('/users')

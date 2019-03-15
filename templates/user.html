@@ -1,136 +1,136 @@
 {% extends 'base.html' %}
 {% block content %}
 
-{% if "user_id" in session %} 
+  {% if "user_id" in session %} 
 
-<!-- Modal for Upload form -->
-<div id="ex2" class="modal">
-  <!-- <p>Here is a bee image</p> -->
+    <!-- Modal for Upload form -->
+    <div id="ex2" class="modal">
+      <!-- <p>Here is a bee image</p> -->
 
-  <div id="beeform">
+      <div id="beeform">
 
-      <h2>Upload a photo! </h2>
-      <form id="submit-form" action="/upload-success" enctype="multipart/form-data" method="POST" > 
+          <h2>Upload a photo! </h2>
+          <form id="submit-form" action="/upload-success" enctype="multipart/form-data" method="POST" > 
 
-          <br>
-          <input type="file" name="file" id="file">
+              <br>
+              <input type="file" name="file" id="file">
 
-          <div>
-            <label> How is the health of this bee?
-              <input type="health" name="health" id="health" required>
-            </label>
-              <label> What is your zipcode?
-                <input type="zipcode" name="zipcode" id="zipcode" required>
-            </label>
-          </div>
-          
-          <button type="submit" value="Submit Photo"> Submit Photo </button>
-      </form>
-    </div>
-
-
-    <div id="spinner">
-      <span id = "status" ></span>
-      <!-- Link to gif -->
-      <img src="/static/images/load.gif" id="load"> 
-    </div>
-
-    <div id="bee-success">
-      
-      test
-    </div>
-
-
-
-  <a href="#" rel="modal:close">Close</a>
-</div> 
-
-<!-- Modal for bee image -->
-<div id="ex3" class="modal">
-  <p>Here is a bee image</p>
-  <a href="#" rel="modal:close">Close</a>
-</div> 
-
-<!-- Link to open the modal -->
-<p><a href="#ex2" rel="modal:open">Upload a Photo</a></p>
-
-<!-- <h3>{{ user.email }} is the user at this URL. ID#{{ user.user_id }}</h3>
-<br><br> -->
-
-{% if user_bees %}
-
-<!-- Container for All Bees -->
-  <div class="all-photos">
-    <h1 "w3-center" > All of Your Bee Photos </h1>
-
-    <div class="grid">
-      <div class="w3-row-padding w3-center" appml-data="images">
-        <div class="w3-col m4 w3-padding-16" appml-repeat="image">
-          <ul id="hexGrid" class="clr">
-     
-            {% for photo in user_bees %}
-
-              <li class="hex">
-
-                <!-- Modal HTML embedded directly into document -->
-                <div id="ex4" class="modal">
-                  
-                  <img src="{{ photo.url }}">
-                  <h1 id="demo1" align="center">
-                    <br>
-                    {% if photo.health.upper() == 'Y' %}
-                      Healthy
-                    {% else %}
-                      Not Healthy
-                    {% endif %}
-                    <br>
-                    Zipcode: {{ photo.zip_code }}<br>
-                    ID: {{ photo.image_id }}<br>
-                    
-                  </h1>
-
-
-                  <a href="#" rel="modal:close">Close</a>
-                </div>
-                
-                <div class="hexIn">
-
-                    <a class="hexLink" href="#ex4" rel="modal:open">
-                        <div class="img" style='background-image:url();'>
-
-
-                          <img src={{ photo.url }} 
-                          
-                          style="width:100%"
-                          onclick="onClick(this)" 
-                          class="w3-hover-opacity"
-                          >
-                          <h1 id="demo1">
-                            No. {{ photo.image_id }}
-                          </h1>
-                        </div>
-                    </a>
-                </div> 
-              </li>
-
-            {% endfor %}
-
-          </ul>
+              <div>
+                <label> How is the health of this bee?
+                  <input type="health" name="health" id="health" required>
+                </label>
+                  <label> What is your zipcode?
+                    <input type="zipcode" name="zipcode" id="zipcode" required>
+                </label>
+              </div>
+              
+              <button type="submit" value="Submit Photo"> Submit Photo </button>
+          </form>
         </div>
+
+
+        <div id="spinner">
+          <span id = "status" ></span>
+          <!-- Link to gif -->
+          <img src="/static/images/load.gif" id="load"> 
+        </div>
+
+        <div id="bee-success">
+          
+          test
+        </div>
+
+
+
+      <a href="#" rel="modal:close">Close</a>
+    </div> 
+
+    <!-- Modal for bee image -->
+    <div id="ex3" class="modal">
+      <p>Here is a bee image</p>
+      <a href="#" rel="modal:close">Close</a>
+    </div> 
+
+    <!-- Link to open the modal -->
+    <p><a href="#ex2" rel="modal:open">Upload a Photo</a></p>
+
+    <!-- <h3>{{ user.email }} is the user at this URL. ID#{{ user.user_id }}</h3>
+    <br><br> -->
+
+    {% if user_bees %}
+
+    <!-- Container for All Bees -->
+      <div class="all-photos">
+        <h1 "w3-center" > All of Your Bee Photos </h1>
+
+        <div class="grid">
+          <div class="w3-row-padding w3-center" appml-data="images">
+            <div class="w3-col m4 w3-padding-16" appml-repeat="image">
+              <ul id="hexGrid" class="clr">
+         
+                {% for photo in user_bees %}
+
+                  <li class="hex">
+
+                    <!-- Modal HTML embedded directly into document -->
+                    <div id="ex4" class="modal">
+                      
+                      <img src="{{ photo.url }}">
+                      <h1 id="demo1" align="center">
+                        <br>
+                        {% if photo.health.upper() == 'Y' %}
+                          Healthy
+                        {% else %}
+                          Not Healthy
+                        {% endif %}
+                        <br>
+                        Zipcode: {{ photo.zip_code }}<br>
+                        ID: {{ photo.image_id }}<br>
+                        
+                      </h1>
+
+
+                      <a href="#" rel="modal:close">Close</a>
+                    </div>
+                    
+                    <div class="hexIn">
+
+                        <a class="hexLink" href="#ex4" rel="modal:open">
+                            <div class="img" style='background-image:url();'>
+
+
+                              <img src={{ photo.url }} 
+                              
+                              style="width:100%"
+                              onclick="onClick(this)" 
+                              class="w3-hover-opacity"
+                              >
+                              <h1 id="demo1">
+                                No. {{ photo.image_id }}
+                              </h1>
+                            </div>
+                        </a>
+                    </div> 
+                  </li>
+
+                {% endfor %}
+
+              </ul>
+            </div>
+          </div>
+        </div>
+
       </div>
-    </div>
-
-  </div>
 
 
-{% else %}
+    {% else %}
 
-    Users photos would have been here. None yet tho
+        Users photos would have been here. None yet tho
+
+    {% endif %}
+    
 
   {% endif %}
-<div>
-
-{% endif %}
 
 
 
