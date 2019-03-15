@@ -90,7 +90,7 @@ def connect_to_db(app):
     """ Connect database to our Flask app. """
 
     # Configuration of a PostgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///bee_db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///test'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_ECHO'] = True
     db.app = app
