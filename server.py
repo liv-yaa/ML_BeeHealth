@@ -116,12 +116,20 @@ def register_form():
 def register_process():
     """ Processing the registration when user signs up """
 
+
+
     email = request.form["email"]
     password = request.form["password"]
 
     # Get most recent user_id:
     result = db.session.query(func.max(User.user_id)).one()
-    max_id = int(result[0]) + 1
+
+    try:
+        max_id = int(result[0]) + 1
+    except TypeError:
+        max_id = 1
+        
+
 
 
     # Create a new user and add them to the session.
