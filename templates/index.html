@@ -30,6 +30,7 @@
 
 
                             <li class="hex">
+
                             <!-- Modal HTML embedded directly into document -->
                             <div id="ex2" class="modal">
                               
@@ -87,10 +88,21 @@
 
                         {% for bee in unhealthy_bees %}
                             <li class="hex">
+
+                            <!-- Modal HTML embedded directly into document -->
+                            <div id="ex2" class="modal">
+                              
+                              <img class="db-image" src="{{ bee.url }}">
+                              <p>{{ bee.health }}</p>
+                              <p>{{ bee.zip_code }}</p>
+
+
+                              <a href="#" rel="modal:close">Close</a>
+                            </div>
                                 
                                 <div class="hexIn">
 
-                                    <a class="hexLink" href="#">
+                                    <a class="hexLink" href="#ex2" rel="modal:open">
 
                                         <div class="img" style='background-image:url();'>
 
@@ -109,7 +121,6 @@
                                         {% endif %}
 
 
-                                        <p id="demo2"> zip: {{ bee.zip_code }} </p>
 
                                     </a>
                                 </div>
