@@ -9,24 +9,31 @@
 
       <div id="beeform">
 
-          <h2>Upload a photo! </h2>
+          <h3>Upload a photo! </h3>
           <form id="submit-form" action="/upload-success" enctype="multipart/form-data" method="POST" > 
 
               <br>
               <input type="file" name="file" id="file">
+              <br><br>
 
               <div>
-                <label> How is the health of this bee?
+                <label> How is the <em>health</em> of this bee?
                   <input type="health" name="health" id="health" required>
-                </label>
-                  <label> What is your zipcode?
+                  </label>
+                  <br><br>
+
+                  <label> What is your <em>zipcode</em>?
+                    <BR>
                     <input type="zipcode" name="zipcode" id="zipcode" required>
                 </label>
               </div>
-              
+              <br><br>
+
               <button type="submit" value="Submit Photo"> Submit Photo </button>
           </form>
-        </div>
+        
+
+        <br><br>
 
 
         <div id="spinner">
@@ -40,6 +47,7 @@
           
           test
         </div>
+      </div>
 
 
 
@@ -126,7 +134,7 @@
 
     {% else %}
 
-        Users photos would have been here. None yet tho
+       <p id="else"> No photos yet. Upload one? </p>
 
     {% endif %}
     

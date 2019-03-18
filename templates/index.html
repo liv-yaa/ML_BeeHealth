@@ -9,7 +9,7 @@
 
 
 {% endif %}
-
+<br><br>
 
 
 
@@ -19,7 +19,7 @@
     <section class="w3-content w3-container w3-padding-64">
     <h1 class="w3-center">Bee Photo Database</h1>
         <br>
-        <p class="w3-center">Healthy Bees - click to see detail </h5>
+        <h2>Healthy Bees</h2>
 
         <div class="grid">
             <div class="w3-row-padding w3-center" appml-data="images">
@@ -33,10 +33,19 @@
 
                             <!-- Modal HTML embedded directly into document -->
                             <div id="ex2" class="modal">
-                              
+                              <br>
                               <img class="db-image" src="{{ bee.url }}">
-                              <p>{{ bee.health }}</p>
-                              <p>{{ bee.zip_code }}</p>
+                              
+                              <p class="m-text">
+
+                                  Bee ID: {{ bee.bee_id }}<br>
+                                  Bee Health: {{ bee.health }}<br>
+                                  Zipcode: {{ bee.zip_code }}
+
+                              </p>
+
+                              <br><br>
+
 
 
                               <a href="#" rel="modal:close">Close</a>
@@ -79,7 +88,7 @@
         </div>
         <br><br>
 
-        <h5> unhealthy bees: </h5>
+        <h2>Unhealthy Bees</h2>
 
         <div class="grid">
             <div class="w3-row-padding w3-center" appml-data="images">
@@ -93,8 +102,8 @@
                             <div id="ex2" class="modal">
                               
                               <img class="db-image" src="{{ bee.url }}">
-                              <p>{{ bee.health }}</p>
-                              <p>{{ bee.zip_code }}</p>
+                              Bee Health: {{ bee.health }}
+                              Zipcode: {{ bee.zip_code }}
 
 
                               <a href="#" rel="modal:close">Close</a>

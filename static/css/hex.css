@@ -20,16 +20,23 @@ img:hover {
 
 
 .modal {
-  display: none;
+  display: flex
   vertical-align: middle;
-  position: relative;
+  position: middle;
   z-index: 2;
   max-width: 500px;
   box-sizing: border-box;
   width: 90%;
   background: #fcf5be;
   padding: 15px 30px;
+  
 }
+
+/*.modal p {
+  font-size: 3rem;
+  background-color: white;
+  
+}*/
 
 .db-image {
   display: none;
@@ -288,7 +295,7 @@ video {
   font-family: Agenda-Light, Agenda Light, Agenda, Arial Narrow, sans-serif;
   font-weight:100; 
   background: rgba(0,0,0,0.3);
-  color: white;
+  color: #ffd464;
   padding: 2rem;
   width: 70%;
   margin:2rem;
@@ -300,8 +307,36 @@ h1 {
   font-size: 3rem;
   text-transform: uppercase;
   margin-top: 0;
+  margin-left: 20;
   letter-spacing: .3rem;
+  padding: 15px 30px;
 }
+
+
+h2 {
+  font-size: 2rem;
+  color: #ffd464;
+  margin-top: 0;
+  margin-left: 20;
+  padding: 15px 30px;
+}
+
+h3 {
+  font-size: 2rem;
+  color: #ffd464;
+  margin-top: 0;
+  margin-left: 20;
+  padding: 15px 30px;
+}
+
+p {
+  font-size: 2rem;
+  margin-top: 0;
+  margin-left: 30;
+  padding: 15px 30px;
+}
+
+
 
 #polina button { 
   display: block;
@@ -323,18 +358,23 @@ h1 {
 
 a {
   display: inline-block;
-  color: #ffe269;
+  color: black;
   text-decoration: none;
-  background:rgba(255,255,255,0.9);
-  padding: .5rem;
+  background: #ffe269;
+  padding: 2rem;
   transition: .6s background; 
+  position: center;
+  padding: 15px 30px;
 }
 
 a:hover{
-  background: rgba(255, 255, 255, 0.9);
-  color: #fcb600;
+  color: #ffe269;
+  background: white;
+  
   text-decoration: none;
+  position: center;
 }
+
 @media screen and (max-width: 500px) { 
   div{width:70%;} 
 }
@@ -369,4 +409,48 @@ body {
 
 .a-navbar:hover{
   background:rgba(0,0,0,0.9);
+}
+/*
+.all-bees {
+
+  background-color: white;
+  margin-top: 10;
+  margin-bottom: 1rem;
+
+}*/
+
+.modal p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: white;
+}
+
+.modal a.close-modal {
+    position: absolute;
+    top: -12.5px;
+    right: -12.5px;
+    display: block;
+    width: 30px;
+    height: 30px;
+    text-indent: -9999px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-color: #ffffff00;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAAAXNSR…o8lCKWUlg/YtGs7tObunDAZfpDLbfEI15zsEIY3U/x/gHHc/G1zltnAgAAAABJRU5ErkJggg==);
+}
+
+#beeform {
+  position: CENTER;
+  background-color: white;
+  padding: 15px 30px;
+  border-radius: 4px;
+
+}
+
+#else {
+  font-size: 1.5rem;
+  margin-top: 0;
+  margin-left: 40;
+  padding: 15px 30px;
 }
