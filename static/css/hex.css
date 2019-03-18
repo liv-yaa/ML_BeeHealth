@@ -367,6 +367,17 @@ a {
   padding: 15px 30px;
 }
 
+#nav-a {
+  display: inline-block;
+  color: black;
+  text-decoration: none;
+  background: #ffe269;
+  padding: 2rem;
+  transition: .6s background; 
+  position: center;
+  padding: 1px 3px;
+}
+
 a:hover{
   color: #ffe269;
   background: white;

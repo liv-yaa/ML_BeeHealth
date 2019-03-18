@@ -33,21 +33,23 @@
     <div class="collapse" id="navbarToggleExternalContent">
       <div class="bg-dark p-4">
         <h4 class="text-white">The Bee Machine</h4>
+          <!-- <div class=""> -->
+          <ul>
+            <a href="">test</a>
+            <a href="">test</a>
+          
           {% if "user_id" in session %}
               <!-- <span class="text-muted"><a href="/users/{{ user_id }}"> Want to submit a photo? </a></span> -->
               <span class="text-muted"><a href="/logout">Log Out</a></span>
 
-          {% else %}
 
+
+          {% else %}
               
               <span class="text-muted"><a href="#ex1" rel="modal:open">Login or Register</a></span>
-              
-
 
           {% endif %}
-
-
-        
+          </ul>
       </div>
     </div>
     <nav class="navbar navbar-dark bg-dark">
