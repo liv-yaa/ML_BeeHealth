@@ -15,6 +15,7 @@ from model import Bee, User, connect_to_db, db
 from bees_seed import process_upload, cl_model, give_model_feedback, predict_with_model, check_prediction
 
 from os.path import join, dirname, realpath
+from os import environ
 
 
 # Create a Flask app
@@ -30,13 +31,17 @@ ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
-# Moved to config:
-# A secret key is required for Flask sessions and debug toolbar
-# app.secret_key = 'XO'
-# app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
-
 # Ask Jinja to give us an error if there is an undefined variable in scope
 app.jinja_env.undefined = StrictUndefined
+
+def screencast_mode():
+    if os.environ.get("SCREENCAST") is "True":
+        print("SCREENCAST MODE IS ON")
+        session["user_id"] = 8
+
+app.before_first_request(screencast_mode)
+
+
 
 @app.route('/')
 def landing():
@@ -175,7 +180,8 @@ def login_process():
         return redirect("/login")
 
     # If we succesfully find a match, add the user_id to the session
-    session["user_id"] = user.user_id
+    if "user_id" not in session:
+        session["user_id"] = user.user_id
 
     flash("Logged in")
     return redirect(f"/users/{user.user_id}") 
@@ -231,20 +237,23 @@ def upload_file():
     """
 
     # Get other data
+
+
     user_id = session.get("user_id")
-    health = request.form["health"] # Change this to a button!!!! "healthy" else "n" gives us 'y' or 'n' in clarafai.
-    zipcode = request.form["zipcode"]
+    health = request.form.get("health") # Change this to a button!!!! "healthy" else "n" gives us 'y' or 'n' in clarafai.
+    zipcode = request.form.get("zipcode")
+
 
     if 'file' not in request.files:
         flash('No file part')
-        return redirect(request.url)
+        return redirect(f'/users/{user_id}')
 
     file = request.files["file"]
 
     # Handle if user did not select file:
     if file.filename == '':
         flash ('No selected file')
-        return redirect(request.url)
+        return redirect(f'/users/{user_id}')
 
     if file and allowed_file(file.filename):
 
@@ -329,7 +338,7 @@ def upload_file():
 
     else:
         flash('Error')
-        return redirect(request.url)
+        return redirect(f'/users/{user_id}')
 
     
 @app.route('/charts')
