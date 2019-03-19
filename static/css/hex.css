@@ -116,8 +116,8 @@ img:hover {
   margin: 0 auto;
 }
 
-.hex h1, .hex p {
-  width: 100%;
+.hex h4, .hex p {
+  width: 80%;
   padding: 5%;
   box-sizing:border-box;
   font-weight: 300;
@@ -187,7 +187,7 @@ clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
 
 
 
-.hexLink:hover h1, .hexLink:focus h1,
+.hexLink:hover h4, .hexLink:focus h4,
 .hexLink:hover p, .hexLink:focus p{
 opacity:1;
 transition: 0.8s;
@@ -326,6 +326,15 @@ h3 {
   color: #ffd464;
   margin-top: 0;
   margin-left: 20;
+  padding: 15px 30px;
+}
+
+h4 {
+  font-size: 3rem;
+  text-transform: uppercase;
+  margin-top: 0;
+  margin-left: 0;
+  letter-spacing: .3rem;
   padding: 15px 30px;
 }
 
