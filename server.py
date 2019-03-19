@@ -34,12 +34,15 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 # Ask Jinja to give us an error if there is an undefined variable in scope
 app.jinja_env.undefined = StrictUndefined
 
-def screencast_mode():
-    if os.environ.get("SCREENCAST") is "True":
-        print("SCREENCAST MODE IS ON")
-        session["user_id"] = 8
+# Hard code
+global user_id
 
-app.before_first_request(screencast_mode)
+
+# if os.environ.get("SCREENCAST") is "True":
+#     print("SCREENCAST MODE IS ON")
+    # global user_id
+user_id = 8
+
 
 
 
@@ -52,7 +55,7 @@ def landing():
 
     """
     # Get current user
-    user_id = session.get("user_id")
+    # user_id = session.get("user_id")
 
     # Get list of bees
 
@@ -70,7 +73,7 @@ def index():
 
     """
     # Get current user
-    user_id = session.get("user_id")
+    # user_id = session.get("user_id")
 
     # Get list of bees
 
@@ -103,7 +106,7 @@ def base():
 
     """
     # Get current user
-    user_id = session.get("user_id")
+    # user_id = session.get("user_id")
 
     # Get list of bees
 
@@ -239,7 +242,7 @@ def upload_file():
     # Get other data
 
 
-    user_id = session.get("user_id")
+    # user_id = session.get("user_id")
     health = request.form.get("health") # Change this to a button!!!! "healthy" else "n" gives us 'y' or 'n' in clarafai.
     zipcode = request.form.get("zipcode")
 
@@ -354,7 +357,7 @@ def links():
     """ Exciting page for links and resources about honeybees
     """
     # Get current user
-    user_id = session.get("user_id")
+    # user_id = session.get("user_id")
 
     return render_template("links.html", 
                                         user_id=user_id)
