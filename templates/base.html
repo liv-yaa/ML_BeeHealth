@@ -35,11 +35,13 @@
         <h4 class="text-white">The Bee Machine</h4>
           <!-- <div class=""> -->
           <ul>
-            <a href="">test</a>
-            <a href="">test</a>
+            <a href="/index">All Bees</a>
+            <a href="/links">Links</a>
+            <a href="/links">Machine Learning API</a>
           
           {% if "user_id" in session %}
               <!-- <span class="text-muted"><a href="/users/{{ user_id }}"> Want to submit a photo? </a></span> -->
+              <a href="/upload/{{ user_id }}">Upload a Photo</a>
               <span class="text-muted"><a href="/logout">Log Out</a></span>
 
 

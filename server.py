@@ -344,8 +344,11 @@ def ml_charts():
 def links():
     """ Exciting page for links and resources about honeybees
     """
+    # Get current user
+    user_id = session.get("user_id")
 
-    return render_template("links.html")
+    return render_template("links.html", 
+                                        user_id=user_id)
 
 
 ## Helper functions ##
