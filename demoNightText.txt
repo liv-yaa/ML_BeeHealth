@@ -1,0 +1,61 @@
+demoNightText
+
+Hi! My name is Olivia.
+
+Welcome to my app, "The Bee Machine"
+
+I'm going to jump right in and show you the user interface. 
+
+It's deceptively simple, because once I upload a photo, that's when the real
+action takes off.
+
+
+*Clicks through app*
+
+
+
+I used to be a molecular biology reseracher at a biotech startup.
+
+I decided to attend Hackbright because I'm passionate about making slow things 
+Faster and more scalable,
+especially when working with large, convoluted datasets.
+
+The first time I ever used Python was to automate experiments involving
+gene expression analysis.
+
+I've been hooked since. For a year I took classes in Java and Object
+Oriented programming, and now I'm at Hackbright picking up the skills to make
+a fullstack web app. 
+
+It implements Python, Flask, Jinja, Javascript, Jquery, 
+and SQLAlchemy to create the backend.
+
+
+
+One great place to practice working with datasets is a site named Kaggle,
+which I first explored when I was studying bioinformatics.
+
+
+
+When I saw the Annotated Honeybee image database, I was excited to find that 
+there were ACTUAL data scientists who managed to predict the Bee health by 
+using machine learning on the images.
+
+It's the sort of massive dataset too large for a human to manually classify,
+so it made sense to try machine learning in my own implementation.
+
+The images needed to go through a fair amount of pre-processing,
+so I decided to use a machine learning API called Clarafai.
+
+Bit by bit, I wrote a module that interacted wtih the API, providing a layer of
+abstraction for interacting with it.
+
+
+
+use Clarafai is able to use a set of photos to create a machine learning model,
+and once the model is built, it can be used to predict concepts on images you upload.
+
+It also automatically bins the images into training, testing, and prediction sets.
+
+
+I browsed the documentation and realized that the concpets are form

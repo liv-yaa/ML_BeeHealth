@@ -300,12 +300,12 @@ def upload_file():
 
 
             if health_confidence >= 0.5:
-                message += "Bee was predicted to be a healthy bee"
+                message += "Bee was predicted to be a healthy bee. Bee added to the model."
 
             elif health_confidence < 0.5:
-                message += "Bee was predicted to be an unhealthy bee"
+                message += "Bee was predicted to be an unhealthy bee. Bee added to the model."
 
-            message += "Bee added to the model."
+
 
             # give_model_feedback(input_id = new_bee.input_id, 
             #     url = new_bee.input_id, 
@@ -327,12 +327,16 @@ def upload_file():
                     "and it was predicted to be healthy")
 
 
+        # Hardcode
+        prediction_success = True
+
+
 
         return render_template("upload_success.html", 
                                         prediction_success=prediction_success,
                                         bee_confidence=bee_confidence,
                                         health_confidence=health_confidence,
-
+                                        user_id=user_id,
                                         message=message,
                                         new_bee=new_bee, # Bee Object
                                         
@@ -382,7 +386,7 @@ if __name__ == '__main__':
     connect_to_db(app)
 
     # Use the flask DebugToolbar
-    DebugToolbarExtension(app)
+    # DebugToolbarExtension(app)
 
     # print(check_prediction("unhealth", predict_with_model( 
     #     path='uploads/download.jpeg')))

@@ -526,8 +526,6 @@ def give_model_feedback(input_id, url, concepts, not_concepts, output_id):
                                     ), # 
 
         ) # Returns None. Just passes this along to Clarafai.
-
-
     
 
 def add_new_image_to_db(user_id, url, health, zipcode, image_id):
@@ -537,10 +535,10 @@ def add_new_image_to_db(user_id, url, health, zipcode, image_id):
 
     # Get the maximum bee_id in the database
     # Note, the bee_id is not the same as the image_id in previous methods!
-    result = db.session.query(func.max(Bee.bee_id)).one()
-    bee_id = int(result[0]) + 1
+    # result = db.session.query(func.max(Bee.bee_id)).one()
+    # bee_id = int(result[0]) + 1
 
-    print(bee_id)
+    # print(bee_id)
 
     success = False
 
@@ -548,7 +546,7 @@ def add_new_image_to_db(user_id, url, health, zipcode, image_id):
 
 
         # Create a new bee:
-        bee = Bee(bee_id=bee_id,
+        bee = Bee(
                     user_id=user_id,
                     url=url, # From user_file
                     health=health,
@@ -582,9 +580,6 @@ def add_new_image_to_db(user_id, url, health, zipcode, image_id):
     except:
         print("Unable to create Bee object.")
         return (success, None)
-
-
-    
 
 
 
