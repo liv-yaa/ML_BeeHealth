@@ -44,8 +44,9 @@ Let people know how they can contribute into your project. A contributing guidel
 ## Credits
 Give proper credits. This could be a link to any repo which inspired you to build this project, any blogposts or links to people who contrbuted in this project.
 
-## Anything else that seems useful
-License
-A short snippet describing the license (MIT, Apache etc)
+<b>Built with</b>
+- [Clarifai] (https://clarifai.com/)
+- [Kaggle: The Annotated HoneyBee Image Database] @jenny18 (https://www.kaggle.com/jenny18/honey-bee-annotated-images/kernels)
 
-MIT © liv-yaa
+## Anything else that seems useful
+License: MIT © liv-yaa
