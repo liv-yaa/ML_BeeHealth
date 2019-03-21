@@ -29,10 +29,9 @@ You can contribute to The Bee Machine by uploading a bee photo. The more photos 
 - [Honey bee health detection with CNN] @dmitrypukhov (https://www.kaggle.com/dmitrypukhov/honey-bee-health-detection-with-cnn)
 - [R2D3ML] @r2d3 (http://www.r2d3.us/visual-intro-to-machine-learning-part-1/)
 - [Ratings Lab] @HackbrightAcademy (https://github.com/hackbrightacademy)
-- @ashley-trinh
+- @atrnh
 - @J-A-Gray
 - @vwxy
-- @
 
 ## Features Still In Progress
 - Instead of form switch to a radio button
