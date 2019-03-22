@@ -86,11 +86,41 @@ class Bee(db.Model):
 ##############################################################################
 # Helper functions
 
-def connect_to_db(app):
-    """ Connect database to our Flask app. """
+# def connect_to_db(app, db_uri="postgresql:///bee_db"):
+#     """ Connect database to our Flask app. """
 
-    # Configuration of a PostgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///bee_db'
+#     # Configuration of a PostgreSQL database
+#     app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
+#     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+#     app.config['SQLALCHEMY_ECHO'] = True
+#     db.app = app
+#     db.init_app(app)
+
+##############################################################################
+# From testing-approaches-demo
+def example_data():
+    """Create some sample data."""
+
+    # In case this is run more than once, empty out existing data
+    Bee.query.delete()
+    User.query.delete()
+
+    # Add sample users and bees
+    user1 = User(user_id="1", email="q@q.q", password="q")
+    user2 = User(user_id="2", email="r@r.r", password="r")
+    user3 = User(user_id="3", email="qr@qr.qr", password="qr")
+
+    bee1 = Bee(user_id="1", url="", health="healthy", zip_code="12314")
+    bee2 = Bee(user_id="2", url="", health="unhealthy", zip_code="41334")
+    bee3 = Bee(user_id="3", url="", health="other", zip_code="52362")
+
+   
+    db.session.add_all([bee1, bee2, bee3, user1, user2, user3])
+    db.session.commit()
+
+
+def connect_to_db(app, db_uri="sqlite:///emp.db"):
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_ECHO'] = True
     db.app = app
