@@ -2,17 +2,18 @@
 "The Bee Machine" 
 
 ## Motivation
-Honeybee populations are dwindling and you can help! Submit a photo of a bee to our machine learning model and you can contribute to a database that tracks honeybee health trends. One photo at a time, we can help save the bees.
+Numerous studies have pointed to the fact that our future depends on preserving honeybee populations, which are intricately intertwined with our food and agricultural systems. Preserving niche species and promoting biodiversity will be a challenge in the coming years, and will depend on research by honeybee immunologists and population studies. Tracking honeybee populations is a substiantial task, and meanwhile, an array of different forces are causing colonies' health to dwindle. The Bee Machine is a tool that can help researchers by "crowd sourcing" health data about honeybee populations from around the world. A user anywhere can submit a photo of a bee and tag its location. Once the image is processed by the Bee Machine's machine learning model, a prediction of that honeybee's health will be returned. If the prediction is not accurate, the model will learn from its mistakes as well as its successes. Over time, statistics show that the model will return fewer false positive and false negative predictions and more true positive and true negative predictions. This way, any user who wants to contribute to our database can help track honeybee health trends.
 
 ## Tech and frameworks used:
 
-Python
-Flask
-Jinja
-CSS
-HTML
-SQLAlchemy
-PostgreSQL Database
+- Python
+- Flask
+- Jinja
+- CSS
+- HTML
+- SQLAlchemy
+- PostgreSQL Database
+- Bootstrap 
 
 ## How to use?
 Upload a photo. Specify "healthy" for healthy bees. All other enties will be tagged "unhealthy".
