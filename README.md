@@ -16,7 +16,7 @@ The Bee Machine is a tool that can help researchers by "crowd sourcing" health d
 - SQLAlchemy
 - PostgreSQL Database
 - Bootstrap 
-- Delployed & 10000 image database hosted on AWS
+- Delployed & 1.1E+4 image database hosted on AWS
 
 ## How to use?
 Upload a photo. Specify "healthy" for healthy bees. All other enties will be tagged "unhealthy".
