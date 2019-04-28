@@ -45,5 +45,6 @@ You can contribute to The Bee Machine by uploading a bee photo. The more photos 
 - UX/aesthetic changes
 - Export dataset to Kaggle
 
-* Please send me your suggestions!
+
+<i> ...dm me: https://www.linkedin.com/in/livsmith/ </i>
 License: MIT © liv-yaa
