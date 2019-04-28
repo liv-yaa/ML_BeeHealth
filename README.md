@@ -16,6 +16,7 @@ The Bee Machine is a tool that can help researchers by "crowd sourcing" health d
 - SQLAlchemy
 - PostgreSQL Database
 - Bootstrap 
+- Delployed & 10000 image database hosted on AWS
 
 ## How to use?
 Upload a photo. Specify "healthy" for healthy bees. All other enties will be tagged "unhealthy".
@@ -38,12 +39,11 @@ You can contribute to The Bee Machine by uploading a bee photo. The more photos 
 
 ## Features Still In Progress
 - Instead of form switch to a radio button
-- Deployment on AWS
+- Deployment on AWS - [Done 3/20]
 - image preprocessing
 - (D3?) Map of geotagged images
 - UX/aesthetic changes
 - Export dataset to Kaggle
-*Please send me your suggestions!
 
-
+* Please send me your suggestions!
 License: MIT © liv-yaa
