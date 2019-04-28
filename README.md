@@ -40,7 +40,7 @@ You can contribute to The Bee Machine by uploading a bee photo. The more photos 
 ## Features Still In Progress
 - Instead of form switch to a radio button
 - Deployment on AWS - [Done 3/20]
-- image preprocessing
+- image preprocessing w/ scikitlearn
 - (D3?) Map of geotagged images
 - UX/aesthetic changes
 - Export dataset to Kaggle
