@@ -47,6 +47,3 @@ You can contribute to The Bee Machine by uploading a bee photo. The more photos 
 
 <br><br>
 <i> dm me? https://www.linkedin.com/in/livsmith/ </i>
-
-<br>
-License: MIT © liv-yaa
