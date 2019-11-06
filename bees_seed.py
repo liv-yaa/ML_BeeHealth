@@ -29,6 +29,8 @@ import pandas as pd
 
 from model import Bee, connect_to_db, db
 
+# Make sure you import CLARAFAI_KEY as an environmental variable
+# For guide: https://medium.com/dataseries/hiding-secret-info-in-python-using-environment-variables-a2bab182eea
 CLARAFAI_KEY = os.environ["CLARAFAI_KEY"]
 
 clarifai_app = ClarifaiApp(api_key=CLARAFAI_KEY) # move this
@@ -58,13 +60,10 @@ def add_bees_to_clar(csv_filename):
 
     # Get the maximum bee_id in the clarafai model and add 1
     next_id = get_hi_input_id() + 1
-    print("next_id", next_id)
+    # print("next_id", next_id)
 
-    print("ADDING BEE IMAGES")
-
+    # print("ADDING BEE IMAGES")
     for i in range(len(df)):
-    # for i in range(10): # FOR NOW
-
         image_id = str(next_id + i)
         health_ = str(df.loc[i][5])
         datetime = str(df.loc[i][0])
@@ -78,12 +77,10 @@ def add_bees_to_clar(csv_filename):
         # Edit fileanme to have the local path:
         img_name = 'images/bees/' + csv_filename
 
-        print("local img_name", img_name )
-
+        # print("local img_name", img_name )
         # print(image_id, health, datetime, csv_filename, zipcode, local_filename)
 
         if (health == 'y'):
-            
             concepts=['health', 'is_bee'] # a list of concept names this image is associated with
             not_concepts=[]  # a list of concept names this image is not associated with
 
@@ -91,8 +88,8 @@ def add_bees_to_clar(csv_filename):
             concepts = ['is_bee']
             not_concepts = ['health']
            
-        print("Before", concepts, " are concepts and not concepts are ", not_concepts)
-        print("image_id", image_id)
+        # print("Before", concepts, " are concepts and not concepts are ", not_concepts)
+        # print("image_id", image_id)
         img = clarifai_app.inputs.create_image_from_filename(filename=img_name, 
                         image_id=image_id,
                         concepts=concepts,
@@ -104,46 +101,36 @@ def add_bees_to_clar(csv_filename):
                                     },
                         allow_duplicate_url=True,
                         )
-
-        print("After", img.concepts, " are concepts and not concepts are ", img.not_concepts)
-        print("image_id", img.metadata['image_id'])
-        print("img.input_id", img.input_id)
-        print("img.url", img.url)
-        print("img.filename", img.filename)
-        print()
-        print(dir(img))
-
+        # print("After", img.concepts, " are concepts and not concepts are ", img.not_concepts)
+        # print("image_id", img.metadata['image_id'])
+        # print("img.input_id", img.input_id)
+        # print("img.url", img.url)
+        # print("img.filename", img.filename)
+        # print(dir(img))
         image_list.append(img)
 
-    print("Image list" , image_list)
+    # print("Image list" , image_list)
     clarifai_app.inputs.bulk_create_images(image_list)
 
 
 def add_nonbees_to_clar():
     """
     Load images to Clarifai model, using custom tags from the csv file.
-    """
+    Hard coded next_id b/c my helper function was too slow. Id is not important here -- we just need to train the model with the negativ controls
 
-    print("ADDING NONBEES")
+    """
+    # print("ADDING NONBEES")
     image_list = []
-    
     nonbees = glob.glob('images/not_bees/*png')
 
     # Get the maximum bee_id in the database
     # next_id = get_hi_input_id() + 1
-
-    next_id = 100000 # Hard coding this b/c my helper function was too slow
-    print("next_id", next_id)
+    next_id = 100000
+    # print("next_id", next_id)
 
     for i, img_name in enumerate(nonbees):
-    # for i in range(200):
-
         image_id = str(next_id + i)
-        
-
-        print("Before", img_name, image_id)
-
-
+        # print("Before", img_name, image_id)
         img = clarifai_app.inputs.create_image_from_filename(
                             filename=img_name, 
                             image_id=image_id,
@@ -159,18 +146,14 @@ def add_nonbees_to_clar():
                             )
 
         # print("After creating img", str(img.filename), img.image_id) 
-        print("After creating img", dir(img)) 
-        print("image_id", img.metadata['image_id'])
-        print("img.input_id", img.input_id)
-        print("img.url", img.url)
-        print("img.filename", img.filename)
-        print()
-
-        print(img.concepts, " are concepts and not concepts are ", img.not_concepts)
-
+        # print("After creating img", dir(img)) 
+        # print("image_id", img.metadata['image_id'])
+        # print("img.input_id", img.input_id)
+        # print("img.url", img.url)
+        # print("img.filename", img.filename)
+        # print(img.concepts, " are concepts and not concepts are ", img.not_concepts)
         image_list.append(img)
 
-    print("Image list added", image_list)
 
     if image_list != []:
         clarifai_app.inputs.bulk_create_images(image_list)
@@ -187,21 +170,16 @@ def load_bees_from_clarifai_to_db(all_images):
         - metadata will be a dict {}
 
     """
-
-    print("Length of all_images", len(all_images))
-
-    # Initialize bee_id
-    i = 1 
-
+    i = 1 # Initialize bee_id
+    
     for img in all_images:
-        print(img)
-        # print(type(img))
-        print(dir(img))
-       
         image_url = img.url
         image_score = img.score
         image_concepts = img.concepts
         image_not_concepts = img.not_concepts
+        image_dt = None
+        image_zip = None
+        image_img_id = None
 
         # Unpack concepts to get image_health: 
         if (image_concepts != None):
@@ -209,21 +187,14 @@ def load_bees_from_clarifai_to_db(all_images):
         else:
             image_health = None
 
-        image_dt = None
-        image_zip = None
-        image_img_id = None
-
         try:
             if (img.metadata['datetime']):
                 image_dt = img.metadata['datetime']
-
-                
             if img.metadata:
                 if (img.metadata['zipcode']):
                     image_zip = int(img.metadata['zipcode'])
                 elif (img.metadata['zip_code']):
                     image_zip = int(img.metadata['zip_code'])
-
             if (img.metadata['image_id']):
                 image_img_id = int(img.metadata['image_id'])
 
@@ -232,8 +203,7 @@ def load_bees_from_clarifai_to_db(all_images):
         except:
             print("Other error")
 
-        if img.concepts and 'is_bee' in img.concepts: # Make sure that only bees are added! Not nonbees!
-
+        if img.concepts:
             # Create a bee
             a_bee = Bee(bee_id=i,
                         user_id=None, # All database bees will have no user_id
@@ -244,13 +214,7 @@ def load_bees_from_clarifai_to_db(all_images):
                         )
 
             db.session.add(a_bee)
-
             i = i + 1 # Increment
-
-            print("bee added, a_bee.bee_id", a_bee.bee_id)
-            print()
-
-    print("Length of all_images ", len(all_images))
 
     # Commit all Bee objects to the database
     db.session.commit()
@@ -266,22 +230,16 @@ def predict_with_model(path):
 
     # # Set a model version id because I want to keep track of progress
     # model.model_version = model_version_id
-
     # print(model.model_version)
 
     # Train model!
     cl_model.train(sync=False) # False goes faster
-
     response = cl_model.predict_by_filename(path)
     # pprint(response)
-
     response_dict = {}
 
     for i in range(2):
-
         response_name_i = response['outputs'][0]['data']['concepts'][i]['name']
-
-        # print(response_name_i)
 
         if response_name_i == 'health':
             health_response_name = response['outputs'][0]['data']['concepts'][i]['name']
@@ -290,7 +248,6 @@ def predict_with_model(path):
         elif response_name_i == 'is_bee':
             is_bee_response_name = response['outputs'][0]['data']['concepts'][i]['name']
             is_bee_response_value = response['outputs'][0]['data']['concepts'][i]['value']
-    
 
     # print("is_bee_response_name", is_bee_response_name)
     # print("is_bee_response_value", is_bee_response_value)
@@ -300,12 +257,8 @@ def predict_with_model(path):
     # Add results to a succinct dictionary
     response_dict['is_bee'] = (is_bee_response_name, is_bee_response_value)
     response_dict['health'] = (health_response_name, health_response_value)
-
-
-    # print(response_dict)
         
     return response_dict
-
 
 
 def process_upload(user_id, health, local_filename, zipcode):
@@ -317,84 +270,39 @@ def process_upload(user_id, health, local_filename, zipcode):
     @ return the new Image object (Clar), which has a URL, and is ready to become 
     our Bee object in the database
     """
-    # # Edit health (a string) to make it a binary value (better for this purpose)
+    # Edit health (a string) to make it a binary value (better for this purpose)
     health = 'y' if health == 'healthy' else 'n'
-    # print(
-        # "health now ", health)
-
 
     # Get prediction_dict which is key:(name, value)
-    prediction_dict = predict_with_model(local_filename) #Clar method
-    # print("prediction_dict", prediction_dict)
+    prediction_dict = predict_with_model(local_filename)
 
     # Get the rest of the values from prediction_tuple
-    
     is_bee_output_id = prediction_dict['is_bee'][0]
     is_bee_output_value = prediction_dict['is_bee'][1]
     health_output_id = prediction_dict['health'][0]
     health_output_value = prediction_dict['health'][1]
-    
-
-    print("is_bee", is_bee_output_id, is_bee_output_value)
-    print("health", health_output_id, health_output_value)
 
     predicted_concepts = []
     predicted_not_concepts = []
 
-
     if is_bee_output_id == 'is_bee':
-
-        
-
-        if is_bee_output_value > THRESHOLD: # Should I change this?
-
+        if is_bee_output_value > THRESHOLD: 
             predicted_concepts.append('is_bee')
-            print('Prediction says is_bee')
-
-
+            # print('Prediction says is_bee')
     else:
         predicted_not_concepts.append('is_bee')
-        print('Prediction says NOT is_bee')
-
+        # print('Prediction says NOT is_bee')
 
     if health_output_id == 'health':
-
-        
-
-        if health_output_value > THRESHOLD: # Should I change this?
+        if health_output_value > THRESHOLD:
             predicted_not_concepts.append('health')
-            print("Prediction says health")
+            # print("Prediction says health")
+    # else:
+        # print('Prediction says NOT health')
 
-    else:
-        print('Prediction says NOT health')
-
-
-    print("predicted_concepts", predicted_concepts)
-    print("predicted_not_concepts", predicted_not_concepts)
-
-
-       
-
-    # Get other metadata needed
     image_id = str(get_hi_input_id() + 1)
-    # print("image_id", image_id)
-    print("user_id", user_id)
-    print("health", health)
-    print("local_filename", local_filename)
-    print("zipcode", zipcode)
-
-
-    # We need to get 
-        # input_id (str) - the id of what it SHOULD BE
-        # url (str), 
-        # concepts, not_concepts (inferred), 
-        # output_id (required) - the id of the output RECIEVED from the API call
-
-
 
     # Create image and add to Clar.
-
-
     img = clarifai_app.inputs.create_image_from_filename(
                     filename=local_filename, 
                     image_id=image_id,
@@ -405,56 +313,29 @@ def process_upload(user_id, health, local_filename, zipcode):
                                 # 'datetime': datetime, 
                                 'zipcode': zipcode,
                                 # 'response_confidence': response_confidence,
-                                
                                 },
                     allow_duplicate_url=True,
-                    )
-
-    # # Unpack all data in the newly created Image object    
-    image_concepts = img.concepts
-    image_not_concepts = img.not_concepts
-    print("After", image_concepts, " are concepts and not concepts are ", image_not_concepts)
+                    )    
 
     i = clarifai_app.inputs.get(input_id=image_id)
-
-    print("Successfully added to clar app: ", i.input_id)
-
-    # # Unpack concepts to get image_health:
-
     
+    # Unpack concepts :
+    image_concepts = img.concepts
+    image_not_concepts = img.not_concepts
     image_health = 'y' if 'health' in image_concepts and 'is_bee' in image_concepts else 'n'
-    print("image_health", image_health)
-
-    image_url = img.url ##
-    print("image_url", image_url)
-
+    image_url = img.url
     image_score = img.score
-    print("image_score", image_score)
 
     if img.metadata:
         # image_dt = img.metadata['datetime']
-        # print("image_dt", image_dt)
-
         image_user_id = int(img.metadata['user_id']) ## 
-        print("image_user_id", image_user_id)
-
         image_zip = int(img.metadata['zipcode'])
-        print("image_zip", image_zip)
-
         image_img_id = int(img.metadata['image_id'])
-        print("image_img_id", image_img_id)
-
         # image_confidence = int(img.metadata['response_confidence'])
-        # print("image_confidence", image_confidence)
+    # else:
+    #     print("not a bee")
 
-    else:
-        print("not a bee")
-
-
-    # print()
-    # print()
-
-    # # Create a new Bee and add it to the database, pasing in metadata from img (Image object)
+    # Create a new Bee and add it to the database, pasing in metadata from img (Image object)
     prediction_success = add_new_image_to_db(user_id=image_user_id,
                         url=image_url,
                         health=image_health,
@@ -462,21 +343,13 @@ def process_upload(user_id, health, local_filename, zipcode):
                         image_id=image_img_id
                         )
 
-    # print("prediction_success", prediction_success)
-
-    # # new_tuple THURSDAY ADD SUCCESS TO THIS
-    # # I am adding this because in order 
-
-
     bee_confidence = prediction_dict['is_bee'][1]
     health_confidence = prediction_dict['health'][1]
-
 
     # Find that new bee
     new_bee = prediction_success[1]
 
     # try:
-
     #     print("New bee image_id ", new_bee.image_id)
     #     print("New bee image_url ", new_bee.url)
     #     print("new_bee", new_bee)
@@ -484,67 +357,38 @@ def process_upload(user_id, health, local_filename, zipcode):
     # except:
     #     print("New bee not created.")
 
-
-
-
-    output = (bee_confidence, health_confidence, prediction_success[0], new_bee)
-
-    print("output", output)
-
-    return output
-    # Needs to return health, performance
+    return (bee_confidence, health_confidence, prediction_success[0], new_bee)
 
 
 def give_model_feedback(input_id, url, concepts, not_concepts, output_id):
     """ https://www.clarifai.com/developer/guide/feedback#prediction-feedback
-    # This is going to depend on performance 
-
-    Here:
-    - input_id = what it should be ('health' or 'is_bee')
-    - output_id = the id ass'd with the output recueved from the prediction call
-
-    If the prediction is correct:
-    
-
+    Give model feedback about the prediction.
+    @returns None. Just passes this along to Clarafai.
     """
-    # We need to get 
-        # input_id (str) - the id of what it SHOULD BE
-        # url (str), 
-        # concepts, not_concepts (inferred), 
-        # output_id (required) - the id of the output RECIEVED from the API call
-
-
     cl_model.send_concept_feedback(
-        # input_id='{input_id}', # What format should this be in?? String!
+        # input_id='{input_id}', # String - what it should be ('health' or 'is_bee')
         input_id=input_id, # String
         url=url, # String
         concepts=concepts, # List of strings
         not_concepts=not_concepts, # List of strings
         feedback_info=FeedbackInfo(event_type='annotation',
-                                    # output_id='{output_id}', @ 
-                                    output_id=output_id, # This should be a string idk why its in a dict
+                                    output_id=output_id, # the id ass'd with the output recueved from the prediction call
                                     ), # 
-
-        ) # Returns None. Just passes this along to Clarafai.
-    
+        ) 
+        
 
 def add_new_image_to_db(user_id, url, health, zipcode, image_id):
     """ Get one image (hosted by clarafai) - which has a url (on Clar)
     Create a Bee object and add it to the database 
     """
-
     # Get the maximum bee_id in the database
     # Note, the bee_id is not the same as the image_id in previous methods!
     # result = db.session.query(func.max(Bee.bee_id)).one()
     # bee_id = int(result[0]) + 1
-
     # print(bee_id)
 
     success = False
-
     try:
-
-
         # Create a new bee:
         bee = Bee(
                     user_id=user_id,
@@ -552,28 +396,14 @@ def add_new_image_to_db(user_id, url, health, zipcode, image_id):
                     health=health,
                     zip_code=zipcode,
                     image_id=image_id,
-
                     )
-
-
-
-        print("Bee created successfully.")
-
-        print("Bee id", bee.bee_id)
-        print("user_id", bee.user_id)
-        print()
+        # print("Bee id", bee.bee_id, bee.user_id)
 
         db.session.add(bee)
         db.session.commit()
-        # flash("Bee added to database. Thank you!")
-
-        print("Bee added to database. Thank you!")
-
-
+        # print("Bee added to database. Thank you!")
         # i = db.session.query(Bee).filter_by(bee_id=bee_id)
-
-        print("Successfully added to db: ", bee.bee_id)
-
+        # print("Successfully added to db: ", bee.bee_id)
         success = True
         return (success, bee)
 
@@ -582,39 +412,26 @@ def add_new_image_to_db(user_id, url, health, zipcode, image_id):
         return (success, None)
 
 
-
 def get_hi_input_id():
     # Get the highest input_id for all the bees in clar
-    # @return maximum , an int
+    # @return maximum id, an int
     all_ids = [bee.input_id for bee in clarifai_app.inputs.get_all()]
-
-    count_len = len(all_ids)
-
-
-    if count_len > 0:
-        
+    if len(all_ids) > 0:
         # maximum = int(max(all_ids))
         # # print(type(maximum)) # an int
         # return maximum
-        return count_len
+        return len(all_ids)
     else:
         return 0
-
 
 
 def check_prediction(health_string, prediction_tuple):
     """ Checks whether prediction tuple matches input of health specified by user """
     response_string = prediction_tuple[0]
     response_confidence = prediction_tuple[1]
-
-    print("response_string", response_string)
-    print(
-        "response_confidence", response_confidence
-        )
-
+    # print("response_string", response_string)
+    # print("response_confidence", response_confidence)
     return response_string == health_string
-
-
 
 
 if __name__ == '__main__':
@@ -627,8 +444,7 @@ if __name__ == '__main__':
     # Get model versions:
     # pprint(cl_model.list_versions())
 
-
-    # Clear it from Clarifai. Be careful!!!!!!!!!
+    # Clear it from Clarifai. Be careful!!
     # clarifai_app.inputs.delete_all()
     # print('Successfully deleted all.')
 
@@ -636,10 +452,8 @@ if __name__ == '__main__':
     # add_bees_to_clar(seed_filename)
     # print('Successfully added all bees.')
 
-
     # add_nonbees_to_clar()
     # print('Successfully added all nonbees.')
-
 
     all_ = list(clarifai_app.inputs.get_all())
     for i in all_:
@@ -665,7 +479,6 @@ if __name__ == '__main__':
     #     local_filename='uploads/001_043.png',
     #     zipcode='22111'
     #     )
-
 
     # print(predict_with_model(path='uploads/download.jpeg'))
     # print(predict_with_model(path='uploads/001_043.png'))

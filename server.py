@@ -2,7 +2,8 @@
     Flask routes for BeeMachine project.
 """
 import random, os, pdb
-from jinja2 import StrictUndefined
+# from jinja2 import StrictUndefined
+
 
 from flask import Flask, render_template, request, flash, redirect, session, send_from_directory
 from flask_debugtoolbar import DebugToolbarExtension 
@@ -32,7 +33,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 # Ask Jinja to give us an error if there is an undefined variable in scope
-app.jinja_env.undefined = StrictUndefined
+# app.jinja_env.undefined = StrictUndefined
 
 # Hard code
 global user_id
