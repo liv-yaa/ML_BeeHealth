@@ -265,45 +265,46 @@ def process_upload(user_id, health, local_filename, zipcode):
     """ Get prediction dict from a user's uploaded image (which has response)
     Determine whether prediction was accurate.
     Help train the model based on this information.
-    Create a new Image object and add it to Clarifai. 
+    Create a new Image object and add it to Clarifai. b
 
     @ return the new Image object (Clar), which has a URL, and is ready to become 
     our Bee object in the database
     """
-    # Edit health (a string) to make it a binary value (better for this purpose)
-    health = 'y' if health == 'healthy' else 'n'
+    try:
+        # Edit health (a string) to make it a binary value (better for this purpose)
+        health = 'y' if health == 'healthy' else 'n'
 
-    # Get prediction_dict which is key:(name, value)
-    prediction_dict = predict_with_model(local_filename)
+        # Get prediction_dict which is key:(name, value)
+        prediction_dict = predict_with_model(local_filename)
 
-    # Get the rest of the values from prediction_tuple
-    is_bee_output_id = prediction_dict['is_bee'][0]
-    is_bee_output_value = prediction_dict['is_bee'][1]
-    health_output_id = prediction_dict['health'][0]
-    health_output_value = prediction_dict['health'][1]
+        # Get the rest of the values from prediction_tuple
+        is_bee_output_id = prediction_dict['is_bee'][0]
+        is_bee_output_value = prediction_dict['is_bee'][1]
+        health_output_id = prediction_dict['health'][0]
+        health_output_value = prediction_dict['health'][1]
 
-    predicted_concepts = []
-    predicted_not_concepts = []
+        predicted_concepts = []
+        predicted_not_concepts = []
 
-    if is_bee_output_id == 'is_bee':
-        if is_bee_output_value > THRESHOLD: 
-            predicted_concepts.append('is_bee')
-            # print('Prediction says is_bee')
-    else:
-        predicted_not_concepts.append('is_bee')
-        # print('Prediction says NOT is_bee')
+        if is_bee_output_id == 'is_bee':
+            if is_bee_output_value > THRESHOLD: 
+                predicted_concepts.append('is_bee')
+                # print('Prediction says is_bee')
+        else:
+            predicted_not_concepts.append('is_bee')
+            # print('Prediction says NOT is_bee')
 
-    if health_output_id == 'health':
-        if health_output_value > THRESHOLD:
-            predicted_not_concepts.append('health')
-            # print("Prediction says health")
-    # else:
-        # print('Prediction says NOT health')
+        if health_output_id == 'health':
+            if health_output_value > THRESHOLD:
+                predicted_not_concepts.append('health')
+                # print("Prediction says health")
+        # else:
+            # print('Prediction says NOT health')
 
-    image_id = str(get_hi_input_id() + 1)
+        image_id = str(get_hi_input_id() + 1)
 
-    # Create image and add to Clar.
-    img = clarifai_app.inputs.create_image_from_filename(
+        # Create image and add to Clar.
+        img = clarifai_app.inputs.create_image_from_filename(
                     filename=local_filename, 
                     image_id=image_id,
                     concepts=predicted_concepts,
@@ -317,45 +318,40 @@ def process_upload(user_id, health, local_filename, zipcode):
                     allow_duplicate_url=True,
                     )    
 
-    i = clarifai_app.inputs.get(input_id=image_id)
+        i = clarifai_app.inputs.get(input_id=image_id)
     
-    # Unpack concepts :
-    image_concepts = img.concepts
-    image_not_concepts = img.not_concepts
-    image_health = 'y' if 'health' in image_concepts and 'is_bee' in image_concepts else 'n'
-    image_url = img.url
-    image_score = img.score
+        # Unpack concepts :
+        image_concepts = img.concepts
+        image_not_concepts = img.not_concepts
+        image_health = 'y' if 'health' in image_concepts and 'is_bee' in image_concepts else 'n'
+        image_url = img.url
+        image_score = img.score
 
-    if img.metadata:
-        # image_dt = img.metadata['datetime']
-        image_user_id = int(img.metadata['user_id']) ## 
-        image_zip = int(img.metadata['zipcode'])
-        image_img_id = int(img.metadata['image_id'])
-        # image_confidence = int(img.metadata['response_confidence'])
-    # else:
-    #     print("not a bee")
+        if img.metadata:
+            # image_dt = img.metadata['datetime']
+            image_user_id = int(img.metadata['user_id']) ## 
+            image_zip = int(img.metadata['zipcode'])
+            image_img_id = int(img.metadata['image_id'])
+            # image_confidence = int(img.metadata['response_confidence'])
 
-    # Create a new Bee and add it to the database, pasing in metadata from img (Image object)
-    prediction_success = add_new_image_to_db(user_id=image_user_id,
+        # Create a new Bee and add it to the database, pasing in metadata from img (Image object)
+        prediction_success = add_new_image_to_db(user_id=image_user_id,
                         url=image_url,
                         health=image_health,
                         zipcode=image_zip,
                         image_id=image_img_id
                         )
-
-    bee_confidence = prediction_dict['is_bee'][1]
-    health_confidence = prediction_dict['health'][1]
-
-    # Find that new bee
-    new_bee = prediction_success[1]
-
-    # try:
-    #     print("New bee image_id ", new_bee.image_id)
-    #     print("New bee image_url ", new_bee.url)
-    #     print("new_bee", new_bee)
-
-    # except:
-    #     print("New bee not created.")
+        # Find that new bee
+        new_bee = prediction_success[1]
+        # print("new_bee", new_bee)
+        bee_confidence = prediction_dict['is_bee'][1]
+        health_confidence = prediction_dict['health'][1]
+    except:
+        # print("New bee not created.")
+        new_bee = None
+        bee_confidence = None
+        health_confidence = None
+        prediction_success[0] = None
 
     return (bee_confidence, health_confidence, prediction_success[0], new_bee)
 
@@ -375,7 +371,7 @@ def give_model_feedback(input_id, url, concepts, not_concepts, output_id):
                                     output_id=output_id, # the id ass'd with the output recueved from the prediction call
                                     ), # 
         ) 
-        
+
 
 def add_new_image_to_db(user_id, url, health, zipcode, image_id):
     """ Get one image (hosted by clarafai) - which has a url (on Clar)
