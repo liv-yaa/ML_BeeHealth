@@ -21,6 +21,8 @@ The Bee Machine is a tool that can help researchers by "crowd sourcing" health d
 ## How to use?
 Upload a photo. Specify "healthy" for healthy bees. All other enties will be tagged "unhealthy".
 
+The computer vision algorithm will use your submission to become better at bee health classifications.
+
 ## Contribute
 You can contribute to The Bee Machine by uploading a bee photo. The more photos are submitted, the more powerful the health sorting algorithm will become. General guidelines for photo submissions would be to make sure the image is quality and it is a bee. Otherwise, the model should screen for any non-bee images too.
 
