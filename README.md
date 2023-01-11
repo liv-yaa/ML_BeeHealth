@@ -2,9 +2,9 @@
 "The Bee Machine" 
 
 ## Motivation
-Created with an a eye toward preserving our honeybee populations, which are intricately intertwined with the food and agricultural systems we have relied on for millenia. Preserving niche species and promoting biodiversity will be a challenge in the coming years, but with more research by honeybee immunologists and population studies, we can start to gather better metrics about honeybee health. Tracking honeybee populations is a substiantial task, and meanwhile, an array of different forces are causing colonies' health to dwindle. 
-
 The Bee Machine is a tool that can help researchers by "crowd sourcing" health data about honeybee populations from around the world. A user anywhere can submit a photo of a bee and tag its location. Once the image is processed by the Bee Machine's machine learning model, a prediction of that honeybee's health will be returned. If the prediction is not accurate, the model will learn from its mistakes as well as its successes. Over time, statistics show that the model will return fewer false positive and false negative predictions and more true positive and true negative predictions. This way, any user who wants to contribute to our database can help track honeybee health trends.
+
+Created with an a eye toward preserving our honeybee populations, which are intricately intertwined with the food and agricultural systems we have relied on for millenia. Preserving niche species and promoting biodiversity will be a challenge in the coming years, but with more research by honeybee immunologists and population studies, we can start to gather better metrics about honeybee health.
 
 ## Tech and frameworks used:
 
